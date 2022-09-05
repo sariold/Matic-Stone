@@ -1,0 +1,25 @@
+{
+	"name": "matic-stone",
+	"version": "1.0.0",
+	"description": "$MATIC and Solidity smart contract online card game.",
+	"main": "truffle-config.js",
+	"directories": {
+		"test": "test"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Diego Sariol, Mateo Martinez",
+	"license": "MIT",
+	"dependencies": {
+		"@ethereumjs/block": "^3.6.3",
+		"@ethereumjs/common": "^2.6.5",
+		"@ethereumjs/tx": "^3.5.2",
+		"@ethereumjs/vm": "^5.9.3",
+		"@metamask/eth-sig-util": "^4.0.1",
+		"@metamask/safe-event-emitter": "^2.0.0",
+		"@openzeppelin/contracts": "^4.7.3",
+		"@truffle/hdwallet-provider": "^2.0.14",
+		"web3": "^1.7.5"
+	}
+}
