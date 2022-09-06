@@ -11,9 +11,15 @@ export class Deck {
 		this.cards = cards;
 	}
 
+	viewDeck() {
+		console.log(this.cards);
+	}
+
 	shuffle() {} // TODO: create shuffle method
 
-	drawCard() {} // TODO: create draw card and insert method
+	drawCard() {
+		return this.cards.shift();
+	} // TODO: create draw card and insert method
 
 	getCount() {} // TODO: create method to return number of cards
 }
@@ -22,13 +28,15 @@ export class Deck {
  * Hand deck class
  */
 export class Hand extends Deck {
-	viewHand() {} // TODO: create view card method
-
 	viewCard() {} // TODO: create view card method
 
-	addCard() {} // TODO: create insert card method
+	addCard(card) {
+		this.cards.push(card);
+	} // TODO: create insert card method
 
-	discardCard() {} // TODO: create discard card method
+	discardCard(pos) {
+		return this.cards.splice(pos, 1);
+	} // TODO: create discard card method
 }
 
 /**
@@ -47,19 +55,22 @@ export class Discarded extends Deck {
 	 * @param {*} card The card to be updated with discarded status
 	 */
 	setStatus(card) {
-		card.setDiscarded(true);
+		console.log(card);
+		console.log(card.name);
 	}
 }
 
-let creature = new cardClass.Creature("Dragon", 5, true, 1, 2);
-console.log(creature);
+let dragon = new cardClass.Creature("Dragon", 5, true, 1, 2);
+let elf = new cardClass.Creature("Elf", 2, false, 4, 1);
+let deck = new Deck([dragon, elf]);
+deck.viewDeck();
 
-let deck = new Deck([creature]);
-
-console.log(deck);
+let hand = new Hand([]);
+hand.addCard(deck.drawCard());
+hand.viewDeck();
 
 let discard = new Discarded([]);
-
-discard.addCard(creature);
-
-console.log(discard);
+discard.viewDeck();
+console.log(hand.discardCard(0));
+// discard.addCard(dragon);
+// discard.viewDeck();
