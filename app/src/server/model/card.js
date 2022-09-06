@@ -8,7 +8,7 @@
  * @param instant The card's ability to be instantly played
  * @param discarded The card's discard status
  */
-class Card {
+export class Card {
 	name = "";
 	atomicID = 0;
 	cardType = "";
@@ -27,6 +27,10 @@ class Card {
 	}
 
 	play() {} // TODO: implement abstract card play method
+
+	setDiscarded(status) {
+		this.discarded = status;
+	}
 }
 
 /**
@@ -35,7 +39,7 @@ class Card {
  * @param damage The damage of the creature
  * @param tapped The creature's hibernation status
  */
-class Creature extends Card {
+export class Creature extends Card {
 	health = 0;
 	damage = 0;
 	tapped = false;
@@ -54,10 +58,10 @@ class Creature extends Card {
 /**
  * Abstract Spell card class
  */
-class Spell extends Card {
+export class Spell extends Card {
 	constructor(name, mana, instant) {
 		super(name, mana, instant);
-		if (this.constructor === Card) {
+		if (this.constructor === Spell) {
 			throw new Error("Abstract classes cannot be instantiated.");
 		}
 	}
@@ -72,7 +76,7 @@ class Spell extends Card {
  * @param damage The damage of the spell
  * @param targetPos The field position of the target
  */
-class InstantDamage extends Spell {
+export class InstantDamage extends Spell {
 	damage = 0;
 	targetPos = 0;
 
@@ -91,7 +95,7 @@ class InstantDamage extends Spell {
  * @param health The health dealt by the spell
  * @param targetPos The field position of the target
  */
-class Buff extends Spell {
+export class Buff extends Spell {
 	damage = 0;
 	health = 0;
 	targetPos = 0;
@@ -112,7 +116,7 @@ class Buff extends Spell {
  * @param mill The next location of the drawn cards
  * @param target The target hero of the spell
  */
-class Draw extends Spell {
+export class Draw extends Spell {
 	draw = 0;
 	mill = false;
 	target = 0; // TODO: change to hero class instance
@@ -131,7 +135,7 @@ class Draw extends Spell {
  * Copy Paste spell card class
  * @param copy The field position of the creature to copy
  */
-class CopyPaste extends Spell {
+export class CopyPaste extends Spell {
 	copy = 0;
 
 	constructor(name, mana, instant, copy) {
