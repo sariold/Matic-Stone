@@ -1,76 +1,67 @@
-import * as cardClass from "./card.js";
-
 /**
  * Abstract Deck class
  * @param cards The collection of cards to construct the deck
  */
 export class Deck {
-	cards = []; // TODO: change to an array list of cards
+	cards = [];
 
 	constructor(cards) {
 		this.cards = cards;
+		this.shuffle();
 	}
 
-	viewDeck() {
-		console.log(this.cards);
-	}
-
-	shuffle() {} // TODO: create shuffle method
+	shuffle() {
+		for (let i = this.cards.length - 1; i > 0; i--) {
+			const index = Math.floor(Math.random() * (i + 1));
+			const temp = this.cards[index];
+			this.cards[index] = this.cards[i];
+			this.cards[i] = temp;
+		}
+	} // TODO: debate shuffle method for another random shuffler
 
 	drawCard() {
 		return this.cards.shift();
-	} // TODO: create draw card and insert method
+	}
 
-	getCount() {} // TODO: create method to return number of cards
+	getCount() {
+		return this.cards.length;
+	}
+
+	discardCard(pos) {
+		return this.cards.splice(pos, 1)[0];
+	}
 }
 
 /**
  * Hand deck class
  */
 export class Hand extends Deck {
-	viewCard() {} // TODO: create view card method
+	play() {} // TODO: implement play card method to battlefield
+
+	viewCards() {
+		return this.cards;
+	}
+
+	viewCard(pos) {
+		return this.cards[pos];
+	}
 
 	addCard(card) {
-		this.cards.push(card);
-	} // TODO: create insert card method
-
-	discardCard(pos) {
-		return this.cards.splice(pos, 1);
-	} // TODO: create discard card method
+		if (this.cards.length > 7) this.discardCard(0);
+		else this.cards.push(card);
+	}
 }
 
 /**
  * Discarded deck class
  */
-export class Discarded extends Deck {
-	/**
-	 * @param {*} card The card to be added to the discard deck
-	 */
+export class Discard extends Deck {
 	addCard(card) {
 		this.setStatus(card);
 		this.cards.push(card);
 	}
 
-	/**
-	 * @param {*} card The card to be updated with discarded status
-	 */
 	setStatus(card) {
-		console.log(card);
-		console.log(card.name);
+		card.setDiscarded(true);
 	}
 }
-
-let dragon = new cardClass.Creature("Dragon", 5, true, 1, 2);
-let elf = new cardClass.Creature("Elf", 2, false, 4, 1);
-let deck = new Deck([dragon, elf]);
-deck.viewDeck();
-
-let hand = new Hand([]);
-hand.addCard(deck.drawCard());
-hand.viewDeck();
-
-let discard = new Discarded([]);
-discard.viewDeck();
-console.log(hand.discardCard(0));
-// discard.addCard(dragon);
-// discard.viewDeck();
