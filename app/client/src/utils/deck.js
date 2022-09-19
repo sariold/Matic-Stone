@@ -6,28 +6,18 @@ export class Deck {
 	cards = [];
 
 	constructor(cards) {
-		this.cards = cards;
-		this.shuffle();
+		if (cards) this.cards = cards;
 	}
 
-	shuffle() {
-		for (let i = this.cards.length - 1; i > 0; i--) {
-			const index = Math.floor(Math.random() * (i + 1));
-			const temp = this.cards[index];
-			this.cards[index] = this.cards[i];
-			this.cards[i] = temp;
-		}
-	} // TODO: debate shuffle method for another random shuffler
-
 	drawCard() {
-		return this.cards.shift();
+		if (this.cards.length > 0) return this.cards.shift();
 	}
 
 	getCount() {
 		return this.cards.length;
 	}
 
-	discardCard(pos) {
+	removeCard(pos) {
 		return this.cards.splice(pos, 1)[0];
 	}
 }
@@ -36,8 +26,6 @@ export class Deck {
  * Hand deck class
  */
 export class Hand extends Deck {
-	play() {} // TODO: implement play card method to battlefield
-
 	viewCards() {
 		return this.cards;
 	}
@@ -47,8 +35,13 @@ export class Hand extends Deck {
 	}
 
 	addCard(card) {
-		if (this.cards.length > 7) this.discardCard(0);
-		else this.cards.push(card);
+		if (card) {
+			if (this.cards.length > 6) {
+				alert("You have more than 7 cards so first will be removed!");
+				this.removeCard(0);
+			}
+			this.cards.push(card);
+		} else alert("You have no more cards");
 	}
 }
 

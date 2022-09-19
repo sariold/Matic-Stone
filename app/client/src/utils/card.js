@@ -7,15 +7,17 @@
  */
 export class Card {
 	name = "";
+	img = "";
 	mana = 0;
 	pos = 0;
 	discarded = false;
 
-	constructor(name, mana) {
+	constructor(name, img, mana) {
 		if (this.constructor === Card) {
 			throw new Error("Abstract classes cannot be instantiated.");
 		}
 		this.name = name;
+		this.img = img;
 		this.mana = mana;
 	}
 
@@ -37,8 +39,8 @@ export class Creature extends Card {
 	damage = 0;
 	tapped = false;
 
-	constructor(name, mana, health, damage) {
-		super(name, mana);
+	constructor(name, img, mana, health, damage) {
+		super(name, img, mana);
 		this.health = health;
 		this.damage = damage;
 	}
@@ -51,8 +53,8 @@ export class Creature extends Card {
  */
 export class Spell extends Card {
 	instant = false;
-	constructor(name, mana, instant) {
-		super(name, mana);
+	constructor(name, img, mana, instant) {
+		super(name, img, mana);
 		this.instant = instant;
 		if (this.constructor === Spell) {
 			throw new Error("Abstract classes cannot be instantiated.");
@@ -71,8 +73,8 @@ export class Spell extends Card {
 export class InstantDamage extends Spell {
 	damage = 0;
 
-	constructor(name, mana, instant, damage) {
-		super(name, mana, instant);
+	constructor(name, img, mana, instant, damage) {
+		super(name, img, mana, instant);
 		this.damage = damage;
 	}
 
@@ -89,8 +91,8 @@ export class Buff extends Spell {
 	damage = 0;
 	health = 0;
 
-	constructor(name, mana, instant, damage, health) {
-		super(name, mana, instant);
+	constructor(name, img, mana, instant, damage, health) {
+		super(name, img, mana, instant);
 		this.damage = damage;
 		this.health = health;
 	}
@@ -108,8 +110,8 @@ export class Draw extends Spell {
 	draw = 0;
 	mill = false;
 
-	constructor(name, mana, instant, draw, mill) {
-		super(name, mana, instant);
+	constructor(name, img, mana, instant, draw, mill) {
+		super(name, img, mana, instant);
 		this.draw = draw;
 		this.mill = mill;
 	}
