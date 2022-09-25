@@ -8,6 +8,7 @@
 export class Card {
 	name = "";
 	img = "";
+	cover = "/assets/cover.png";
 	mana = 0;
 	pos = 0;
 	discarded = false;

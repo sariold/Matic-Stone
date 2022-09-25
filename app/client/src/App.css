@@ -1,8 +1,8 @@
-.App {
+/* .App {
   text-align: center;
-}
+} */
 
-.App-logo {
+/*.App-logo {
   height: 40vmin;
   pointer-events: none;
 }
@@ -35,34 +35,93 @@
   to {
     transform: rotate(360deg);
   }
+} */
+
+.playerHand {
+  /* margin-top: -2em; */
+  display:flex;
+  /* position:relative; */
+  justify-content: center;
 }
 
-.player-hand {
-  margin-top: 45em;
+/* .player-field {
+  margin-top: 5em;
   display:flex;
   position:relative;
   justify-content: center;
-  /* margin-left: 10%; */
-  /* margin-right: 10;  */
-  /* display: grid; */
-  /* grid-template-columns: repeat(7, 1fr); */
-}
+} */
 
 .front {
   width: 10em;
 }
 
 .card{
-  height:180px;
-  width:160px;
+  /* height:180px;
+  width:160px; */
   /* border-radius:5px; */
-  padding-left: 5px;
-  position: relative;
+  /* padding-left: 5px; */
+  /* position: relative; */
   /* top:30px; */
-  transition: transform .2s;
+  transition: transform .4s;
+  transition-delay: .3s;
 }
 
-.card:hover{
-z-index:2;
-  transform: scale(1.7);
+.zoom{
+  cursor: pointer;
+  z-index: 2;
+  transform: scale(2.5);
 }
+
+.back {
+  width: 8em;
+  position: absolute;;
+}
+
+.sortable-chosen{
+  box-shadow: 8px 8px 32px #E1E1E1;
+}
+
+.sortable-drag{
+  opacity: 0;
+}
+
+.container {  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-auto-columns: 1fr;
+  gap: 5px 50px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "cpuDeck cpuHand cpuHand cpuHand cpuHand cpuHand cpuHand cpuHand cpuDiscard"
+    ". . cpuField cpuField cpuField cpuField cpuField . ."
+    ". . playerField playerField playerField playerField playerField . ."
+    "playerDiscard playerHand playerHand playerHand playerHand playerHand playerHand playerHand playerDeck";
+}
+
+.playerHand { 
+  grid-area: playerHand; 
+  border-style: solid;
+  justify-content: center;
+}
+
+.playerDeck { 
+  grid-area: playerDeck; 
+  border-style: solid;
+  /* position: relative;; */
+}
+
+.playerDiscard { 
+  grid-area: playerDiscard; 
+  border-style: solid;
+  /* position: relative;; */
+}
+
+.playerField { grid-area: playerField; }
+
+.cpuField { grid-area: cpuField; }
+
+.cpuHand { grid-area: cpuHand; }
+
+.cpuDeck { grid-area: cpuDeck; }
+
+.cpuDiscard { grid-area: cpuDiscard; }

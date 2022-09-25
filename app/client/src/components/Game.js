@@ -1,100 +1,95 @@
 import * as heroClass from "../utils/hero";
 import * as cardClass from "../utils/card";
 import * as deckClass from "../utils/deck";
+import Collection from "./Collection";
 import { useEffect, useState } from "react";
-import cover from "../assets/cover.png";
+import { ReactSortable } from "react-sortablejs";
 
 function Game() {
-	var creatures = [
-		"archer.jpeg",
-		"battle_orc.jpeg",
-		"bloodshot.jpeg",
-		"demogorgon.jpeg",
-		"ninja_2077.jpeg",
-		"roborex.jpeg",
-		"serpentine.jpeg",
-		"terminator.jpeg",
-		"undead_army.jpeg",
-	];
-	// var playerTurn = false;
-	// var turnPhase = 0; // four phases (draw, play, attack, play)
-	// var turnNum = 0;
-
-	// var player = new heroClass.Player("Diego");
-	// var computer = new heroClass.Computer("Computer");
-	// console.log(player);
-	// console.log(computer);
 	const [gameOver, setGameOver] = useState(true);
+	const [playerTurn, setTurn] = useState(false);
+
 	const [playerDeck, setPlayerDeck] = useState([]);
-	// const [computerDeck, setComputerDeck] = useState([]);
+	const [computerDeck, setComputerDeck] = useState([]);
 
 	const [playerHand, setPlayerHand] = useState([]);
-	// const [computerHand, setComputerHand] = useState([]);
+	const [computerHand, setComputerHand] = useState([]);
 
-	function randomDeck() {
-		let cards = [];
-		for (let i = 0; i < 10; i++) {
-			let name = creatures[Math.floor(Math.random() * creatures.length)];
-			let img = "../assets/creatures/" + name;
-			let mana = Math.floor(Math.random() * 8);
-			let health = Math.floor(Math.random() * 8);
-			let damage = Math.floor(Math.random() * 8);
+	const [playerDiscard, setPlayerDiscard] = useState([]);
+	const [computerDiscard, setComputerDiscard] = useState([]);
 
-			let creature = new cardClass.Creature(
-				name,
-				img,
-				mana,
-				health,
-				damage
-			);
-			cards.push(creature);
-		}
-		return cards;
-	}
-
-	function shuffleDeck(cards) {
-		return [...cards]
-			.sort(() => Math.random() - 0.5)
-			.map((card) => ({ ...card, id: Math.random() }));
-	}
-
-	function newGame() {
+	async function newGame() {
 		console.log("New game!");
 		setGameOver(false);
-		setPlayerDeck(shuffleDeck(randomDeck()));
-		setPlayerHand([]);
-		// setComputerDeck(shuffleDeck(randomDeck()));
-	}
+		let deck = await deckClass.randomDeck();
+		deck = await deckClass.shuffleDeck(deck);
+		let card = deck.shift();
+		setPlayerDeck([...deck]);
+		setPlayerHand([card]);
+		setPlayerDiscard([]);
 
-	function drawCard() {
-		if (playerHand.length > 7) {
-			playerHand.pop();
-			setPlayerHand([...playerHand]);
-		}
-		let card = playerDeck.shift();
-		if (card && playerHand.length < 7) setPlayerHand([...playerHand, card]);
-		console.log(playerHand);
-		console.log(playerDeck);
+		deck = await deckClass.randomDeck();
+		deck = await deckClass.shuffleDeck(deck);
+		card = deck.shift();
+		setComputerDeck([...deck]);
+		setComputerHand([card]);
+		setComputerDiscard([]);
 	}
 
 	useEffect(() => {
-		// console.log("DECKS:");
-		// console.log(playerDeck);
-		// console.log(playerHand);
-		// console.log(computerDeck);
-	}, [playerHand]);
+		console.log("PLAYER:");
+		console.log(playerDeck);
+		console.log(playerHand);
+		console.log(playerDiscard);
+		if (playerHand.length > 7) {
+			playerHand.shift();
+			setPlayerHand([...playerHand]);
+			console.log("popping card!");
+		}
+	}, [playerDeck, playerHand, playerDiscard]);
 
 	return (
 		<div className="App">
-			{/* <h1>Hello</h1> */}
-			<button onClick={newGame}>New Game</button>
-			<button onClick={drawCard}>Draw Card</button>
-			<div className="player-hand">
-				{playerHand.map((card) => (
-					<div className="card" key={card.id}>
-						<img className="front" src={cover} alt="cover" />
-					</div>
-				))}
+			<button onClick={newGame}>Start</button>
+			<div className="turn">
+				<h1>{playerTurn ? "Your turn!" : "CPU turn!"}</h1>
+			</div>
+			<div className="container">
+				<Collection
+					disabled={playerTurn}
+					deck={playerHand}
+					useDeck={setPlayerHand}
+					id={"draggable"}
+					className={"playerHand"}
+					cardClass={"front"}
+					pull={true}
+					put={["playerDeck"]}
+				/>{" "}
+				<Collection
+					disabled={playerTurn}
+					deck={playerDeck}
+					useDeck={setPlayerDeck}
+					id={"draggable"}
+					className={"playerDeck"}
+					cardClass={"back"}
+					pull={true}
+					put={["none"]}
+				/>{" "}
+				<Collection
+					disabled={playerTurn}
+					deck={playerDiscard}
+					useDeck={setPlayerDiscard}
+					id={"discard"}
+					className={"playerDiscard"}
+					cardClass={"back"}
+					pull={false}
+					put={["playerHand"]}
+				/>{" "}
+				<div className="playerField"></div>
+				<div className="cpuField"></div>
+				<div className="cpuHand"></div>
+				<div className="cpuDeck"></div>
+				<div className="cpuDiscard"></div>
 			</div>
 		</div>
 	);
