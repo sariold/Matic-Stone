@@ -37,31 +37,12 @@
   }
 } */
 
-.playerHand {
-  /* margin-top: -2em; */
-  display:flex;
-  /* position:relative; */
-  justify-content: center;
-}
 
-/* .player-field {
-  margin-top: 5em;
-  display:flex;
-  position:relative;
-  justify-content: center;
-} */
-
-.front {
+.front, .cpuBack {
   width: 10em;
 }
 
 .card{
-  /* height:180px;
-  width:160px; */
-  /* border-radius:5px; */
-  /* padding-left: 5px; */
-  /* position: relative; */
-  /* top:30px; */
   transition: transform .4s;
   transition-delay: .3s;
 }
@@ -101,27 +82,98 @@
 .playerHand { 
   grid-area: playerHand; 
   border-style: solid;
+  display: flex;
   justify-content: center;
+  min-height: 14em;
+}
+
+.leftSortable, .rightSortable {
+  display: flex;
+}
+
+.leftSortable { 
+  /* display: flex; */
+  border-style: solid;
+  border-color: red;
+  /* grid-area: playerHand; 
+  justify-content: center;
+  min-height: 14em; */
+}
+
+.rightSortable { 
+  border-style: solid;
+  border-color: blue;
+  /* grid-area: playerHand; 
+  justify-content: center;
+  min-height: 14em; */
 }
 
 .playerDeck { 
   grid-area: playerDeck; 
   border-style: solid;
+  border-color: blue;
+  height: 11em;
+  width: 8em;
   /* position: relative;; */
 }
 
 .playerDiscard { 
   grid-area: playerDiscard; 
   border-style: solid;
+  border-color: red;
+  height: 11em;
+  width: 8em;
   /* position: relative;; */
 }
 
-.playerField { grid-area: playerField; }
+.playerField { 
+  grid-area: playerField; 
+  border-style: solid;
+  display: flex;
+  justify-content: center;
+}
 
-.cpuField { grid-area: cpuField; }
+.cpuField { 
+  grid-area: cpuField; 
+  border-style: solid;
+  display: flex;
+  justify-content: center;
+}
 
-.cpuHand { grid-area: cpuHand; }
+.cpuHand { 
+  grid-area: cpuHand; 
+  border-style: solid;
+  display: flex;
+  justify-content: center;
+}
 
-.cpuDeck { grid-area: cpuDeck; }
+.cpuDeck { 
+  grid-area: cpuDeck; 
+  border-style: solid;
+  border-color: blue;
+  height: 11em;
+  width: 8em;
+}
 
-.cpuDiscard { grid-area: cpuDiscard; }
+.cpuDiscard { 
+  grid-area: cpuDiscard; 
+  border-style: solid;
+  border-color: red;
+  height: 11em;
+  width: 8em;
+}
+
+.affordable {
+  border-style: solid;
+  border-color: greenyellow;
+}
+
+.App {
+  display: block;
+  justify-content: center;
+}
+
+.turn, .mana {
+  display: flex;
+  justify-content: center;
+}

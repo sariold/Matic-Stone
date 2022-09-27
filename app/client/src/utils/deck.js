@@ -62,25 +62,26 @@ export class Discard extends Deck {
 }
 
 var creatures = [
-	"archer.jpeg",
-	"battle_orc.jpeg",
-	"bloodshot.jpeg",
-	"demogorgon.jpeg",
-	"ninja_2077.jpeg",
-	"roborex.jpeg",
-	"serpentine.jpeg",
-	"terminator.jpeg",
-	"undead_army.jpeg",
+	["archer.jpeg", 2, 2, 2],
+	["battle_orc.jpeg", 2, 1, 2],
+	["bloodshot.jpeg", 2, 1, 2],
+	["demogorgon.jpeg", 5, 3, 5],
+	["ninja_2077.jpeg", 3, 3, 1],
+	["roborex.jpeg", 5, 5, 3],
+	["serpentine.jpeg", 2, 3, 1],
+	["terminator.jpeg", 4, 4, 3],
+	["undead_army.jpeg", 5, 4, 4],
 ];
 
 export async function randomDeck() {
 	let cards = [];
-	for (let i = 0; i < 10; i++) {
-		let name = creatures[Math.floor(Math.random() * creatures.length)];
+	for (let i = 0; i < 20; i++) {
+		let array = creatures[Math.floor(Math.random() * creatures.length)];
+		let name = array[0];
 		let img = "/assets/creatures/" + name;
-		let mana = Math.floor(Math.random() * 8);
-		let health = Math.floor(Math.random() * 8);
-		let damage = Math.floor(Math.random() * 8);
+		let mana = array[1];
+		let health = array[2];
+		let damage = array[3];
 
 		let creature = new cardClass.Creature(name, img, mana, health, damage);
 		cards.push(creature);

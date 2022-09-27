@@ -6,17 +6,28 @@ import { useEffect, useState } from "react";
 import { ReactSortable } from "react-sortablejs";
 
 function Game() {
+	const maxMana = 10;
+
 	const [gameOver, setGameOver] = useState(true);
-	const [playerTurn, setTurn] = useState(false);
+	const [playerTurn, setPlayerTurn] = useState(true);
+
+	const [playerMana, setPlayerMana] = useState(1);
+	const [cpuMana, setCpuMana] = useState(0);
+	const [playerManaPool, setPlayerManaPool] = useState(1);
+	const [cpuManaPool, setCpuManaPool] = useState(0);
 
 	const [playerDeck, setPlayerDeck] = useState([]);
-	const [computerDeck, setComputerDeck] = useState([]);
+	const [cpuDeck, setCpuDeck] = useState([]);
 
 	const [playerHand, setPlayerHand] = useState([]);
-	const [computerHand, setComputerHand] = useState([]);
+	const [playerAffordableHand, setPlayerAffordableHand] = useState([]);
+	const [cpuHand, setCpuHand] = useState([]);
 
 	const [playerDiscard, setPlayerDiscard] = useState([]);
-	const [computerDiscard, setComputerDiscard] = useState([]);
+	const [cpuDiscard, setCpuDiscard] = useState([]);
+
+	const [playerField, setPlayerField] = useState([]);
+	const [cpuField, setCpuField] = useState([]);
 
 	async function newGame() {
 		console.log("New game!");
@@ -31,22 +42,57 @@ function Game() {
 		deck = await deckClass.randomDeck();
 		deck = await deckClass.shuffleDeck(deck);
 		card = deck.shift();
-		setComputerDeck([...deck]);
-		setComputerHand([card]);
-		setComputerDiscard([]);
+		setCpuDeck([...deck]);
+		setCpuHand([card]);
+		setCpuDiscard([]);
 	}
+
+	useEffect(() => {
+		setPlayerAffordableHand(
+			playerHand.filter((card) => card.mana <= playerMana)
+		);
+		// setPlayerHand());
+		// if (playerHand.length > 7) {
+		// 	let card = playerHand.shift();
+		// 	setPlayerHand([...playerHand]);
+		// 	setPlayerDiscard([...playerDiscard, card]);
+		// 	console.log("popping card!");
+		// }
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [playerMana, playerHand]);
 
 	useEffect(() => {
 		console.log("PLAYER:");
 		console.log(playerDeck);
 		console.log(playerHand);
 		console.log(playerDiscard);
-		if (playerHand.length > 7) {
-			playerHand.shift();
-			setPlayerHand([...playerHand]);
-			console.log("popping card!");
+	}, [playerHand, playerDeck, playerDiscard]);
+
+	useEffect(() => {
+		console.log(playerAffordableHand);
+	}, [playerAffordableHand]);
+
+	useEffect(() => {
+		if (cpuHand.length > 7) {
+			let card = cpuHand.shift();
+			setCpuHand([...cpuHand]);
+			setCpuDiscard([...cpuDiscard, card]);
+			console.log("CPU popping card!");
 		}
-	}, [playerDeck, playerHand, playerDiscard]);
+	}, [cpuHand, cpuDiscard]);
+
+	useEffect(() => {
+		if (!playerTurn) {
+			let card = cpuDeck.shift();
+			setCpuHand((c) => [...cpuHand, card]);
+			setTimeout(() => {
+				setPlayerManaPool(playerManaPool + 1);
+				setPlayerMana(playerManaPool + 1);
+				setPlayerTurn(true);
+			}, 1000);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [playerTurn]);
 
 	return (
 		<div className="App">
@@ -56,41 +102,123 @@ function Game() {
 			</div>
 			<div className="container">
 				<Collection
-					disabled={playerTurn}
+					mana={playerMana}
+					setMana={setPlayerMana}
+					disabled={!playerTurn}
 					deck={playerHand}
 					useDeck={setPlayerHand}
+					affordable={playerAffordableHand}
+					setAffordable={setPlayerAffordableHand}
 					id={"draggable"}
 					className={"playerHand"}
 					cardClass={"front"}
 					pull={true}
 					put={["playerDeck"]}
+					setTurn={setPlayerTurn}
 				/>{" "}
 				<Collection
-					disabled={playerTurn}
+					mana={null}
+					setMana={null}
+					disabled={!playerTurn}
 					deck={playerDeck}
 					useDeck={setPlayerDeck}
+					affordable={null}
+					setAffordable={null}
 					id={"draggable"}
 					className={"playerDeck"}
 					cardClass={"back"}
 					pull={true}
 					put={["none"]}
+					setTurn={setPlayerTurn}
 				/>{" "}
 				<Collection
-					disabled={playerTurn}
+					mana={null}
+					setMana={null}
+					disabled={!playerTurn}
 					deck={playerDiscard}
 					useDeck={setPlayerDiscard}
+					affordable={null}
+					setAffordable={null}
 					id={"discard"}
 					className={"playerDiscard"}
 					cardClass={"back"}
 					pull={false}
-					put={["playerHand"]}
+					put={["playerHand", "affordable"]}
+					setTurn={setPlayerTurn}
 				/>{" "}
-				<div className="playerField"></div>
-				<div className="cpuField"></div>
-				<div className="cpuHand"></div>
-				<div className="cpuDeck"></div>
-				<div className="cpuDiscard"></div>
+				<Collection
+					mana={null}
+					setMana={null}
+					disabled={!playerTurn}
+					deck={playerField}
+					useDeck={setPlayerField}
+					affordable={null}
+					setAffordable={null}
+					id={"field"}
+					className={"playerField"}
+					cardClass={"front"}
+					pull={false}
+					// only allow "affordable" cards to be played
+					put={"affordable"}
+					setTurn={setPlayerTurn}
+				/>{" "}
+				{/* divider */}
+				{/* <Collection
+					mana={null}
+					setMana={null}
+					disabled={playerTurn}
+					deck={cpuField}
+					useDeck={setCpuField}
+					id={"field"}
+					className={"cpuField"}
+					cardClass={"front"}
+					pull={false}
+					put={false}
+					setTurn={setPlayerTurn}
+				/>{" "}
+				<Collection
+					mana={null}
+					setMana={null}
+					disabled={playerTurn}
+					deck={cpuHand}
+					useDeck={setCpuHand}
+					id={""}
+					className={"cpuHand"}
+					cardClass={"cpuBack"}
+					pull={false}
+					put={false}
+					setTurn={setPlayerTurn}
+				/>{" "}
+				<Collection
+					mana={null}
+					setMana={null}
+					disabled={!playerTurn}
+					deck={cpuDeck}
+					useDeck={setCpuDeck}
+					id={""}
+					className={"cpuDeck"}
+					cardClass={"back"}
+					pull={false}
+					put={false}
+					setTurn={setPlayerTurn}
+				/>{" "}
+				<Collection
+					mana={null}
+					setMana={null}
+					disabled={!playerTurn}
+					deck={cpuDiscard}
+					useDeck={setCpuDiscard}
+					id={"discard"}
+					className={"cpuDiscard"}
+					cardClass={"back"}
+					pull={false}
+					put={false}
+					setTurn={setPlayerTurn}
+				/>{" "} */}
 			</div>
+			<h1 className="mana">
+				{playerMana} / {playerManaPool}
+			</h1>
 		</div>
 	);
 }
