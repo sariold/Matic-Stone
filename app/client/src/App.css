@@ -37,40 +37,73 @@
   }
 } */
 
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
+}
 
-.front, .cpuBack {
+.start {
+  font-size: 2em;
+}
+
+.health {
+  color: red;
+  font-size: 2em;
+}
+
+.turn, .mana, .health {
+  text-align: center;
+  margin-top: -3;
+}
+
+.front, .back {
   width: 10em;
 }
 
-.card{
+.card {
   transition: transform .4s;
   transition-delay: .3s;
 }
 
-.zoom{
+.affordable {
+  border-style: solid;
+  border-color: greenyellow;
+}
+
+.tapped {
+  transform: rotate(90deg);
+  margin-left: 5em;
+  margin-right: 5em;
+}
+
+.zoom {
   cursor: pointer;
   z-index: 2;
-  transform: scale(2.5);
+  transform: scale(3);
 }
 
-.back {
-  width: 8em;
-  position: absolute;;
+.backStack {
+  width: 10em;
+  position: absolute;
+  /* top: 0; */
+  /* left: 0; */
 }
 
-.sortable-chosen{
+/* .sortable-chosen{
   box-shadow: 8px 8px 32px #E1E1E1;
 }
 
 .sortable-drag{
   opacity: 0;
-}
+} */
 
 .container {  display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
   grid-auto-columns: 1fr;
-  gap: 5px 50px;
+  gap: 1em 1em;
   grid-auto-flow: row;
   grid-template-areas:
     "cpuDeck cpuHand cpuHand cpuHand cpuHand cpuHand cpuHand cpuHand cpuDiscard"
@@ -81,10 +114,8 @@
 
 .playerHand { 
   grid-area: playerHand; 
-  border-style: solid;
   display: flex;
   justify-content: center;
-  min-height: 14em;
 }
 
 .leftSortable, .rightSortable {
@@ -92,38 +123,39 @@
 }
 
 .leftSortable { 
-  /* display: flex; */
-  border-style: solid;
-  border-color: red;
-  /* grid-area: playerHand; 
+  /* border-style: solid; */
+  /* border-color: red; */
+  grid-area: playerHand; 
   justify-content: center;
-  min-height: 14em; */
+  min-height: 14em;
+  min-width: 10em;
 }
 
 .rightSortable { 
-  border-style: solid;
-  border-color: blue;
-  /* grid-area: playerHand; 
-  justify-content: center;
-  min-height: 14em; */
+  /* border-style: solid;
+  border-color: blue; */
+  min-height: 14em;
+  min-width: 10em;
 }
 
 .playerDeck { 
   grid-area: playerDeck; 
   border-style: solid;
   border-color: blue;
-  height: 11em;
-  width: 8em;
-  /* position: relative;; */
+  height: 14em;
+  width: 10em;
 }
 
 .playerDiscard { 
+  background-image: url(../public/assets/trash.png);
+  background-repeat: no-repeat;
+  background-size: 5em;
+  background-position: center;
   grid-area: playerDiscard; 
   border-style: solid;
   border-color: red;
-  height: 11em;
-  width: 8em;
-  /* position: relative;; */
+  height: 14em;
+  width: 10em;
 }
 
 .playerField { 
@@ -140,9 +172,14 @@
   justify-content: center;
 }
 
+.cpuField img {
+  /* border-style: solid; */
+  /* border-color: red; */
+  animation: slam 1s;
+}
+
 .cpuHand { 
   grid-area: cpuHand; 
-  border-style: solid;
   display: flex;
   justify-content: center;
 }
@@ -150,30 +187,40 @@
 .cpuDeck { 
   grid-area: cpuDeck; 
   border-style: solid;
-  border-color: blue;
-  height: 11em;
-  width: 8em;
+  border-color: black;
+  position: relative;
+  height: 14em;
+  width: 10em;
 }
 
-.cpuDiscard { 
+.cpuDiscard {
+  background-image: url(../public/assets/trash.png);
+  background-repeat: no-repeat;
+  background-size: 5em;
+  background-position: center; 
   grid-area: cpuDiscard; 
   border-style: solid;
-  border-color: red;
-  height: 11em;
-  width: 8em;
+  border-color: black;
+  height: 14em;
+  width: 10em;
 }
 
-.affordable {
-  border-style: solid;
-  border-color: greenyellow;
-}
-
-.App {
-  display: block;
-  justify-content: center;
-}
-
-.turn, .mana {
-  display: flex;
-  justify-content: center;
+@keyframes slam
+{
+  0%
+  {
+    transform: scale(10, 10);
+    opacity: 0;
+  }
+  
+  40%
+  {
+    opacity: 0;
+  }
+  
+  100%
+  {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
 }

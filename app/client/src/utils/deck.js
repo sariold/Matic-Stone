@@ -1,4 +1,5 @@
 import * as cardClass from "../utils/card";
+import { uuid } from "uuidv4";
 
 /**
  * Abstract Deck class
@@ -92,5 +93,12 @@ export async function randomDeck() {
 export async function shuffleDeck(cards) {
 	return [...cards]
 		.sort(() => Math.random() - 0.5)
-		.map((card) => ({ ...card, id: Math.random() * Math.random() }));
+		.map((card) => ({
+			...card,
+			// id: new uuid(card),
+			// Date.now().toString(36) +
+			// Math.floor(
+			// 	Math.pow(10, 12) + Math.random() * 9 * Math.pow(10, 12)
+			// ).toString(36),
+		}));
 }

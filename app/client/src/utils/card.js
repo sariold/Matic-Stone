@@ -38,7 +38,7 @@ export class Card {
 export class Creature extends Card {
 	health = 0;
 	damage = 0;
-	tapped = false;
+	tapped = true;
 
 	constructor(name, img, mana, health, damage) {
 		super(name, img, mana);
