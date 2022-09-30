@@ -8,6 +8,7 @@
 export class Card {
 	name = "";
 	img = "";
+	// cover = "https://sariold.github.io/Matic-Stone/assets/cover.png";
 	cover = "/assets/cover.png";
 	mana = 0;
 	pos = 0;
@@ -40,10 +41,10 @@ export class Creature extends Card {
 	damage = 0;
 	tapped = true;
 
-	constructor(name, img, mana, health, damage) {
+	constructor(name, img, mana, damage, health) {
 		super(name, img, mana);
-		this.health = health;
 		this.damage = damage;
+		this.health = health;
 	}
 
 	play() {} // TODO: implement card play method for creatures

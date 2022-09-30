@@ -74,12 +74,15 @@ var creatures = [
 	["undead_army.jpeg", 5, 4, 4],
 ];
 
+// var homepage = "https://sariold.github.io/Matic-Stone";
+var homepage = "";
+
 export async function randomDeck() {
 	let cards = [];
 	for (let i = 0; i < 20; i++) {
 		let array = creatures[Math.floor(Math.random() * creatures.length)];
 		let name = array[0];
-		let img = "/assets/creatures/" + name;
+		let img = homepage + "/assets/creatures/" + name;
 		let mana = array[1];
 		let health = array[2];
 		let damage = array[3];

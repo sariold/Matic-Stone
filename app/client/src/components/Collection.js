@@ -30,6 +30,13 @@ function Collection({ deck, className, cardClass }) {
 						onDoubleClick={zoom}
 						draggable="false"
 					/>
+					{className === "cpuField" ? (
+						<span className="badge">
+							{card.damage} / {card.health}
+						</span>
+					) : (
+						""
+					)}
 				</div>
 			))}
 		</div>

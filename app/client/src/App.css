@@ -37,7 +37,7 @@
   }
 } */
 
-.App {
+.Game {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -53,7 +53,7 @@
   font-size: 2em;
 }
 
-.turn, .mana, .health {
+.mana, .health {
   text-align: center;
   margin-top: -3;
 }
@@ -63,6 +63,7 @@
 }
 
 .card {
+  position: relative;
   transition: transform .4s;
   transition-delay: .3s;
 }
@@ -80,8 +81,8 @@
 
 .zoom {
   cursor: pointer;
-  z-index: 2;
-  transform: scale(3);
+  z-index: 10;
+  transform: scale(5);
 }
 
 .backStack {
@@ -89,6 +90,20 @@
   position: absolute;
   /* top: 0; */
   /* left: 0; */
+}
+
+.badge {
+  position: absolute;
+  bottom: 0.5em;
+  right: 0.75em;
+  width: 4em;
+  height: 1.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
 }
 
 /* .sortable-chosen{
@@ -99,7 +114,8 @@
   opacity: 0;
 } */
 
-.container {  display: grid;
+.container {  
+  display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
   grid-auto-columns: 1fr;

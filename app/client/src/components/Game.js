@@ -165,95 +165,97 @@ function Game() {
 			</button>
 			<div className="turn">
 				<h1>{playerTurn ? "Your turn!" : "CPU turn!"}</h1>
+			</div>
+			<div className="Game">
 				<h1 className="health">❤ {cpuHealth}</h1>
+				<h1 className="mana">
+					{cpuMana} / {cpuManaPool}
+				</h1>
+				<div className="container">
+					<PlayerCollection
+						mana={playerMana}
+						setMana={setPlayerMana}
+						disabled={!playerTurn}
+						deck={playerHand}
+						useDeck={setPlayerHand}
+						affordable={playerAffordableHand}
+						setAffordable={setPlayerAffordableHand}
+						className={"playerHand"}
+						cardClass={"front"}
+						pull={true}
+						put={["playerDeck"]}
+						setTurn={setPlayerTurn}
+					/>
+					<PlayerCollection
+						mana={null}
+						setMana={null}
+						disabled={!playerTurn}
+						deck={playerDeck}
+						useDeck={setPlayerDeck}
+						affordable={null}
+						setAffordable={null}
+						className={"playerDeck"}
+						cardClass={"backStack"}
+						pull={true}
+						put={["none"]}
+						setTurn={setPlayerTurn}
+					/>
+					<PlayerCollection
+						mana={null}
+						setMana={null}
+						disabled={!playerTurn}
+						deck={playerDiscard}
+						useDeck={setPlayerDiscard}
+						affordable={null}
+						setAffordable={null}
+						className={"playerDiscard"}
+						cardClass={"backStack"}
+						pull={false}
+						put={["playerHand", "affordable"]}
+						setTurn={setPlayerTurn}
+					/>
+					<PlayerCollection
+						mana={null}
+						setMana={null}
+						disabled={!playerTurn}
+						deck={playerField}
+						useDeck={setPlayerField}
+						affordable={null}
+						setAffordable={null}
+						className={"playerField"}
+						cardClass={"front"}
+						pull={false}
+						// only allow "affordable" cards to be played
+						put={"affordable"}
+						setTurn={setPlayerTurn}
+					/>
+					{/* divider */}
+					<Collection
+						deck={cpuField}
+						className={"cpuField"}
+						cardClass={"front"}
+					/>
+					<Collection
+						deck={cpuHand}
+						className={"cpuHand"}
+						cardClass={"back"}
+					/>
+					<Collection
+						deck={cpuDeck}
+						className={"cpuDeck"}
+						cardClass={"backStack"}
+					/>
+					<Collection
+						deck={cpuDiscard}
+						className={"cpuDiscard"}
+						cardClass={"backStack"}
+					/>
+				</div>
+				<h1 className="mana">
+					{playerMana} / {playerManaPool}
+				</h1>
+				<h1 className="health">❤ {playerHealth}</h1>
 			</div>
-			<h1 className="mana">
-				{cpuMana} / {cpuManaPool}
-			</h1>
-			<div className="container">
-				<PlayerCollection
-					mana={playerMana}
-					setMana={setPlayerMana}
-					disabled={!playerTurn}
-					deck={playerHand}
-					useDeck={setPlayerHand}
-					affordable={playerAffordableHand}
-					setAffordable={setPlayerAffordableHand}
-					className={"playerHand"}
-					cardClass={"front"}
-					pull={true}
-					put={["playerDeck"]}
-					setTurn={setPlayerTurn}
-				/>
-				<PlayerCollection
-					mana={null}
-					setMana={null}
-					disabled={!playerTurn}
-					deck={playerDeck}
-					useDeck={setPlayerDeck}
-					affordable={null}
-					setAffordable={null}
-					className={"playerDeck"}
-					cardClass={"backStack"}
-					pull={true}
-					put={["none"]}
-					setTurn={setPlayerTurn}
-				/>
-				<PlayerCollection
-					mana={null}
-					setMana={null}
-					disabled={!playerTurn}
-					deck={playerDiscard}
-					useDeck={setPlayerDiscard}
-					affordable={null}
-					setAffordable={null}
-					className={"playerDiscard"}
-					cardClass={"backStack"}
-					pull={false}
-					put={["playerHand", "affordable"]}
-					setTurn={setPlayerTurn}
-				/>
-				<PlayerCollection
-					mana={null}
-					setMana={null}
-					disabled={!playerTurn}
-					deck={playerField}
-					useDeck={setPlayerField}
-					affordable={null}
-					setAffordable={null}
-					className={"playerField"}
-					cardClass={"front"}
-					pull={false}
-					// only allow "affordable" cards to be played
-					put={"affordable"}
-					setTurn={setPlayerTurn}
-				/>
-				{/* divider */}
-				<Collection
-					deck={cpuField}
-					className={"cpuField"}
-					cardClass={"front"}
-				/>
-				<Collection
-					deck={cpuHand}
-					className={"cpuHand"}
-					cardClass={"back"}
-				/>
-				<Collection
-					deck={cpuDeck}
-					className={"cpuDeck"}
-					cardClass={"backStack"}
-				/>
-				<Collection
-					deck={cpuDiscard}
-					className={"cpuDiscard"}
-					cardClass={"backStack"}
-				/>
-			</div>
-			<h1 className="mana">
-				{playerMana} / {playerManaPool}
-			</h1>
-			<h1 className="health">❤ {playerHealth}</h1>
 		</div>
 	);
 }

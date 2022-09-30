@@ -70,6 +70,13 @@ function PlayerCollection({
 									onDoubleClick={zoom}
 									draggable="false"
 								/>
+								{className === "playerHand" ? (
+									<span className="badge">
+										{card.damage} / {card.health}
+									</span>
+								) : (
+									""
+								)}
 							</div>
 						))}
 				</ReactSortable>
@@ -101,6 +108,13 @@ function PlayerCollection({
 									onDoubleClick={zoom}
 									draggable="false"
 								/>
+								{className === "playerHand" ? (
+									<span className="badge">
+										{card.damage} / {card.health}
+									</span>
+								) : (
+									""
+								)}
 							</div>
 						))}
 				</ReactSortable>
@@ -150,6 +164,13 @@ function PlayerCollection({
 							onDoubleClick={zoom}
 							draggable="false"
 						/>
+						{className === "playerField" ? (
+							<span className="badge">
+								{card.damage} / {card.health}
+							</span>
+						) : (
+							""
+						)}
 					</div>
 				))}
 			</ReactSortable>
