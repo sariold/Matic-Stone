@@ -14,13 +14,13 @@ function PlayerCollection({
 	cardClass,
 	pull,
 	put,
-	setTurn,
+	setDrawn,
 }) {
 	const [toPlay, setToPlay] = useState(null);
 
 	const zoom = (event) => {
 		if (event.target.classList.contains("front"))
-			event.target.classList.toggle("zoom");
+			event.target.parentElement.classList.toggle("zoom");
 	};
 
 	if (className === "playerHand")
@@ -70,13 +70,9 @@ function PlayerCollection({
 									onDoubleClick={zoom}
 									draggable="false"
 								/>
-								{className === "playerHand" ? (
-									<span className="badge">
-										{card.damage} / {card.health}
-									</span>
-								) : (
-									""
-								)}
+								<span className="badge">
+									{card.damage} / {card.health}
+								</span>
 							</div>
 						))}
 				</ReactSortable>
@@ -96,7 +92,11 @@ function PlayerCollection({
 					{deck
 						.filter((card) => card.mana > mana)
 						.map((card) => (
-							<div className={"card"} key={card.id}>
+							<div
+								className={"card"}
+								key={card.id}
+								onDoubleClick={zoom}
+							>
 								<img
 									className={cardClass}
 									src={
@@ -105,16 +105,12 @@ function PlayerCollection({
 											: card.cover
 									}
 									alt={cardClass}
-									onDoubleClick={zoom}
+									// onDoubleClick={zoom}
 									draggable="false"
 								/>
-								{className === "playerHand" ? (
-									<span className="badge">
-										{card.damage} / {card.health}
-									</span>
-								) : (
-									""
-								)}
+								<span className="badge">
+									{card.damage} / {card.health}
+								</span>
 							</div>
 						))}
 				</ReactSortable>
@@ -133,7 +129,7 @@ function PlayerCollection({
 					put: function (to) {
 						// console.log(to);
 						if (className === "playerField")
-							if (to.el.children.length < 3) return "affordable";
+							if (to.el.children.length < 5) return "affordable";
 							else return false;
 						else return put;
 					},
@@ -142,9 +138,10 @@ function PlayerCollection({
 				onRemove={function (evt) {
 					if (
 						evt.from.className === "playerDeck" &&
-						evt.to.className === "rightSortable"
+						(evt.to.className === "rightSortable" ||
+							evt.to.className === "playerDiscard")
 					) {
-						setTurn(false);
+						setDrawn(true);
 					}
 				}}
 			>

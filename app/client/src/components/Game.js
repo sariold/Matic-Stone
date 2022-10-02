@@ -1,23 +1,23 @@
-import * as heroClass from "../utils/hero";
-import * as cardClass from "../utils/card";
 import * as deckClass from "../utils/deck";
 import PlayerCollection from "./PlayerCollection";
 import Collection from "./Collection";
+import Timer from "./Timer";
 import { useEffect, useState } from "react";
-import { ReactSortable } from "react-sortablejs";
 
 function Game() {
 	const maxMana = 10;
 
 	const [gameOver, setGameOver] = useState(true);
-	const [playerTurn, setPlayerTurn] = useState(true);
+	const [playerTurn, setPlayerTurn] = useState(false);
+
+	const [playerDrawn, setPlayerDrawn] = useState(false);
 
 	const [playerHealth, setPlayerHealth] = useState(15);
 	const [cpuHealth, setCpuHealth] = useState(15);
 
-	const [playerMana, setPlayerMana] = useState(1);
+	const [playerMana, setPlayerMana] = useState(0);
 	const [cpuMana, setCpuMana] = useState(0);
-	const [playerManaPool, setPlayerManaPool] = useState(1);
+	const [playerManaPool, setPlayerManaPool] = useState(0);
 	const [cpuManaPool, setCpuManaPool] = useState(0);
 
 	const [playerDeck, setPlayerDeck] = useState([]);
@@ -38,39 +38,49 @@ function Game() {
 		setGameOver(false);
 		let deck = await deckClass.randomDeck();
 		deck = await deckClass.shuffleDeck(deck);
-		let card = deck.shift();
+		let cards = deck.splice(0, 6);
 		setPlayerMana(1);
 		setPlayerManaPool(1);
 		setPlayerDeck([...deck]);
 		setPlayerAffordableHand([]);
-		setPlayerHand([card]);
+		setPlayerHand(cards);
 		setPlayerDiscard([]);
 		setPlayerField([]);
 		// console.log(deck);
 
 		deck = await deckClass.randomDeck();
 		deck = await deckClass.shuffleDeck(deck);
-		card = deck.shift();
+		cards = deck.splice(0, 6);
 		// console.log(deck);
 		setCpuMana(0);
 		setCpuManaPool(0);
 		setCpuDeck([...deck]);
-		setCpuHand([card]);
+		setCpuHand(cards);
 		setCpuDiscard([]);
 		setCpuField([]);
 	}
 
-	// useEffect(() => {
-	// 	setPlayerHand([...playerHand, ...playerAffordableHand]);
-	// }, [playerAffordableHand]);
+	async function endTurn() {
+		setPlayerTurn(false);
+	}
 
-	// useEffect(() => {
-	// 	console.log("PLAYER:");
-	// 	console.log(playerDeck);
-	// 	console.log(playerHand);
-	// 	console.log(playerAffordableHand);
-	// 	// console.log(playerDiscard);
-	// }, [playerHand, playerAffordableHand, playerDeck, playerDiscard]);
+	useEffect(() => {
+		if (
+			(!gameOver && playerDeck.length === 0) ||
+			(!gameOver && cpuDeck.length === 0)
+		) {
+			setGameOver(true);
+			newGame();
+		}
+	}, [playerHand, playerDeck, cpuHand, cpuDeck]);
+
+	useEffect(() => {
+		console.log("PLAYER:");
+		console.log(playerDeck);
+		console.log(playerHand);
+		console.log(playerAffordableHand);
+		console.log(playerDiscard);
+	}, [playerHand, playerAffordableHand, playerDeck, playerDiscard]);
 
 	useEffect(() => {
 		if (cpuHand.length > 7) {
@@ -83,19 +93,29 @@ function Game() {
 
 	useEffect(() => {
 		if (playerHand.length + playerAffordableHand.length > 7) {
-			let deck = Math.floor(Math.random() * 2);
-			if (deck === 0) {
-				let card = playerHand.shift();
-				setPlayerHand([...playerHand]);
-				setPlayerDiscard([...playerDiscard, card]);
-			} else {
-				let card = playerAffordableHand.shift();
-				setPlayerAffordableHand([...playerAffordableHand]);
-				setPlayerDiscard([...playerDiscard, card]);
-			}
+			let hand = playerHand;
+			let aHand = playerAffordableHand;
+			let deck = [...aHand, ...hand];
+			let pos = Math.floor(Math.random() * deck.length);
+			let card = deck.splice(pos, 1)[0];
+			setPlayerDiscard([...playerDiscard, card]);
+			// if (deck === 0) {
+			// 	// 	let card = playerHand.shift();
+			// 	// 	setPlayerHand([...playerHand]);
+			// 	// 	setPlayerDiscard([...playerDiscard, card]);
+			// } else {
+			// 	console.log("removing affordable card");
+			// 	// 	let card = playerAffordableHand.shift();
+			// 	// 	setPlayerAffordableHand([...playerAffordableHand]);
+			// 	// 	setPlayerDiscard([...playerDiscard, card]);
+			// }
+			setPlayerHand(deck.filter((card) => card.mana > playerMana));
+			setPlayerAffordableHand(
+				deck.filter((card) => card.mana <= playerMana)
+			);
 			console.log("Player popping card!");
 		}
-	}, [playerHand, playerAffordableHand, playerDiscard]);
+	}, [playerHand, playerAffordableHand]);
 
 	useEffect(() => {
 		// console.log(cpuField);
@@ -103,7 +123,13 @@ function Game() {
 	}, [cpuField, cpuHand]);
 
 	useEffect(() => {
-		if (!playerTurn) {
+		if (!playerTurn && !gameOver) {
+			if (!playerDrawn) {
+				let card = playerDeck.shift();
+				let deck = [...playerHand, card];
+				setPlayerHand([...deck]);
+			}
+
 			let card = cpuDeck.shift();
 			let deck = [...cpuHand, card];
 
@@ -127,17 +153,18 @@ function Game() {
 				setPlayerField(creatures);
 
 				setPlayerTurn(true);
+				setPlayerDrawn(false);
 			}, 1000);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [playerTurn]);
+	}, [playerTurn, gameOver]);
 
 	useEffect(() => {
 		let deck = cpuHand;
 		let affordableDeck = deck.filter((c) => c.mana <= cpuMana);
 		deck = deck.filter((c) => c.mana > cpuMana);
-		console.log(affordableDeck);
-		if (affordableDeck.length > 0) {
+		// console.log(affordableDeck);
+		if (affordableDeck.length > 0 && cpuField.length < 5) {
 			let card = affordableDeck.splice(
 				Math.floor(Math.random() * affordableDeck.length),
 				1
@@ -160,11 +187,25 @@ function Game() {
 
 	return (
 		<div className="App">
-			<button className="start" onClick={newGame}>
-				New Game
-			</button>
+			{gameOver ? (
+				<button className="start" onClick={newGame}>
+					Start
+				</button>
+			) : (
+				<button className="start" onClick={endTurn}>
+					End Turn
+				</button>
+			)}
 			<div className="turn">
-				<h1>{playerTurn ? "Your turn!" : "CPU turn!"}</h1>
+				{!gameOver
+					? [
+							<h1>{playerTurn ? "Your turn!" : "CPU turn!"}</h1>,
+							<Timer
+								start={playerTurn}
+								setTurn={setPlayerTurn}
+							/>,
+					  ]
+					: ""}
 			</div>
 			<div className="Game">
 				<h1 className="health">❤ {cpuHealth}</h1>
@@ -184,12 +225,12 @@ function Game() {
 						cardClass={"front"}
 						pull={true}
 						put={["playerDeck"]}
-						setTurn={setPlayerTurn}
+						setDrawn={setPlayerDrawn}
 					/>
 					<PlayerCollection
 						mana={null}
 						setMana={null}
-						disabled={!playerTurn}
+						disabled={playerDrawn}
 						deck={playerDeck}
 						useDeck={setPlayerDeck}
 						affordable={null}
@@ -198,7 +239,7 @@ function Game() {
 						cardClass={"backStack"}
 						pull={true}
 						put={["none"]}
-						setTurn={setPlayerTurn}
+						setDrawn={setPlayerDrawn}
 					/>
 					<PlayerCollection
 						mana={null}
@@ -211,8 +252,8 @@ function Game() {
 						className={"playerDiscard"}
 						cardClass={"backStack"}
 						pull={false}
-						put={["playerHand", "affordable"]}
-						setTurn={setPlayerTurn}
+						put={["playerHand", "affordable", "playerDeck"]}
+						setDrawn={setPlayerDrawn}
 					/>
 					<PlayerCollection
 						mana={null}
@@ -227,7 +268,7 @@ function Game() {
 						pull={false}
 						// only allow "affordable" cards to be played
 						put={"affordable"}
-						setTurn={setPlayerTurn}
+						setDrawn={setPlayerDrawn}
 					/>
 					{/* divider */}
 					<Collection

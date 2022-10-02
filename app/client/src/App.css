@@ -58,19 +58,31 @@
   margin-top: -3;
 }
 
+.time {
+  font-size: 2em;
+}
+
 .front, .back {
   width: 10em;
 }
 
 .card {
   position: relative;
-  transition: transform .4s;
-  transition-delay: .3s;
+  transition: transform .3s;
+  transition-delay: .01s;
 }
 
 .affordable {
-  border-style: solid;
-  border-color: greenyellow;
+  position: relative;
+}
+
+.affordable::before {
+  content: "";
+  width: 100%;
+  height: 14em;
+  position: absolute;
+  background-color: greenyellow;
+  opacity: 25%;
 }
 
 .tapped {
@@ -81,7 +93,7 @@
 
 .zoom {
   cursor: pointer;
-  z-index: 10;
+  z-index: 9999;
   transform: scale(5);
 }
 
@@ -93,15 +105,16 @@
 }
 
 .badge {
-  position: absolute;
-  bottom: 0.5em;
-  right: 0.75em;
+  position: absolute;;
+  bottom: 0.6em;
+  right: 0em;
   width: 4em;
   height: 1.5em;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 50%;
+  border-top-left-radius: 20%;
+  border-bottom-right-radius: 20%;
   background-color: red;
   color: white;
 }
@@ -188,10 +201,10 @@
   justify-content: center;
 }
 
-.cpuField img {
+.cpuField > div {
   /* border-style: solid; */
   /* border-color: red; */
-  animation: slam 1s;
+  animation: slam 2s;
 }
 
 .cpuHand { 
