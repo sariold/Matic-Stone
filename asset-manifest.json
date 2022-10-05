@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/Matic-Stone/static/css/main.0305774f.css",
-    "main.js": "/Matic-Stone/static/js/main.b09cb6ce.js",
+    "main.css": "/Matic-Stone/static/css/main.5d9282ff.css",
+    "main.js": "/Matic-Stone/static/js/main.af16d8eb.js",
     "index.html": "/Matic-Stone/index.html",
-    "main.0305774f.css.map": "/Matic-Stone/static/css/main.0305774f.css.map",
-    "main.b09cb6ce.js.map": "/Matic-Stone/static/js/main.b09cb6ce.js.map"
+    "main.5d9282ff.css.map": "/Matic-Stone/static/css/main.5d9282ff.css.map",
+    "main.af16d8eb.js.map": "/Matic-Stone/static/js/main.af16d8eb.js.map"
   },
   "entrypoints": [
-    "static/css/main.0305774f.css",
-    "static/js/main.b09cb6ce.js"
+    "static/css/main.5d9282ff.css",
+    "static/js/main.af16d8eb.js"
   ]
 }
