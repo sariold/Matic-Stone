@@ -18,103 +18,77 @@ function PlayerCollection({
 }) {
 	const [toPlay, setToPlay] = useState(null);
 
-	const zoom = (event) => {
-		if (event.target.classList.contains("front"))
-			event.target.parentElement.classList.toggle("zoom");
-	};
+	useEffect(() => {
+		console.log(toPlay);
+	}, [toPlay]);
+
+	function isAffordable(card) {
+		return card.mana <= mana ? "affordableCard" : "handCard";
+	}
+
+	function getClass(className, card) {
+		if (className !== "playerField") return "backStack";
+		return className === "playerField" && card.tapped === true
+			? "tapped"
+			: "card";
+	}
 
 	if (className === "playerHand")
 		return (
-			<div className={className}>
-				<ReactSortable
-					sort={true}
-					className={"leftSortable"}
-					disabled={disabled}
-					list={affordable}
-					setList={setAffordable}
-					group={{
-						name: "affordable",
-						put: "affordable",
-						pull: pull,
-					}}
-					// onMove={function (evt) {
-					// 	console.log(deck[evt.oldIndex]);
-					// }}
-					onChoose={function (evt) {
-						// console.log(evt.oldIndex);
-						// console.log(affordable[evt.oldIndex]);
-						// toPlay = affordable[evt.oldIndex];
-						setToPlay(affordable[evt.oldIndex]);
-					}}
-					onRemove={function (evt) {
-						// console.log(evt.to);
-						// console.log(evt.oldIndex);
-						// console.log(deck[evt.oldIndex]);
-						// console.log(mana);
-						if (evt.to.className === "playerField")
-							setMana(mana - toPlay.mana);
-					}}
-				>
-					{affordable
-						// .filter((card) => card.mana <= mana)
-						.map((card) => (
-							<div className="card affordable" key={card.id}>
+			<ReactSortable
+				sort={false}
+				className={"playerHand"}
+				disabled={disabled}
+				list={deck}
+				setList={useDeck}
+				group={{
+					name: className,
+					put: put,
+					pull: pull,
+				}}
+				fallbackOnBody={true}
+				invertSwap={true}
+				forceFallback={false}
+				// draggable={[".affordable", ".card"]}
+				// dragoverBubble={true}
+				onStart={function (evt) {
+					console.log("meow");
+					setToPlay(deck[evt.oldIndex]);
+				}}
+				onMove={function (evt) {
+					if (evt.to.className === "playerField") {
+						console.log(toPlay);
+						if (toPlay.mana <= mana) {
+							// setMana(mana - toPlay.mana);
+							return true;
+						} else return false;
+					} else return true;
+				}}
+				onRemove={function (evt) {
+					if (evt.to.className === "playerField") {
+						console.log(toPlay);
+						if (toPlay.mana <= mana) setMana(mana - toPlay.mana);
+					}
+				}}
+			>
+				{deck
+					// .filter((card) => card.mana <= mana)
+					.map((card) => (
+						<div className="playerCard" key={card.id}>
+							<div className={isAffordable(card)}>
 								<img
 									className={cardClass}
-									src={
-										cardClass === "front"
-											? card.img
-											: card.cover
-									}
+									src={card.img}
 									alt={cardClass}
-									onDoubleClick={zoom}
 									draggable="false"
 								/>
 								<span className="badge">
 									{card.damage} / {card.health}
 								</span>
 							</div>
-						))}
-				</ReactSortable>
-				<ReactSortable
-					sort={true}
-					disabled={disabled}
-					className={"rightSortable"}
-					list={deck}
-					setList={useDeck}
-					group={{
-						name: className,
-						put: put,
-						pull: pull,
-					}}
-					draggable={".card"}
-				>
-					{deck
-						.filter((card) => card.mana > mana)
-						.map((card) => (
-							<div
-								className={"card"}
-								key={card.id}
-								onDoubleClick={zoom}
-							>
-								<img
-									className={cardClass}
-									src={
-										cardClass === "front"
-											? card.img
-											: card.cover
-									}
-									alt={cardClass}
-									// onDoubleClick={zoom}
-									draggable="false"
-								/>
-								<span className="badge">
-									{card.damage} / {card.health}
-								</span>
-							</div>
-						))}
-				</ReactSortable>
-			</div>
+						</div>
+					))}
+			</ReactSortable>
 		);
 	else
 		return (
@@ -126,19 +100,23 @@ function PlayerCollection({
 				setList={useDeck}
 				group={{
 					name: className,
+					// put: function (evt) {
+					// 	if (className === "playerField") console.log(evt);
+					// },
 					put: function (to) {
 						// console.log(to);
-						if (className === "playerField")
-							if (to.el.children.length < 5) return "affordable";
+						if (className === "playerField") {
+							// 	console.log(toPlay);
+							if (to.el.children.length < 5) return true;
 							else return false;
-						else return put;
+						} else return put;
 					},
 					pull: pull,
 				}}
 				onRemove={function (evt) {
 					if (
 						evt.from.className === "playerDeck" &&
-						(evt.to.className === "rightSortable" ||
+						(evt.to.className === "playerHand" ||
 							evt.to.className === "playerDiscard")
 					) {
 						setDrawn(true);
@@ -146,19 +124,11 @@ function PlayerCollection({
 				}}
 			>
 				{deck.map((card) => (
-					<div
-						className={
-							className === "playerField" && card.tapped
-								? "tapped"
-								: "card"
-						}
-						key={card.id}
-					>
+					<div className={getClass(className, card)} key={card.id}>
 						<img
 							className={cardClass}
 							src={cardClass === "front" ? card.img : card.cover}
 							alt={cardClass}
-							onDoubleClick={zoom}
 							draggable="false"
 						/>
 						{className === "playerField" ? (

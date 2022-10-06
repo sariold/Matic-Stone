@@ -1,3 +1,6 @@
+// var homepage = "https://sariold.github.io/Matic-Stone";
+var homepage = "";
+
 /**
  * Abstract Card class
  * @param name The name of the card
@@ -9,7 +12,7 @@ export class Card {
 	name = "";
 	img = "";
 	// cover = "https://sariold.github.io/Matic-Stone/assets/cover.png";
-	cover = "/assets/cover.png";
+	cover = homepage + "/assets/cover.png";
 	mana = 0;
 	pos = 0;
 	discarded = false;

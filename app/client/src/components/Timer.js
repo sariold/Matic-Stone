@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 
 function Timer({ start, setTurn }) {
 	const [seconds, setSeconds] = useState(20);
-	const [isOn, setOn] = useState(false);
+	const [isOn, setOn] = useState(true);
 
 	// toggle();
 
 	useEffect(() => {
 		setOn(start);
-		console.log(start);
+		// console.log(start);
 	}, [start]);
 
 	useEffect(() => {

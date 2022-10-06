@@ -74,13 +74,13 @@ function Game() {
 		}
 	}, [playerHand, playerDeck, cpuHand, cpuDeck]);
 
-	useEffect(() => {
-		console.log("PLAYER:");
-		console.log(playerDeck);
-		console.log(playerHand);
-		console.log(playerAffordableHand);
-		console.log(playerDiscard);
-	}, [playerHand, playerAffordableHand, playerDeck, playerDiscard]);
+	// useEffect(() => {
+	// 	console.log("PLAYER:");
+	// 	console.log(playerDeck);
+	// 	console.log(playerHand);
+	// 	console.log(playerAffordableHand);
+	// 	console.log(playerDiscard);
+	// }, [playerHand, playerAffordableHand, playerDeck, playerDiscard]);
 
 	useEffect(() => {
 		if (cpuHand.length > 7) {
@@ -99,20 +99,13 @@ function Game() {
 			let pos = Math.floor(Math.random() * deck.length);
 			let card = deck.splice(pos, 1)[0];
 			setPlayerDiscard([...playerDiscard, card]);
-			// if (deck === 0) {
-			// 	// 	let card = playerHand.shift();
-			// 	// 	setPlayerHand([...playerHand]);
-			// 	// 	setPlayerDiscard([...playerDiscard, card]);
-			// } else {
-			// 	console.log("removing affordable card");
-			// 	// 	let card = playerAffordableHand.shift();
-			// 	// 	setPlayerAffordableHand([...playerAffordableHand]);
-			// 	// 	setPlayerDiscard([...playerDiscard, card]);
-			// }
-			setPlayerHand(deck.filter((card) => card.mana > playerMana));
-			setPlayerAffordableHand(
-				deck.filter((card) => card.mana <= playerMana)
-			);
+
+			// setPlayerHand(deck.filter((card) => card.mana > playerMana));
+			// setPlayerAffordableHand(
+			// 	deck.filter((card) => card.mana <= playerMana)
+			// );
+
+			setPlayerHand([...deck]);
 			console.log("Player popping card!");
 		}
 	}, [playerHand, playerAffordableHand]);
@@ -154,7 +147,7 @@ function Game() {
 
 				setPlayerTurn(true);
 				setPlayerDrawn(false);
-			}, 1000);
+			}, 3000);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [playerTurn, gameOver]);
@@ -175,37 +168,40 @@ function Game() {
 		}
 	}, [cpuMana]);
 
-	useEffect(() => {
-		let cards = [...playerHand, ...playerAffordableHand];
-		// console.log(cards);
-		setPlayerHand(cards.filter((card) => card.mana > playerMana));
-		setPlayerAffordableHand(
-			cards.filter((card) => card.mana <= playerMana)
-		);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [playerMana]);
+	// useEffect(() => {
+	// 	let cards = [...playerHand, ...playerAffordableHand];
+	// 	setPlayerHand(cards.filter((card) => card.mana > playerMana));
+	// 	setPlayerAffordableHand(
+	// 		cards.filter((card) => card.mana <= playerMana)
+	// 	);
+	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, [playerMana]);
 
 	return (
 		<div className="App">
-			{gameOver ? (
-				<button className="start" onClick={newGame}>
-					Start
-				</button>
-			) : (
-				<button className="start" onClick={endTurn}>
-					End Turn
-				</button>
-			)}
-			<div className="turn">
-				{!gameOver
-					? [
-							<h1>{playerTurn ? "Your turn!" : "CPU turn!"}</h1>,
-							<Timer
-								start={playerTurn}
-								setTurn={setPlayerTurn}
-							/>,
-					  ]
-					: ""}
+			<div className="info">
+				{gameOver ? (
+					<button className="start" onClick={newGame}>
+						Start
+					</button>
+				) : (
+					<button className="start" onClick={endTurn}>
+						End Turn
+					</button>
+				)}
+				<div className="turn">
+					{!gameOver
+						? [
+								<h1>
+									{playerTurn ? "Your turn!" : "CPU turn!"}
+								</h1>,
+								<Timer
+									start={playerTurn}
+									setTurn={setPlayerTurn}
+								/>,
+						  ]
+						: ""}
+				</div>
 			</div>
 			<div className="Game">
 				<h1 className="health">❤ {cpuHealth}</h1>
@@ -252,7 +248,7 @@ function Game() {
 						className={"playerDiscard"}
 						cardClass={"backStack"}
 						pull={false}
-						put={["playerHand", "affordable", "playerDeck"]}
+						put={["playerHand", "playerDeck"]}
 						setDrawn={setPlayerDrawn}
 					/>
 					<PlayerCollection
@@ -267,7 +263,7 @@ function Game() {
 						cardClass={"front"}
 						pull={false}
 						// only allow "affordable" cards to be played
-						put={"affordable"}
+						put={["playerHand"]}
 						setDrawn={setPlayerDrawn}
 					/>
 					{/* divider */}
