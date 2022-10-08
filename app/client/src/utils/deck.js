@@ -111,8 +111,8 @@ var creatures = [
 	["WITCH.png", 2],
 ];
 
-// var homepage = "https://sariold.github.io/Matic-Stone";
-var homepage = "";
+var homepage = "https://sariold.github.io/Matic-Stone";
+// var homepage = "";
 
 export async function randomDeck() {
 	let cards = [];

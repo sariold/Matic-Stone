@@ -7,11 +7,12 @@ function TurnInfo({
 	turnCount,
 	setTurnCounter,
 }) {
+	const turnTime = 20;
 	const [showTurnInfo, setShowTurnInfo] = useState(false);
 	const [currentTurn, setCurrentTurn] = useState(turnState);
 
 	const [count, setCount] = useState(turnCount);
-	const [seconds, setSeconds] = useState(10);
+	const [seconds, setSeconds] = useState(turnTime);
 	const [isOn, setOn] = useState(false);
 
 	useEffect(() => {
@@ -27,7 +28,7 @@ function TurnInfo({
 	useEffect(() => {
 		setCurrentTurn(turnState);
 		const changeTurn = () => {
-			return setSeconds(10);
+			return setSeconds(turnTime);
 		};
 		changeTurn();
 	}, [turnState]);
@@ -40,7 +41,7 @@ function TurnInfo({
 			}, 1000);
 		} else if ((!isOn && !dependentState) || seconds <= 0) {
 			clearInterval(interval);
-			setSeconds(10);
+			setSeconds(turnTime);
 			setTurnCounter(count + 1);
 			gameFunction(!turnState);
 			// if (restartState && isOn) setTurn(false);

@@ -1,5 +1,5 @@
-// var homepage = "https://sariold.github.io/Matic-Stone";
-var homepage = "";
+var homepage = "https://sariold.github.io/Matic-Stone";
+// var homepage = "";
 
 /**
  * Abstract Card class
@@ -11,7 +11,6 @@ var homepage = "";
 export class Card {
 	name = "";
 	img = "";
-	// cover = "https://sariold.github.io/Matic-Stone/assets/cover.png";
 	cover = homepage + "/assets/cover.png";
 	mana = 0;
 	pos = 0;

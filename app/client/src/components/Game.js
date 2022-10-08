@@ -301,6 +301,11 @@ function Game() {
 					mana={playerMana}
 					manaPool={playerManaPool}
 				/>
+				<Button
+					dependentState={playerTurn}
+					gameFunction={null}
+					text={"Attack!"}
+				/>
 			</div>
 		</div>
 	);
