@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { ReactSortable } from "react-sortablejs";
-import * as card from "../utils/card";
 
 function PlayerCollection({
 	mana,
@@ -8,8 +7,6 @@ function PlayerCollection({
 	disabled,
 	deck,
 	useDeck,
-	affordable,
-	setAffordable,
 	className,
 	cardClass,
 	pull,
@@ -18,9 +15,9 @@ function PlayerCollection({
 }) {
 	const [toPlay, setToPlay] = useState(null);
 
-	useEffect(() => {
-		console.log(toPlay);
-	}, [toPlay]);
+	// useEffect(() => {
+	// 	console.log(toPlay);
+	// }, [toPlay]);
 
 	function isAffordable(card) {
 		return card.mana <= mana ? "affordableCard" : "handCard";

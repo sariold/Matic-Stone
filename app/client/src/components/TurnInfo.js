@@ -1,38 +1,36 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-function Timer({
+function TurnInfo({
 	dependentState,
-	restartState,
-	setTurn,
+	turnState,
+	gameFunction,
 	turnCount,
 	setTurnCounter,
 }) {
-	const [seconds, setSeconds] = useState(5);
-	const [isOn, setOn] = useState(false);
+	const [showTurnInfo, setShowTurnInfo] = useState(false);
+	const [currentTurn, setCurrentTurn] = useState(turnState);
 
 	const [count, setCount] = useState(turnCount);
+	const [seconds, setSeconds] = useState(10);
+	const [isOn, setOn] = useState(false);
 
 	useEffect(() => {
 		setCount(turnCount);
 	}, [turnCount]);
 
-	// toggle();
-
 	useEffect(() => {
+		setShowTurnInfo(dependentState);
 		if (!dependentState) setOn(true);
 		// console.log(dependentState); // TODO: why does this event fire off twice for newGame function?
 	}, [dependentState]);
 
-	// useEffect(() => {
-	// 	console.log(turnCounter);
-	// }, [turnCounter]);
-
 	useEffect(() => {
+		setCurrentTurn(turnState);
 		const changeTurn = () => {
-			return setSeconds(5);
+			return setSeconds(10);
 		};
 		changeTurn();
-	}, [restartState]);
+	}, [turnState]);
 
 	useEffect(() => {
 		let interval = null;
@@ -42,16 +40,26 @@ function Timer({
 			}, 1000);
 		} else if ((!isOn && !dependentState) || seconds <= 0) {
 			clearInterval(interval);
-			setSeconds(5);
+			setSeconds(10);
 			setTurnCounter(count + 1);
-			setTurn(!restartState);
+			gameFunction(!turnState);
 			// if (restartState && isOn) setTurn(false);
 			// else if (isOn) setTurn(true);
 		}
 		return () => clearInterval(interval);
 	}, [isOn, seconds]);
 
-	return <div className="time">{seconds}s</div>;
+	return (
+		<div
+			style={{ visibility: `${!showTurnInfo ? "visible" : "hidden"}` }}
+			className="turnInfo"
+		>
+			<p className="currentTurn">
+				{currentTurn ? "Your turn!" : "CPU turn!"}
+			</p>
+			<p className="time">{seconds}s</p>
+		</div>
+	);
 }
 
-export default Timer;
+export default TurnInfo;

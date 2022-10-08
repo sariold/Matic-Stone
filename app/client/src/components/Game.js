@@ -1,14 +1,18 @@
 import * as deckClass from "../utils/deck";
 import PlayerCollection from "./PlayerCollection";
 import Collection from "./Collection";
-import Timer from "./Timer";
+import Button from "./Button";
+import TurnInfo from "./TurnInfo";
+
 import { useEffect, useState } from "react";
+import HealthMana from "./HealthMana";
 
 function Game() {
 	const maxMana = 10;
 
 	const [gameOver, setGameOver] = useState(true);
 	const [playerTurn, setPlayerTurn] = useState(false);
+	const [turnCounter, setTurnCounter] = useState(0);
 
 	const [playerDrawn, setPlayerDrawn] = useState(false);
 
@@ -24,7 +28,6 @@ function Game() {
 	const [cpuDeck, setCpuDeck] = useState([]);
 
 	const [playerHand, setPlayerHand] = useState([]);
-	const [playerAffordableHand, setPlayerAffordableHand] = useState([]);
 	const [cpuHand, setCpuHand] = useState([]);
 
 	const [playerDiscard, setPlayerDiscard] = useState([]);
@@ -42,7 +45,6 @@ function Game() {
 		setPlayerMana(1);
 		setPlayerManaPool(1);
 		setPlayerDeck([...deck]);
-		setPlayerAffordableHand([]);
 		setPlayerHand(cards);
 		setPlayerDiscard([]);
 		setPlayerField([]);
@@ -58,29 +60,40 @@ function Game() {
 		setCpuHand(cards);
 		setCpuDiscard([]);
 		setCpuField([]);
+		setPlayerTurn(true);
 	}
 
 	async function endTurn() {
 		setPlayerTurn(false);
+		setTurnCounter(turnCounter + 1);
 	}
 
 	useEffect(() => {
+		console.log(turnCounter);
+	}, [turnCounter]);
+
+	useEffect(() => {
 		if (
-			(!gameOver && playerDeck.length === 0) ||
-			(!gameOver && cpuDeck.length === 0)
+			turnCounter > 0 &&
+			((!gameOver && playerDeck.length === 0) ||
+				(!gameOver && cpuDeck.length === 0))
 		) {
 			setGameOver(true);
 			newGame();
 		}
 	}, [playerHand, playerDeck, cpuHand, cpuDeck]);
 
-	// useEffect(() => {
-	// 	console.log("PLAYER:");
-	// 	console.log(playerDeck);
-	// 	console.log(playerHand);
-	// 	console.log(playerAffordableHand);
-	// 	console.log(playerDiscard);
-	// }, [playerHand, playerAffordableHand, playerDeck, playerDiscard]);
+	// useEffect(
+	// 	(evt) => {
+	// 		console.log(evt);
+	// 		console.log("PLAYER:");
+	// 		console.log(playerDeck);
+	// 		console.log(playerHand);
+	// 		console.log();
+	// 		console.log(playerDiscard);
+	// 	},
+	// 	[playerHand, playerDeck, playerDiscard]
+	// );
 
 	useEffect(() => {
 		if (cpuHand.length > 7) {
@@ -92,10 +105,9 @@ function Game() {
 	}, [cpuHand, cpuDiscard]);
 
 	useEffect(() => {
-		if (playerHand.length + playerAffordableHand.length > 7) {
+		if (playerHand.length > 7) {
 			let hand = playerHand;
-			let aHand = playerAffordableHand;
-			let deck = [...aHand, ...hand];
+			let deck = [...hand];
 			let pos = Math.floor(Math.random() * deck.length);
 			let card = deck.splice(pos, 1)[0];
 			setPlayerDiscard([...playerDiscard, card]);
@@ -108,7 +120,7 @@ function Game() {
 			setPlayerHand([...deck]);
 			console.log("Player popping card!");
 		}
-	}, [playerHand, playerAffordableHand]);
+	}, [playerHand]);
 
 	useEffect(() => {
 		// console.log(cpuField);
@@ -116,7 +128,7 @@ function Game() {
 	}, [cpuField, cpuHand]);
 
 	useEffect(() => {
-		if (!playerTurn && !gameOver) {
+		if (!playerTurn && !gameOver && turnCounter > 0) {
 			if (!playerDrawn) {
 				let card = playerDeck.shift();
 				let deck = [...playerHand, card];
@@ -145,9 +157,10 @@ function Game() {
 				creatures.forEach((c) => (c.tapped = false));
 				setPlayerField(creatures);
 
-				setPlayerTurn(true);
+				setPlayerTurn(true); // TODO: These two lines can use the endTurn(true) function instead
+				setTurnCounter(turnCounter + 1);
 				setPlayerDrawn(false);
-			}, 3000);
+			}, 5000);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [playerTurn, gameOver]);
@@ -180,34 +193,36 @@ function Game() {
 	return (
 		<div className="App">
 			<div className="info">
-				{gameOver ? (
-					<button className="start" onClick={newGame}>
-						Start
-					</button>
-				) : (
-					<button className="start" onClick={endTurn}>
-						End Turn
-					</button>
-				)}
-				<div className="turn">
-					{!gameOver
-						? [
-								<h1>
-									{playerTurn ? "Your turn!" : "CPU turn!"}
-								</h1>,
-								<Timer
-									start={playerTurn}
-									setTurn={setPlayerTurn}
-								/>,
-						  ]
-						: ""}
-				</div>
+				<Button
+					dependentState={gameOver}
+					gameFunction={newGame}
+					text={"Start Game"}
+				/>
+				<Button
+					dependentState={playerTurn}
+					gameFunction={endTurn}
+					text={"End Turn"}
+				/>
+				<TurnInfo
+					dependentState={gameOver}
+					turnState={playerTurn}
+					gameFunction={setPlayerTurn}
+					turnCount={turnCounter}
+					setTurnCounter={setTurnCounter}
+				/>
 			</div>
-			<div className="Game">
-				<h1 className="health">❤ {cpuHealth}</h1>
-				<h1 className="mana">
-					{cpuMana} / {cpuManaPool}
-				</h1>
+			<div
+				style={{
+					visibility: `${!gameOver ? "visible" : "hidden"}`,
+				}}
+				className="Game"
+			>
+				<HealthMana
+					dependentState={gameOver}
+					health={cpuHealth}
+					mana={cpuMana}
+					manaPool={cpuManaPool}
+				/>
 				<div className="container">
 					<PlayerCollection
 						mana={playerMana}
@@ -215,8 +230,6 @@ function Game() {
 						disabled={!playerTurn}
 						deck={playerHand}
 						useDeck={setPlayerHand}
-						affordable={playerAffordableHand}
-						setAffordable={setPlayerAffordableHand}
 						className={"playerHand"}
 						cardClass={"front"}
 						pull={true}
@@ -229,8 +242,6 @@ function Game() {
 						disabled={playerDrawn}
 						deck={playerDeck}
 						useDeck={setPlayerDeck}
-						affordable={null}
-						setAffordable={null}
 						className={"playerDeck"}
 						cardClass={"backStack"}
 						pull={true}
@@ -243,8 +254,6 @@ function Game() {
 						disabled={!playerTurn}
 						deck={playerDiscard}
 						useDeck={setPlayerDiscard}
-						affordable={null}
-						setAffordable={null}
 						className={"playerDiscard"}
 						cardClass={"backStack"}
 						pull={false}
@@ -257,8 +266,6 @@ function Game() {
 						disabled={!playerTurn}
 						deck={playerField}
 						useDeck={setPlayerField}
-						affordable={null}
-						setAffordable={null}
 						className={"playerField"}
 						cardClass={"front"}
 						pull={false}
@@ -288,10 +295,12 @@ function Game() {
 						cardClass={"backStack"}
 					/>
 				</div>
-				<h1 className="mana">
-					{playerMana} / {playerManaPool}
-				</h1>
-				<h1 className="health">❤ {playerHealth}</h1>
+				<HealthMana
+					dependentState={gameOver}
+					health={playerHealth}
+					mana={playerMana}
+					manaPool={playerManaPool}
+				/>
 			</div>
 		</div>
 	);

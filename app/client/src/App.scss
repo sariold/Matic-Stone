@@ -50,13 +50,13 @@
   text-align: center;
 }
 
-.start {
-  font-size: 2em;
+.button, .turnInfo {
+  font-size: 1em;
 }
 
 .health {
   color: red;
-  font-size: 2em;
+  font-size: 1em;
 }
 
 .mana, .health {
@@ -65,11 +65,11 @@
 }
 
 .time {
-  font-size: 2em;
+  font-size: 1em;
 }
 
 .front, .back {
-  width: 10em;
+  width: 5em;
 }
 
 .card {
@@ -85,7 +85,7 @@
 .affordableCard::before {
   content: "";
   width: 100%;
-  height: 14em;
+  height: 7em;
   position: absolute;
   background-color: greenyellow;
   opacity: 25%;
@@ -94,7 +94,7 @@
 /* .regular::before {
   content: "";
   width: 100%;
-  height: 14em;
+  height: 7em;
   position: absolute;
   background-color: red;
   opacity: 25%;
@@ -106,6 +106,24 @@
   margin-right: 5em;
 }
 
+.tapped:hover {
+  cursor: pointer;
+  z-index: 9999;
+  transform: scale(5);
+}
+
+.cpuField .card:hover {
+  cursor: pointer;
+  z-index: 9999;
+  transform: scale(5);
+}
+
+.playerField .card:hover {
+  cursor: pointer;
+  z-index: 9999;
+  transform: scale(5);
+}
+
 .zoom {
   cursor: pointer;
   z-index: 9999;
@@ -113,25 +131,27 @@
 }
 
 .backStack {
-  width: 10em;
+  width: 5em;
   position: absolute;
   /* top: 0; */
   /* left: 0; */
 }
 
 .badge {
-  position: absolute;;
-  bottom: 0.6em;
-  right: 0em;
-  width: 4em;
-  height: 1.5em;
+  text-align: center;
+  position: relative;
+  bottom: 1.1em;
+  right: -3.5em;
+  width: 3em;
+  // height: 3.5em;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-top-left-radius: 20%;
-  border-bottom-right-radius: 20%;
+  border-top-right-radius: 50%;
+  border-top-left-radius: 50%;
   background-color: red;
   color: white;
+  font-size: 0.5em;
 }
 
 /* .sortable-chosen{
@@ -160,6 +180,7 @@
   grid-area: playerHand; 
   display: flex;
   justify-content: center;
+  margin-bottom: 1.5em;
 }
 
 .leftSortable, .rightSortable {
@@ -171,23 +192,23 @@
   /* border-color: red; */
   grid-area: playerHand; 
   justify-content: center;
-  min-height: 14em;
-  min-width: 10em;
+  min-height: 7em;
+  min-width: 5em;
 }
 
 .rightSortable { 
   /* border-style: solid;
   border-color: blue; */
-  min-height: 14em;
-  min-width: 10em;
+  min-height: 7em;
+  min-width: 5em;
 }
 
 .playerDeck { 
   grid-area: playerDeck; 
   border-style: solid;
   border-color: blue;
-  height: 14em;
-  width: 10em;
+  height: 7em;
+  width: 5em;
 }
 
 .playerDiscard { 
@@ -198,8 +219,8 @@
   grid-area: playerDiscard; 
   border-style: solid;
   border-color: red;
-  height: 14em;
-  width: 10em;
+  height: 7em;
+  width: 5em;
 }
 
 .playerField { 
@@ -207,6 +228,7 @@
   border-style: solid;
   display: flex;
   justify-content: center;
+  height: 7em;
 }
 
 .cpuField { 
@@ -214,7 +236,14 @@
   border-style: solid;
   display: flex;
   justify-content: center;
+  height: 7em;
 }
+
+// .playerField, .cpuField div div:hover {
+//   cursor: pointer;
+//   z-index: 9999;
+//   transform: scale(5);
+// }
 
 .cpuField > div {
   /* border-style: solid; */
@@ -233,8 +262,8 @@
   border-style: solid;
   border-color: black;
   position: relative;
-  height: 14em;
-  width: 10em;
+  height: 7em;
+  width: 5em;
 }
 
 .cpuDiscard {
@@ -245,8 +274,8 @@
   grid-area: cpuDiscard; 
   border-style: solid;
   border-color: black;
-  height: 14em;
-  width: 10em;
+  height: 7em;
+  width: 5em;
 }
 
 @keyframes slam
@@ -270,10 +299,10 @@
 }
 
 .playerCard {
-  height: 14em;
+  height: 7em;
   margin: 0 -0.5em;
   position: relative;
-  width: 10em;
+  width: 5em;
   &:after {
     // uncomment background below to see hit areas
     background: rgba(255, 0, 0, 0.15);
