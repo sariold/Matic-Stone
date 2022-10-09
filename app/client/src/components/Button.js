@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function Button({ dependentState, gameFunction, text }) {
+const Button = ({ dependentState, gameFunction, text, className }) => {
 	const [showButton, setShowButton] = useState(false);
 
 	const displayStyle = {
@@ -23,16 +23,16 @@ function Button({ dependentState, gameFunction, text }) {
 	return (
 		<div style={determineStyle(text)}>
 			<button
-				className="button"
+				className={className}
 				onClick={() => {
 					gameFunction();
-					this.disabled = dependentState;
+					// disabled = dependentState;
 				}}
 			>
 				{text}
 			</button>
 		</div>
 	);
-}
+};
 
 export default Button;

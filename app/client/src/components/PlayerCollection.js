@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { ReactSortable } from "react-sortablejs";
+import Button from "./Button";
 
 const PlayerCollection = ({
+	viewValue,
 	mana,
 	setMana,
 	disabled,
@@ -17,6 +19,8 @@ const PlayerCollection = ({
 
 	const [playerDeck, setPlayerDeck] = useState(deck);
 
+	const [viewable, setViewable] = useState(false);
+
 	useEffect(() => {
 		// if (className === "playerField") {
 		// 	console.log("CHANGES");
@@ -29,8 +33,15 @@ const PlayerCollection = ({
 	// 	console.log(toPlay);
 	// }, [toPlay]);
 
+	useEffect(() => {
+		setViewable(viewValue);
+	}, [viewValue]);
+
 	function isAffordable(card) {
-		return card.mana <= mana ? "affordableCard" : "handCard";
+		return (
+			(card.mana <= mana ? "affordableCard" : "handCard") +
+			(viewable ? " viewable" : "")
+		);
 	}
 
 	function getClass(className, card) {
@@ -47,7 +58,7 @@ const PlayerCollection = ({
 			<ReactSortable
 				sort={false}
 				className={"playerHand"}
-				disabled={disabled}
+				disabled={disabled || viewable}
 				list={playerDeck}
 				setList={useDeck}
 				group={{
@@ -59,22 +70,21 @@ const PlayerCollection = ({
 				// invertSwap={true}
 				// forceFallback={false}
 				// draggable={[".affordable", ".card"]}
-				// dragoverBubble={true}
-
+				dragoverBubble={true}
 				ghostClass={"sortable-ghost"} // Class name for the drop placeholder
 				chosenClass={"sortable-chosen"} // Class name for the chosen item
 				dragClass={"sortable-drag"} // Class name for the dragging item
-				swapThreshold={1} // Threshold of the swap zone
-				invertSwap={false} // Will always use inverted swap zone if set to true
-				invertedSwapThreshold={1} // Threshold of the inverted swap zone (will be set to swapThreshold value by default)
-				direction={"horizontal"} // Direction of Sortable (will be detected automatically if not given)
-				forceFallback={false} // ignore the HTML5 DnD behaviour and force the fallback to kick in
-				fallbackClass={"sortable-fallback"} // Class name for the cloned DOM Element when using forceFallback
-				fallbackOnBody={false} // Appends the cloned DOM Element into the Document's Body
-				fallbackTolerance={0} // Specify in pixels how far the mouse should move before it's considered as a drag.
-				dragoverBubble={false}
-				removeCloneOnHide={true} // Remove the clone element when it is not showing, rather than just hiding it
-				emptyInsertThreshold={5} // px, distance mouse must be from empty sortable to insert drag element into it
+				// swapThreshold={1} // Threshold of the swap zone
+				// invertSwap={false} // Will always use inverted swap zone if set to true
+				// invertedSwapThreshold={1} // Threshold of the inverted swap zone (will be set to swapThreshold value by default)
+				// direction={"horizontal"} // Direction of Sortable (will be detected automatically if not given)
+				// forceFallback={false} // ignore the HTML5 DnD behaviour and force the fallback to kick in
+				// fallbackClass={"sortable-fallback"} // Class name for the cloned DOM Element when using forceFallback
+				// fallbackOnBody={false} // Appends the cloned DOM Element into the Document's Body
+				// fallbackTolerance={0} // Specify in pixels how far the mouse should move before it's considered as a drag.
+				// dragoverBubble={false}
+				// removeCloneOnHide={true} // Remove the clone element when it is not showing, rather than just hiding it
+				// emptyInsertThreshold={5} // px, distance mouse must be from empty sortable to insert drag element into it
 				onStart={function (evt) {
 					// console.log("meow");
 					setToPlay(playerDeck[evt.oldIndex]);

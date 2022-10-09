@@ -14,6 +14,8 @@ function Game() {
 	const [winState, setWinState] = useState(0);
 	const [playerTurn, setPlayerTurn] = useState(false);
 	const [turnCounter, setTurnCounter] = useState(0);
+	const [viewable, setViewable] = useState(false);
+	const [viewText, setViewText] = useState("OFF");
 
 	const [playerDrawn, setPlayerDrawn] = useState(false);
 
@@ -65,6 +67,14 @@ function Game() {
 		setCpuField([]);
 		setPlayerTurn(true);
 	}
+
+	function toggleViewable() {
+		setViewable(!viewable);
+	}
+
+	useEffect(() => {
+		viewable ? setViewText("ON") : setViewText("OFF");
+	}, [viewable]);
 
 	async function endTurn() {
 		setPlayerTurn(false);
@@ -283,12 +293,14 @@ function Game() {
 					dependentState={gameOver && winState === 0}
 					gameFunction={newGame}
 					text={"Start Game"}
+					className={"button"}
 				/>
 				{gameOver && winState !== 0 ? whoWon(winState) : ""}
 				<Button
 					dependentState={playerTurn && winState === 0}
 					gameFunction={endTurn}
 					text={"End Turn"}
+					className={"button"}
 				/>
 				<TurnInfo
 					dependentState={gameOver}
@@ -312,6 +324,7 @@ function Game() {
 				/>
 				<div className="container">
 					<PlayerCollection
+						viewValue={viewable}
 						mana={playerMana}
 						setMana={setPlayerMana}
 						disabled={!playerTurn}
@@ -324,6 +337,7 @@ function Game() {
 						setDrawn={setPlayerDrawn}
 					/>
 					<PlayerCollection
+						viewValue={viewable}
 						mana={null}
 						setMana={null}
 						disabled={playerDrawn}
@@ -336,6 +350,7 @@ function Game() {
 						setDrawn={setPlayerDrawn}
 					/>
 					<PlayerCollection
+						viewValue={viewable}
 						mana={null}
 						setMana={null}
 						disabled={!playerTurn}
@@ -348,6 +363,7 @@ function Game() {
 						setDrawn={setPlayerDrawn}
 					/>
 					<PlayerCollection
+						viewValue={viewable}
 						mana={null}
 						setMana={null}
 						disabled={!playerTurn}
@@ -392,6 +408,14 @@ function Game() {
 					dependentState={playerTurn && winState === 0}
 					gameFunction={attack}
 					text={"Attack!"}
+					className={"button"}
+				/>
+				<br />
+				<Button
+					dependentState={!gameOver}
+					gameFunction={toggleViewable}
+					text={"Zoom " + viewText}
+					className={viewText}
 				/>
 			</div>
 		</div>
