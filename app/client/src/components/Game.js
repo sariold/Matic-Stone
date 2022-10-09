@@ -11,6 +11,7 @@ function Game() {
 	const maxMana = 10;
 
 	const [gameOver, setGameOver] = useState(true);
+	const [winState, setWinState] = useState(0);
 	const [playerTurn, setPlayerTurn] = useState(false);
 	const [turnCounter, setTurnCounter] = useState(0);
 
@@ -39,6 +40,8 @@ function Game() {
 	async function newGame() {
 		console.log("New game!");
 		setGameOver(false);
+		setWinState(0);
+		setPlayerTurn(false);
 		let deck = await deckClass.randomDeck();
 		deck = await deckClass.shuffleDeck(deck);
 		let cards = deck.splice(0, 6);
@@ -68,9 +71,78 @@ function Game() {
 		setTurnCounter(turnCounter + 1);
 	}
 
+	async function attack() {
+		let creaturesOne = playerTurn ? playerField : cpuField;
+
+		if (creaturesOne.length === 0) return;
+		console.log((playerTurn ? "Player " : "CPU ") + "is now attacking!");
+
+		let creaturesTwo = playerTurn ? cpuField : playerField;
+
+		let healthOne = playerTurn ? playerHealth : cpuHealth;
+		let healthTwo = playerTurn ? cpuHealth : playerHealth;
+
+		for (let i = 0; i < creaturesOne.length; i++) {
+			let cOne = creaturesOne[i];
+			if (cOne.tapped) continue;
+			let cTwo = creaturesTwo[i];
+
+			if (typeof cTwo === "undefined") {
+				cOne.attacking = true;
+				healthTwo -= cOne.damage;
+				cOne.tapped = true;
+			} else if (typeof cTwo !== "undefined") {
+				cOne.attacking = true;
+				if (cTwo.tapped) {
+					healthTwo -= cOne.damage;
+				} else {
+					cOne.health -= cTwo.damage;
+					cTwo.health -= cOne.damage;
+					cTwo.tapped = true;
+				}
+				cOne.tapped = true;
+
+				setCpuField(playerTurn ? [...creaturesTwo] : [...creaturesOne]);
+				setPlayerField(
+					playerTurn ? [...creaturesOne] : [...creaturesTwo]
+				);
+
+				setCpuHealth(playerTurn ? healthTwo : healthOne);
+				setPlayerHealth(playerTurn ? healthOne : healthTwo);
+
+				cOne.health > 0
+					? (creaturesOne[i] = cOne)
+					: creaturesOne.splice(i, 1);
+				cTwo.health > 0
+					? (creaturesTwo[i] = cTwo)
+					: creaturesTwo.splice(i, 1);
+			}
+			setCpuField(playerTurn ? [...creaturesTwo] : [...creaturesOne]);
+			setPlayerField(playerTurn ? [...creaturesOne] : [...creaturesTwo]);
+
+			setCpuHealth(playerTurn ? healthTwo : healthOne);
+			setPlayerHealth(playerTurn ? healthOne : healthTwo);
+		}
+	}
+
 	useEffect(() => {
-		console.log(turnCounter);
-	}, [turnCounter]);
+		console.log(playerHealth, cpuHealth);
+		if (playerHealth <= 0) {
+			setTimeout(() => {
+				setWinState(2);
+				setGameOver(true);
+			}, 2000);
+		} else if (cpuHealth <= 0) {
+			setTimeout(() => {
+				setWinState(1);
+				setGameOver(true);
+			}, 2000);
+		}
+	}, [playerHealth, cpuHealth]);
+
+	// useEffect(() => {
+	// 	console.log(turnCounter);
+	// }, [turnCounter]);
 
 	useEffect(() => {
 		if (
@@ -142,25 +214,33 @@ function Game() {
 			setCpuHand([...deck]);
 			// setCpuField([...cpuField, card[0]]);
 			let creatures = cpuField;
-			creatures.forEach((c) => (c.tapped = false));
+			creatures.forEach((c) => {
+				c.tapped = false;
+				c.attacking = false;
+			});
 			setCpuField(creatures);
 			if (cpuMana < maxMana) {
 				setCpuManaPool(cpuManaPool + 1);
 				setCpuMana(cpuManaPool + 1);
 			}
+			let timeDuration = Math.floor(Math.random() * 5) + 5;
+			console.log(`Computer will take a ${timeDuration - 1}s long turn`);
 			setTimeout(() => {
 				if (playerMana < maxMana) {
 					setPlayerManaPool(playerManaPool + 1);
 					setPlayerMana(playerManaPool + 1);
 				}
 				let creatures = playerField;
-				creatures.forEach((c) => (c.tapped = false));
+				creatures.forEach((c) => {
+					c.tapped = false;
+					c.attacking = false;
+				});
 				setPlayerField(creatures);
 
 				setPlayerTurn(true); // TODO: These two lines can use the endTurn(true) function instead
 				setTurnCounter(turnCounter + 1);
 				setPlayerDrawn(false);
-			}, 5000);
+			}, timeDuration * 1000);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [playerTurn, gameOver]);
@@ -178,7 +258,7 @@ function Game() {
 			setCpuHand([...deck, ...affordableDeck]);
 			setCpuField([...cpuField, card[0]]);
 			setCpuMana(cpuMana - card[0].mana);
-		}
+		} else attack();
 	}, [cpuMana]);
 
 	// useEffect(() => {
@@ -190,16 +270,23 @@ function Game() {
 	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	// }, [playerMana]);
 
+	function whoWon(val) {
+		let messages = ["", "YOU WON!", "YOU LOSE!"];
+
+		return <h1>{messages[val]}</h1>;
+	}
+
 	return (
 		<div className="App">
 			<div className="info">
 				<Button
-					dependentState={gameOver}
+					dependentState={gameOver && winState === 0}
 					gameFunction={newGame}
 					text={"Start Game"}
 				/>
+				{gameOver && winState !== 0 ? whoWon(winState) : ""}
 				<Button
-					dependentState={playerTurn}
+					dependentState={playerTurn && winState === 0}
 					gameFunction={endTurn}
 					text={"End Turn"}
 				/>
@@ -302,8 +389,8 @@ function Game() {
 					manaPool={playerManaPool}
 				/>
 				<Button
-					dependentState={playerTurn}
-					gameFunction={null}
+					dependentState={playerTurn && winState === 0}
+					gameFunction={attack}
 					text={"Attack!"}
 				/>
 			</div>

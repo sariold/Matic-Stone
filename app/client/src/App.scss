@@ -1,42 +1,3 @@
-/* .App {
-  text-align: center;
-} */
-
-/*.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-} */
-
 html {
   font-size: 90%;
   @media only screen and (max-width: 1000px) {
@@ -48,12 +9,9 @@ html {
   display: flex;
   flex-direction: column;
   align-items: center;
-  // justify-content: center;
 }
 
 .info {
-  // align-items: center;
-  // justify-content: center;
   text-align: center;
 }
 
@@ -85,10 +43,6 @@ html {
   transition-delay: .01s;
 }
 
-// .affordable {
-//   position: relative;
-// }
-
 .affordableCard::before {
   content: "";
   width: 100%;
@@ -98,34 +52,25 @@ html {
   opacity: 25%;
 }
 
-/* .regular::before {
-  content: "";
-  width: 100%;
-  height: 7rem;
-  position: absolute;
-  background-color: red;
-  opacity: 25%;
-} */
-
 .tapped {
   transform: rotate(90deg);
-  margin-left: 5rem;
-  margin-right: 5rem;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
 }
 
-.tapped:hover {
+.tapped:active {
   cursor: pointer;
   z-index: 9999;
   transform: scale(5);
 }
 
-.cpuField .card:hover {
+.cpuField .card:active {
   cursor: pointer;
   z-index: 9999;
   transform: scale(5);
 }
 
-.playerField .card:hover {
+.playerField .card:active {
   cursor: pointer;
   z-index: 9999;
   transform: scale(5);
@@ -140,8 +85,6 @@ html {
 .backStack {
   width: 5rem;
   position: absolute;
-  /* top: 0; */
-  /* left: 0; */
 }
 
 .badge {
@@ -160,14 +103,6 @@ html {
   color: white;
   font-size: 0.5rem;
 }
-
-/* .sortable-chosen{
-  box-shadow: 8px 8px 32px #E1E1E1;
-}
-
-.sortable-drag{
-  opacity: 0;
-} */
 
 .container {  
   display: grid;
@@ -246,15 +181,7 @@ html {
   height: 7rem;
 }
 
-// .playerField, .cpuField div div:hover {
-//   cursor: pointer;
-//   z-index: 9999;
-//   transform: scale(5);
-// }
-
 .cpuField > div {
-  /* border-style: solid; */
-  /* border-color: red; */
   animation: slam 2s;
 }
 
@@ -355,27 +282,24 @@ $total: 7;
   $offset: abs(($i - ($total - 1) / 2) / ($total - 2) * $offsetRange);
   .playerCard:nth-child(#{$i + 1}) {
     .handCard, .affordableCard {
-      // box-shadow: 
-      //   -5px 5px 5px hsla(0, 0%, 0%, 0.15),
-      // ;
       transform: translateY($offset * 1px) rotate($rotation * 1deg);
     }
-    &:hover {
-      .handCard, .affordableCard {
-        // box-shadow: 
-        //   0 10px 20px hsla(0, 0%, 0%, 0.4),
-        // ;
-        transform: translateY(-100px) rotate(0deg) scale(3);
-        transition-duration: 0ms;
-        z-index: 5;
-        &:after {
-          animation: fade 250ms ease-out forwards;
-        }
-      }
-      &:after {
-        top: -175px;  
-      }
-    }
+    // &:hover {
+    //   .handCard, .affordableCard {
+    //     // pointer-events: none;
+    //     transform: translateY(-100px) rotate(0deg) scale(3);
+    //     transition-duration: 0ms;
+    //     z-index: 5;
+    //     // animation: fade 2s ease-out forwards;
+
+    //     &:after {
+    //       animation: fade 250ms ease-out forwards;
+    //     }
+    //   }
+    //   &:after {
+    //     top: -175px;  
+    //   }
+    // }
   }
 }
 
@@ -387,5 +311,30 @@ $total: 7;
   100% {
     opacity: 0;
     transform: scale(1.15);
+  }
+}
+
+.playerField .attackPlayer {
+  animation: lungeForward 1s ease-out forwards;
+}
+
+// .attackCPU {
+//   // animation: lungeBackward 1s ease-in backwards;
+//   transform: scale(5);
+// }
+
+.cpuField .attackCPU  {
+  animation: lungeBackward 1s ease-in backwards;
+}
+
+@keyframes lungeForward {
+  50% {
+    transform: translateY(-15rem);
+  }
+}
+
+@keyframes lungeBackward {
+  50% {
+    transform: translateY(15rem);
   }
 }

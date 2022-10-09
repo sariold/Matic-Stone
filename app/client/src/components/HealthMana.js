@@ -5,6 +5,7 @@ function HealthMana({ dependentState, health, mana, manaPool }) {
 
 	useEffect(() => {
 		if (!dependentState) setShowHealthMana(true);
+		else if (dependentState) setShowHealthMana(false);
 	}, [dependentState]);
 
 	return (

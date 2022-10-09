@@ -111,8 +111,8 @@ var creatures = [
 	["WITCH.png", 2],
 ];
 
-var homepage = "https://sariold.github.io/Matic-Stone";
-// var homepage = "";
+// var homepage = "https://sariold.github.io/Matic-Stone";
+var homepage = "";
 
 export async function randomDeck() {
 	let cards = [];
@@ -122,7 +122,7 @@ export async function randomDeck() {
 		let img = homepage + "/assets/creatures/" + name;
 		let mana = array[1];
 		let health = Math.floor(Math.random() * Number(mana)) + 1;
-		let damage = Math.floor(Math.random() * Number(mana));
+		let damage = Math.floor(Math.random() * Number(mana)) + 1;
 
 		let creature = new cardClass.Creature(name, img, mana, damage, health);
 		cards.push(creature);

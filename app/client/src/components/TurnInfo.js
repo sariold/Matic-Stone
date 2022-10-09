@@ -22,6 +22,7 @@ function TurnInfo({
 	useEffect(() => {
 		setShowTurnInfo(dependentState);
 		if (!dependentState) setOn(true);
+		else if (dependentState) setOn(false);
 		// console.log(dependentState); // TODO: why does this event fire off twice for newGame function?
 	}, [dependentState]);
 

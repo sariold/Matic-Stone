@@ -22,7 +22,13 @@ function Button({ dependentState, gameFunction, text }) {
 
 	return (
 		<div style={determineStyle(text)}>
-			<button className="button" onClick={() => gameFunction()}>
+			<button
+				className="button"
+				onClick={() => {
+					gameFunction();
+					this.disabled = dependentState;
+				}}
+			>
 				{text}
 			</button>
 		</div>

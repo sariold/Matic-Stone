@@ -1,5 +1,5 @@
-var homepage = "https://sariold.github.io/Matic-Stone";
-// var homepage = "";
+// var homepage = "https://sariold.github.io/Matic-Stone";
+var homepage = "";
 
 /**
  * Abstract Card class
@@ -42,6 +42,7 @@ export class Creature extends Card {
 	health = 0;
 	damage = 0;
 	tapped = true;
+	attacking = false;
 
 	constructor(name, img, mana, damage, health) {
 		super(name, img, mana);

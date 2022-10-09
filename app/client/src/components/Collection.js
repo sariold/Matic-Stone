@@ -1,18 +1,24 @@
 import { useEffect, useState } from "react";
 
-function Collection({ deck, className, cardClass }) {
+const Collection = ({ deck, className, cardClass }) => {
 	const [cards, setCards] = useState(deck);
 
 	function getClass(className, card) {
 		if (className === "cpuHand") return "card";
 		if (className !== "cpuField") return "backStack";
-		return className === "cpuField" && card.tapped === true
-			? "tapped"
-			: "card";
+		if (className === "cpuField") {
+			if (card.attacking) return "tapped attackCPU";
+			return card.tapped ? "tapped" : "card";
+		}
+		return "card";
 	}
 
 	useEffect(() => {
-		setCards(deck);
+		if (className === "cpuField") {
+			console.log("CHANGES");
+			console.log(deck);
+		}
+		setCards([...deck]);
 	}, [deck]);
 
 	return (
@@ -36,6 +42,6 @@ function Collection({ deck, className, cardClass }) {
 			))}
 		</div>
 	);
-}
+};
 
 export default Collection;
