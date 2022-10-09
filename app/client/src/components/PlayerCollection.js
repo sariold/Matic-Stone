@@ -56,7 +56,7 @@ const PlayerCollection = ({
 	if (className === "playerHand")
 		return (
 			<ReactSortable
-				sort={false}
+				sort={true}
 				className={"playerHand"}
 				disabled={disabled || viewable}
 				list={playerDeck}
@@ -70,6 +70,7 @@ const PlayerCollection = ({
 				// invertSwap={true}
 				// forceFallback={false}
 				// draggable={[".affordable", ".card"]}
+				animation={150}
 				dragoverBubble={true}
 				ghostClass={"sortable-ghost"} // Class name for the drop placeholder
 				chosenClass={"sortable-chosen"} // Class name for the chosen item
@@ -114,7 +115,7 @@ const PlayerCollection = ({
 									className={cardClass}
 									src={card.img}
 									alt={cardClass}
-									draggable="false"
+									draggable="true"
 								/>
 								<span className="badge">
 									{card.damage} / {card.health}
@@ -127,7 +128,7 @@ const PlayerCollection = ({
 	else
 		return (
 			<ReactSortable
-				sort={pull}
+				sort={false}
 				disabled={disabled}
 				className={className}
 				list={playerDeck}
@@ -163,7 +164,7 @@ const PlayerCollection = ({
 							className={cardClass}
 							src={cardClass === "front" ? card.img : card.cover}
 							alt={cardClass}
-							draggable="false"
+							draggable="true"
 						/>
 						{className === "playerField" ? (
 							<span className="badge">

@@ -256,19 +256,21 @@ function Game() {
 	}, [playerTurn, gameOver]);
 
 	useEffect(() => {
-		let deck = cpuHand;
-		let affordableDeck = deck.filter((c) => c.mana <= cpuMana);
-		deck = deck.filter((c) => c.mana > cpuMana);
-		// console.log(affordableDeck);
-		if (affordableDeck.length > 0 && cpuField.length < 5) {
-			let card = affordableDeck.splice(
-				Math.floor(Math.random() * affordableDeck.length),
-				1
-			);
-			setCpuHand([...deck, ...affordableDeck]);
-			setCpuField([...cpuField, card[0]]);
-			setCpuMana(cpuMana - card[0].mana);
-		} else attack();
+		setTimeout(() => {
+			let deck = cpuHand;
+			let affordableDeck = deck.filter((c) => c.mana <= cpuMana);
+			deck = deck.filter((c) => c.mana > cpuMana);
+			// console.log(affordableDeck);
+			if (affordableDeck.length > 0 && cpuField.length < 5) {
+				let card = affordableDeck.splice(
+					Math.floor(Math.random() * affordableDeck.length),
+					1
+				);
+				setCpuHand([...deck, ...affordableDeck]);
+				setCpuField([...cpuField, card[0]]);
+				setCpuMana(cpuMana - card[0].mana);
+			} else attack();
+		}, 1000);
 	}, [cpuMana]);
 
 	// useEffect(() => {

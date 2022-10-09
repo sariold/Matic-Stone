@@ -3,6 +3,13 @@ html {
   @media only screen and (max-width: 1000px) {
     font-size: 80%;
   }
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+     -moz-user-select: none; /* Old versions of Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome, Edge, Opera and Firefox */
 }
 
 .Game {
@@ -171,7 +178,8 @@ html {
   border-style: solid;
   display: flex;
   justify-content: center;
-  height: 7rem;
+  // height: 7rem;
+  width: 40rem;
 }
 
 .cpuField { 
@@ -179,7 +187,7 @@ html {
   border-style: solid;
   display: flex;
   justify-content: center;
-  height: 7rem;
+  // height: 7rem;
 }
 
 .cpuField > div {
@@ -243,7 +251,7 @@ html {
     // uncomment background below to see hit areas
     // background: rgba(255, 0, 0, 0.45);
     // width: 10rem;
-    bottom: -4rem;
+    bottom: 0;
     content: '';
     left: 0;
     position: absolute;
@@ -252,6 +260,13 @@ html {
     z-index: 10;
   }
 }
+
+// .sortable-chosen::before {
+//   // position: relative;
+//   transform: translate(0, 0);
+//   background: red;
+//   z-index: 9999;
+// }
 
 .handCard, .affordableCard {
   bottom: 0;
@@ -264,7 +279,7 @@ html {
   transition: 800ms cubic-bezier(0.19, 1, 0.22, 1) transform;
   &:after {
     animation: none;
-    // background: #fff;
+    // background: red;
     bottom: 0;
     content: '';
     left: 0;
@@ -317,9 +332,9 @@ $total: 7;
           animation: fade 250ms ease-out forwards;
         }
       }
-      &:after {
-        top: -175px;  
-      }
+      // &:after {
+      //   top: -175px;  
+      // }
     }
   }
 }
