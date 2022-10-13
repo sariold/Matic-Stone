@@ -1,13 +1,12 @@
 import { Route, Routes } from "react-router-dom";
-import "./App.scss";
-// import Home from "./components/Home";
-import Game from "./components/Game";
+// import Game from "./components/Game";
+import Home from "./components/routes/Home";
 
 function App() {
 	return (
 		<div className="App">
 			<Routes>
-				<Route path="/" element={<Game />}></Route>
+				<Route path="/" element={<Home/>}></Route>
 			</Routes>
 		</div>
 	);

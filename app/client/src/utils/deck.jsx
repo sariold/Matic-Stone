@@ -1,4 +1,4 @@
-import * as cardClass from "../utils/card";
+import * as cardClass from "./card";
 
 /**
  * Abstract Deck class

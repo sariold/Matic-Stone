@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ReactSortable } from "react-sortablejs";
-import Button from "./Button";
+import Button from "./ui/ActionButton";
 
 const PlayerCollection = ({
 	viewValue,

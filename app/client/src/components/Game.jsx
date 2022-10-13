@@ -1,7 +1,7 @@
 import * as deckClass from "../utils/deck";
 import PlayerCollection from "./PlayerCollection";
 import Collection from "./Collection";
-import Button from "./Button";
+import Button from "./ui/ActionButton";
 import TurnInfo from "./TurnInfo";
 
 import { useEffect, useState } from "react";
@@ -288,140 +288,181 @@ function Game() {
 		return <h1>{messages[val]}</h1>;
 	}
 
+
+
 	return (
-		<div className="App">
-			<div className="info">
-				<Button
-					dependentState={gameOver && winState === 0}
-					gameFunction={newGame}
-					text={"Start Game"}
-					className={"button"}
-				/>
-				{gameOver && winState !== 0 ? whoWon(winState) : ""}
-				<Button
-					dependentState={playerTurn && winState === 0}
-					gameFunction={endTurn}
-					text={"End Turn"}
-					className={"button"}
-				/>
-				<TurnInfo
-					dependentState={gameOver}
-					turnState={playerTurn}
-					gameFunction={setPlayerTurn}
-					turnCount={turnCounter}
-					setTurnCounter={setTurnCounter}
-				/>
-			</div>
-			<div
-				style={{
-					visibility: `${!gameOver ? "visible" : "hidden"}`,
-				}}
-				className="Game"
-			>
-				<HealthMana
-					dependentState={gameOver}
-					health={cpuHealth}
-					mana={cpuMana}
-					manaPool={cpuManaPool}
-				/>
-				<div className="container">
-					<PlayerCollection
-						viewValue={viewable}
-						mana={playerMana}
-						setMana={setPlayerMana}
-						disabled={!playerTurn}
-						deck={playerHand}
-						useDeck={setPlayerHand}
-						className={"playerHand"}
-						cardClass={"front"}
-						pull={true}
-						put={["playerDeck"]}
-						setDrawn={setPlayerDrawn}
+		<div className="container text-center">
+			<div className="row">
+				<div className="col align-self-center">
+					<Button
+						dependentState={gameOver && winState === 0}
+						gameFunction={newGame}
+						text={"Start Game"}
+						className={"button"}
 					/>
-					<PlayerCollection
-						viewValue={viewable}
-						mana={null}
-						setMana={null}
-						disabled={playerDrawn}
-						deck={playerDeck}
-						useDeck={setPlayerDeck}
-						className={"playerDeck"}
-						cardClass={"backStack"}
-						pull={true}
-						put={["none"]}
-						setDrawn={setPlayerDrawn}
+
+
+					{gameOver && winState !== 0 ? whoWon(winState) : ""}
+					<Button
+						dependentState={playerTurn && winState === 0}
+						gameFunction={endTurn}
+						text={"End Turn"}
+						className={"button"}
 					/>
-					<PlayerCollection
-						viewValue={viewable}
-						mana={null}
-						setMana={null}
-						disabled={!playerTurn}
-						deck={playerDiscard}
-						useDeck={setPlayerDiscard}
-						className={"playerDiscard"}
-						cardClass={"backStack"}
-						pull={false}
-						put={["playerHand", "playerDeck"]}
-						setDrawn={setPlayerDrawn}
-					/>
-					<PlayerCollection
-						viewValue={viewable}
-						mana={null}
-						setMana={null}
-						disabled={!playerTurn}
-						deck={playerField}
-						useDeck={setPlayerField}
-						className={"playerField"}
-						cardClass={"front"}
-						pull={false}
-						// only allow "affordable" cards to be played
-						put={["playerHand"]}
-						setDrawn={setPlayerDrawn}
-					/>
-					{/* divider */}
-					<Collection
-						deck={cpuField}
-						className={"cpuField"}
-						cardClass={"front"}
-					/>
-					<Collection
-						deck={cpuHand}
-						className={"cpuHand"}
-						cardClass={"back"}
-					/>
-					<Collection
-						deck={cpuDeck}
-						className={"cpuDeck"}
-						cardClass={"backStack"}
-					/>
-					<Collection
-						deck={cpuDiscard}
-						className={"cpuDiscard"}
-						cardClass={"backStack"}
+
+					<TurnInfo
+						dependentState={gameOver}
+						turnState={playerTurn}
+						gameFunction={setPlayerTurn}
+						turnCount={turnCounter}
+						setTurnCounter={setTurnCounter}
 					/>
 				</div>
-				<HealthMana
-					dependentState={gameOver}
-					health={playerHealth}
-					mana={playerMana}
-					manaPool={playerManaPool}
-				/>
-				<Button
-					dependentState={playerTurn && winState === 0}
-					gameFunction={attack}
-					text={"Attack!"}
-					className={"button"}
-				/>
-				<br />
-				<Button
-					dependentState={!gameOver}
-					gameFunction={toggleViewable}
-					text={"Zoom " + viewText}
-					className={viewText}
-				/>
 			</div>
 		</div>
-	);
+	)
+
+	// return (
+	// 	<div className="App">
+	// 		<div className="info">
+	// 			<div className="container text-center">
+	// 				<div className="row">
+	// 				<div className="col align-self-center">
+	// 					<Button
+	// 						dependentState={gameOver && winState === 0}
+	// 						gameFunction={newGame}
+	// 						text={"Start Game"}
+	// 						className={"button"}
+	// 					/>
+	// 				</div>
+	// 				</div>
+	// 			</div>
+
+	// 			{gameOver && winState !== 0 ? whoWon(winState) : ""}
+	// 			<Button
+	// 				dependentState={playerTurn && winState === 0}
+	// 				gameFunction={endTurn}
+	// 				text={"End Turn"}
+	// 				className={"button"}
+	// 			/>
+	// 			<TurnInfo
+	// 				dependentState={gameOver}
+	// 				turnState={playerTurn}
+	// 				gameFunction={setPlayerTurn}
+	// 				turnCount={turnCounter}
+	// 				setTurnCounter={setTurnCounter}
+	// 			/>
+	// 		</div>
+	// 		<div
+	// 			style={{
+	// 				visibility: `${!gameOver ? "visible" : "hidden"}`,
+	// 			}}
+	// 			className="Game"
+	// 		>
+	// 			<HealthMana
+	// 				dependentState={gameOver}
+	// 				health={cpuHealth}
+	// 				mana={cpuMana}
+	// 				manaPool={cpuManaPool}
+	// 			/>
+	// 			<div className="container">
+	// 				<PlayerCollection
+	// 					viewValue={viewable}
+	// 					mana={playerMana}
+	// 					setMana={setPlayerMana}
+	// 					disabled={!playerTurn}
+	// 					deck={playerHand}
+	// 					useDeck={setPlayerHand}
+	// 					className={"playerHand"}
+	// 					cardClass={"front"}
+	// 					pull={true}
+	// 					put={["playerDeck"]}
+	// 					setDrawn={setPlayerDrawn}
+	// 				/>
+	// 				<PlayerCollection
+	// 					viewValue={viewable}
+	// 					mana={null}
+	// 					setMana={null}
+	// 					disabled={playerDrawn}
+	// 					deck={playerDeck}
+	// 					useDeck={setPlayerDeck}
+	// 					className={"playerDeck"}
+	// 					cardClass={"backStack"}
+	// 					pull={true}
+	// 					put={["none"]}
+	// 					setDrawn={setPlayerDrawn}
+	// 				/>
+	// 				<PlayerCollection
+	// 					viewValue={viewable}
+	// 					mana={null}
+	// 					setMana={null}
+	// 					disabled={!playerTurn}
+	// 					deck={playerDiscard}
+	// 					useDeck={setPlayerDiscard}
+	// 					className={"playerDiscard"}
+	// 					cardClass={"backStack"}
+	// 					pull={false}
+	// 					put={["playerHand", "playerDeck"]}
+	// 					setDrawn={setPlayerDrawn}
+	// 				/>
+	// 				<PlayerCollection
+	// 					viewValue={viewable}
+	// 					mana={null}
+	// 					setMana={null}
+	// 					disabled={!playerTurn}
+	// 					deck={playerField}
+	// 					useDeck={setPlayerField}
+	// 					className={"playerField"}
+	// 					cardClass={"front"}
+	// 					pull={false}
+	// 					// only allow "affordable" cards to be played
+	// 					put={["playerHand"]}
+	// 					setDrawn={setPlayerDrawn}
+	// 				/>
+	// 				{/* divider */}
+	// 				<Collection
+	// 					deck={cpuField}
+	// 					className={"cpuField"}
+	// 					cardClass={"front"}
+	// 				/>
+	// 				<Collection
+	// 					deck={cpuHand}
+	// 					className={"cpuHand"}
+	// 					cardClass={"back"}
+	// 				/>
+	// 				<Collection
+	// 					deck={cpuDeck}
+	// 					className={"cpuDeck"}
+	// 					cardClass={"backStack"}
+	// 				/>
+	// 				<Collection
+	// 					deck={cpuDiscard}
+	// 					className={"cpuDiscard"}
+	// 					cardClass={"backStack"}
+	// 				/>
+	// 			</div>
+	// 			<HealthMana
+	// 				dependentState={gameOver}
+	// 				health={playerHealth}
+	// 				mana={playerMana}
+	// 				manaPool={playerManaPool}
+	// 			/>
+	// 			<Button
+	// 				dependentState={playerTurn && winState === 0}
+	// 				gameFunction={attack}
+	// 				text={"Attack!"}
+	// 				className={"button"}
+	// 			/>
+	// 			<br />
+	// 			<Button
+	// 				dependentState={!gameOver}
+	// 				gameFunction={toggleViewable}
+	// 				text={"Zoom " + viewText}
+	// 				className={viewText}
+	// 			/>
+	// 		</div>
+	// 	</div>
+	// );
 }
 
 export default Game;
