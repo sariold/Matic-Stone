@@ -3,7 +3,7 @@ import React, { Fragment } from "react";
 const Header = () => {
   return (
     <Fragment>
-      <nav className="navbar navbar-expand-lg shadow-lg bg-secondary">
+      <nav className="navbar navbar-expand-lg shadow-lg " style={{backgroundColor: "#395B64"}}>
         <div className="container-fluid">
           <p className="navbar-brand">Matic Stone</p>
           <div className="navbar-nav">

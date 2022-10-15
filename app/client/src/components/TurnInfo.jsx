@@ -54,7 +54,7 @@ function TurnInfo({
 	return (
 		<div
 			style={{ visibility: `${!showTurnInfo ? "visible" : "hidden"}` }}
-			className="turnInfo"
+			className="turnInfo card bg-primary shadow-lg"
 		>
 			<p className="currentTurn">
 				{currentTurn ? "Your turn!" : "CPU turn!"}

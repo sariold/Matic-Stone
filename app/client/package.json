@@ -12,7 +12,7 @@
 		"react-dnd": "^16.0.1",
 		"react-dnd-html5-backend": "^16.0.1",
 		"react-dom": "^18.2.0",
-		"react-router-dom": "^6.4.0",
+		"react-router-dom": "^6.4.2",
 		"react-sortablejs": "^6.1.4",
 		"sass": "^1.55.0",
 		"sortablejs": "^1.15.0",
@@ -45,9 +45,9 @@
 		]
 	},
 	"devDependencies": {
-		"react-scripts": "5.0.1",
-		"nodemon": "^2.0.19",
 		"@types/react": "^18.0.21",
-		"gh-pages": "^4.0.0"
+		"gh-pages": "^4.0.0",
+		"nodemon": "^2.0.19",
+		"react-scripts": "5.0.1"
 	}
 }

@@ -1,15 +1,19 @@
-import React, { Fragment } from "react"
+import React, { Fragment } from "react";
 
 const Button = (props) => {
+ 
 
+  return (
+    <Fragment>
+      <a
+        href="/game"
+        className={`btn shadow-lg ${props.className}`}
+        style={props.style}
+      >
+        {props.text}
+      </a>
+    </Fragment>
+  );
+};
 
-    return (
-        <Fragment>
-            <div className={`btn btn-secondary shadow-lg ${props.className}`}>
-                {props.text}
-            </div>
-        </Fragment>
-    )
-}
-
-export default Button
+export default Button;

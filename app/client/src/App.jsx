@@ -1,15 +1,15 @@
-import { Route, Routes } from "react-router-dom";
-// import Game from "./components/Game";
+import { Routes, Route } from "react-router-dom";
+import Game from "./components/Game";
 import Home from "./components/routes/Home";
+import "./App.css";
 
-function App() {
-	return (
-		<div className="App">
-			<Routes>
-				<Route path="/" element={<Home/>}></Route>
-			</Routes>
-		</div>
-	);
+const App = () => {
+  return (
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/game" element={<Game />} />
+      </Routes>
+  );
 }
 
 export default App;

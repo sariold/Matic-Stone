@@ -3,7 +3,7 @@ import React, { Fragment } from "react";
 const Footer = (props) => {
   return (
     <Fragment>
-      <div className="navbar fixed-bottom shadow-lg bg-secondary">
+      <div className="navbar fixed-bottom shadow-lg" style={{backgroundColor: "#395B64"}}>
         <div className="container text-center">
           <div className="col">
             <div className="row">
