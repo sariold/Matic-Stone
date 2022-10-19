@@ -1,44 +1,29 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 
-const Button = ({ dependentState, gameFunction, text, className }) => {
-	const [showButton, setShowButton] = useState(false);
+const ActionButton = ({ dependentState, gameFunction, text }) => {
+  const [showButton, setShowButton] = useState(false);
 
+  useEffect(() => {
+    setShowButton(dependentState);
+  }, [dependentState]);
 
-	// REMOVE LATER
-	const displayStyle = {
-		display: `${showButton ? "inline" : "none"}`,
-	};
-
-
-	const visibleStyle = {
-		visibility: `${showButton ? "visible" : "hidden"}`,
-	};
-
-	
-	// REMOVE LATER
-	function determineStyle(text) {
-		if (text === "Start Game") return displayStyle;
-		else return visibleStyle;
-	}
-
-	useEffect(() => {
-		setShowButton(dependentState);
-	}, [dependentState]);
-
-	return (
-		<div style={determineStyle(text)} >
-			<button
-			className="btn btn-secondary shadow-lg mt-5"
-				
-				onClick={() => {
-					gameFunction();
-					// disabled = dependentState;
-				}}
-			>
-				{text}
-			</button>
-		</div>
-	);
+  return (
+    <Fragment>
+      <div
+        className="col-6"
+        style={{ visibility: `${showButton ? "visible" : "hidden"}` }}
+      >
+        <button
+          className="btn btn-success"
+          onClick={() => {
+            gameFunction();
+          }}
+        >
+          {text}
+        </button>
+      </div>
+    </Fragment>
+  );
 };
 
-export default Button;
+export default ActionButton;
