@@ -1,15 +1,23 @@
 import { Routes, Route } from "react-router-dom";
-import Game from "./components/Game";
+import Game from "./components/routes/Game";
 import Home from "./components/routes/Home";
 import "./App.css";
 
 const App = () => {
   return (
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/game" element={<Game />} />
-      </Routes>
+    <Routes>
+      <Route
+        path="/"
+        // @ts-ignore
+        element={<Home />}
+      />
+      <Route
+        path="/game"
+        // @ts-ignore
+        element={<Game />}
+      />
+    </Routes>
   );
-}
+};
 
 export default App;

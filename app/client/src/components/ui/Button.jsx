@@ -1,13 +1,11 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 
 const Button = (props) => {
- 
-
   return (
     <Fragment>
       <a
-        href="/game"
-        className={`btn shadow-lg ${props.className}`}
+        href={props.path}
+        className={`btn ${props.className}`}
         style={props.style}
       >
         {props.text}
