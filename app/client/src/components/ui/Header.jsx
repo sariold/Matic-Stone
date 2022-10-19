@@ -1,18 +1,12 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 
 const Header = () => {
   return (
     <Fragment>
-      <nav className="navbar navbar-expand-lg shadow-lg " style={{backgroundColor: "#395B64"}}>
+      <nav className="navbar bg-primary">
         <div className="container-fluid">
-          <p className="navbar-brand">Matic Stone</p>
-          <div className="navbar-nav">
-          <div className="nav-item">
-            <p className="nav-link" >
-              How-To
-            </p>
-          </div>
-        </div>
+          <p className="navbar-brand">MATIC STONE</p>
+          <div className="navbar-nav">©2022</div>
         </div>
       </nav>
     </Fragment>
