@@ -286,7 +286,7 @@ function Game() {
 
   return (
     <Fragment>
-      <div className="text-center background bg-primary">
+      <div className="text-center background">
         <div className="col my-auto">
           <div className="row">
             {gameOver && winState !== 0 ? whoWon(winState) : ""}
@@ -343,7 +343,7 @@ function Game() {
             </div>
           </div>
 
-          <div className="row m-4">
+          <div className="row">
             <Collection
               deck={cpuField}
               className={"cpuField"}
@@ -351,7 +351,7 @@ function Game() {
             />
           </div>
 
-          <div className="row m-4">
+          <div className="row">
             <PlayerCollection
               viewValue={viewable}
               mana={null}

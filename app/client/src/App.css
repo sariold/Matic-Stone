@@ -19,7 +19,7 @@ body {
 
 .front,
 .back {
-  width: 4rem;
+  width: 5rem;
   /* height: 6rem; */
 }
 
@@ -44,21 +44,21 @@ body {
   /* margin-right: 1.5rem; */
 }
 
-/* .badge {
+.badge {
   text-align: center;
-  position: absolute;
-  bottom: 0.01rem;
-  width: 4rem;
-  height: 3.5rem;
-  display: flex;
+  /* position: absolute; */
+  /* bottom: 0.01rem; */
+  /* width: 4rem; */
+  /* height: 3.5rem; */
+  /* display: flex; */
   justify-content: center;
   align-items: center;
-  border-bottom-right-radius: 50%;
-  border-bottom-left-radius: 50%;
-  background-color: red;
-  color: white;
-  font-size: 0.5rem;
-} */
+  /* border-bottom-right-radius: 50%; */
+  /* border-bottom-left-radius: 50%; */
+  /* background-color: red; */
+  color: red;
+  font-size: 0.75rem;
+}
 
 .cpuHand,
 .cpuField,
@@ -76,11 +76,12 @@ body {
 .cpuField,
 .playerField {
   /* max-width: 40rem; */
+  margin: 1rem;
 }
 
 .cpuField,
 .playerField {
-  height: 6rem;
+  height: 7rem;
   /* max-width: 50rem; */
   border-style: solid;
   border-color: black;
