@@ -1,0 +1,376 @@
+html {
+  font-size: 90%;
+  @media only screen and (max-width: 1000px) {
+    font-size: 80%;
+  }
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+     -moz-user-select: none; /* Old versions of Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome, Edge, Opera and Firefox */
+}
+
+.Game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.info {
+  text-align: center;
+}
+
+.button, .turnInfo {
+  font-size: 1rem
+}
+
+.health {
+  color: red;
+  font-size: 1rem;
+}
+
+.mana, .health {
+  text-align: center;
+  margin-top: -3;
+}
+
+.time {
+  font-size: 1rem;
+}
+
+.front, .back {
+  width: 5rem;
+}
+
+.card {
+  position: relative;
+  transition: transform .3s;
+  transition-delay: .01s;
+}
+
+.affordableCard::before {
+  content: "";
+  width: 100%;
+  height: 7rem;
+  position: absolute;
+  background-color: greenyellow;
+  opacity: 25%;
+}
+
+.tapped {
+  transform: rotate(90deg);
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+}
+
+.tapped:active {
+  cursor: pointer;
+  z-index: 9999;
+  transform: scale(5);
+}
+
+.cpuField .card:active {
+  cursor: pointer;
+  z-index: 9999;
+  transform: scale(5);
+}
+
+.playerField .card:active {
+  cursor: pointer;
+  z-index: 9999;
+  transform: scale(5);
+}
+
+.backStack {
+  width: 5rem;
+  position: absolute;
+}
+
+.badge {
+  text-align: center;
+  position: absolute;
+  bottom: 0.01rem;
+  right: 1rem;
+  width: 3rem;
+  // height: 3.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top-right-radius: 50%;
+  border-top-left-radius: 50%;
+  background-color: red;
+  color: white;
+  font-size: 0.5rem;
+}
+
+.container {  
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-auto-columns: 1fr;
+  gap: 1em 1rem;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "cpuDeck cpuHand cpuHand cpuHand cpuHand cpuHand cpuHand cpuHand cpuDiscard"
+    ". . cpuField cpuField cpuField cpuField cpuField . ."
+    ". . playerField playerField playerField playerField playerField . ."
+    "playerDiscard playerHand playerHand playerHand playerHand playerHand playerHand playerHand playerDeck";
+}
+
+.playerHand { 
+  grid-area: playerHand; 
+  display: flex;
+  justify-content: center;
+  // margin-bottom: 1.5rem;
+}
+
+.playerHandDIV { 
+  grid-area: playerHand; 
+  // display: flex;
+  // justify-content: center;
+  text-align: center;
+}
+
+.leftSortable, .rightSortable {
+  display: flex;
+}
+
+.leftSortable { 
+  /* border-style: solid; */
+  /* border-color: red; */
+  grid-area: playerHand; 
+  justify-content: center;
+  min-height: 7rem;
+  min-width: 5rem;
+}
+
+.rightSortable { 
+  /* border-style: solid;
+  border-color: blue; */
+  min-height: 7rem;
+  min-width: 5rem;
+}
+
+.playerDeck { 
+  grid-area: playerDeck; 
+  border-style: solid;
+  border-color: blue;
+  height: 7rem;
+  width: 5rem;
+}
+
+.playerDiscard { 
+  background-image: url(../public/assets/trash.png);
+  background-repeat: no-repeat;
+  background-size: 2rem;
+  background-position: center;
+  grid-area: playerDiscard; 
+  border-style: solid;
+  border-color: red;
+  height: 7rem;
+  width: 5rem;
+}
+
+.playerField { 
+  grid-area: playerField; 
+  border-style: solid;
+  display: flex;
+  justify-content: center;
+  // height: 7rem;
+  width: 40rem;
+}
+
+.cpuField { 
+  grid-area: cpuField; 
+  border-style: solid;
+  display: flex;
+  justify-content: center;
+  // height: 7rem;
+}
+
+.cpuField > div {
+  animation: slam 2s;
+}
+
+.cpuHand { 
+  grid-area: cpuHand; 
+  display: flex;
+  justify-content: center;
+}
+
+.cpuDeck { 
+  grid-area: cpuDeck; 
+  border-style: solid;
+  border-color: black;
+  position: relative;
+  height: 7rem;
+  width: 5rem;
+}
+
+.cpuDiscard {
+  background-image: url(../public/assets/trash.png);
+  background-repeat: no-repeat;
+  background-size: 2rem;
+  background-position: center; 
+  grid-area: cpuDiscard; 
+  border-style: solid;
+  border-color: black;
+  height: 7rem;
+  width: 5rem;
+}
+
+@keyframes slam
+{
+  0%
+  {
+    transform: scale(10, 10);
+    opacity: 0;
+  }
+  
+  40%
+  {
+    opacity: 0;
+  }
+  
+  100%
+  {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+}
+
+.playerCard {
+  height: 7rem;
+  // padding: 1rem;
+  margin: 0 -0.5rem;
+  position: relative;
+  width: 5rem;
+  &:after {
+    // uncomment background below to see hit areas
+    background: rgba(255, 0, 0, 0.45);
+    // width: 10rem;
+    bottom: 0;
+    content: '';
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 10;
+  }
+}
+
+// .sortable-chosen::before {
+//   // position: relative;
+//   transform: translate(0, 0);
+//   background: red;
+//   z-index: 9999;
+// }
+
+.handCard, .affordableCard {
+  bottom: 0;
+  content: '';
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: 800ms cubic-bezier(0.19, 1, 0.22, 1) transform;
+  &:after {
+    animation: none;
+    // background: red;
+    bottom: 0;
+    content: '';
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+}
+
+.ON {
+  color: green;
+}
+
+.OFF {
+  color: red;
+}
+
+// .playerCard:not(.sortable-drag):hover {
+//   // pointer-events: none;
+//   transform: translateY(-100px) rotate(0deg) scale2 / 1(3);
+//   transition-duration: 0ms;
+//   z-index: 5;
+//   // animation: fade 2s ease-out forwards;
+
+//   &:after {
+//     animation: fade 250ms ease-out forwards;
+//   }
+// }
+
+$total: 7;
+@for $i from 0 through ($total - 1) {
+  $rotationRange: 20;
+  $rotation: ($i - ($total - 1) / 2) / ($total - 2) * $rotationRange;
+  $offsetRange: 10;
+  $offset: abs(($i - ($total - 1) / 2) / ($total - 2) * $offsetRange);
+  .playerCard:nth-child(#{$i + 1}) {
+    .handCard, .affordableCard {
+      transform: translateY($offset * 1px) rotate($rotation * 1deg);
+    }
+    &:hover {
+      .viewable {
+        pointer-events: none;
+        transform: translateY(-100px) rotate(0deg) scale(3);
+        transition-duration: 0ms;
+        z-index: 5;
+        // animation: fade 2s ease-out forwards;
+
+        &:after {
+          animation: fade 250ms ease-out forwards;
+        }
+      }
+      // &:after {
+      //   top: -175px;  
+      // }
+    }
+  }
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.15);
+  }
+}
+
+.playerField .attackPlayer {
+  animation: lungeForward 1s ease-out forwards;
+}
+
+// .attackCPU {
+//   // animation: lungeBackward 1s ease-in backwards;
+//   transform: scale(5);
+// }
+
+.cpuField .attackCPU  {
+  animation: lungeBackward 1s ease-in backwards;
+}
+
+@keyframes lungeForward {
+  50% {
+    transform: translateY(-15rem);
+  }
+}
+
+@keyframes lungeBackward {
+  50% {
+    transform: translateY(15rem);
+  }
+}
