@@ -1,8 +1,9 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import Button from "../ui/Button";
 import Header from "../ui/Header";
 
 const Home = () => {
+
   return (
     <Fragment>
       <div>
