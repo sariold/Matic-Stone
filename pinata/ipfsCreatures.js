@@ -1,4 +1,4 @@
-var creatures = [
+exports.creatures = [
   ["ALIENS.png", 3, "QmTEUP8nmXA6v3m1A3dYZuRRyptXBpyJ3tQnH932VRuuFp"],
   ["ARCHERESS.png", 2, "QmU9VdGKgF5FQ3LxNhpW2wtpdDpKomGupftYHF6r4sCQLg"],
   ["ASIMO.png", 2, "QmeuNxbfav7tpne5qkuDBTuDqtj7NAgR9yKnfELAbU4XkU"],
@@ -35,5 +35,3 @@ var creatures = [
   ["VECNA.png", 4, "QmUZpeL4ADkJgvEdU9TTiQTdX6AfiosUiLaZURc7L5vg86"],
   ["WITCH.png", 2, "QmVRdV8AciwvWqy2aK9TUKAkzwLByx8k67eEJgc19Exxc5"],
 ];
-
-export default creatures;

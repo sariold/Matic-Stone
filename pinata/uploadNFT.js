@@ -49,28 +49,28 @@ const limiter = new Bottleneck({
 });
 
 const pinFileToIPFS = async (fileName) => {
-  const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
-  let data = new FormData();
-  data.append(
-    "file",
-    fs.createReadStream("../app/client/public/assets/creatures/" + fileName)
-  );
-  const res = await axios.post(url, data, {
-    maxContentLength: "Infinity",
-    headers: {
-      "Content-Type": `multipart/form-data; boundary=${data._boundary}`,
-      pinata_api_key: process.env.pinataApiKey,
-      pinata_secret_api_key: process.env.pinataSecretApiKey,
-    },
-  });
-  console.log(res.data["IpfsHash"]);
-  return res.data["IpfsHash"];
+  // const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
+  // let data = new FormData();
+  // data.append(
+  //   "file",
+  //   fs.createReadStream("../app/client/public/assets/creatures/" + fileName)
+  // );
+  // const res = await axios.post(url, data, {
+  //   maxContentLength: "Infinity",
+  //   headers: {
+  //     "Content-Type": `multipart/form-data; boundary=${data._boundary}`,
+  //     pinata_api_key: process.env.pinataApiKey,
+  //     pinata_secret_api_key: process.env.pinataSecretApiKey,
+  //   },
+  // });
+  // console.log(res.data["IpfsHash"]);
+  // return res.data["IpfsHash"];
 };
 
 creatures.forEach(async (creature) => {
-  console.log(creature[0]);
-  const res = await limiter.schedule(() => pinFileToIPFS(creature[0]));
-  creature.push(res);
+  // console.log(creature[0]);
+  // const res = await limiter.schedule(() => pinFileToIPFS(creature[0]));
+  // creature.push(res);
 });
 
 console.log(creatures);
