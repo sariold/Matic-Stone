@@ -1,0 +1,24 @@
+{
+  "description": "MaticStone Trading Card NFT",
+  "image": "",
+  "name": "",
+  "attributes": [
+    { "trait_type": "Type", "value": "" },
+    {
+      "trait_type": "Card",
+      "value": ""
+    },
+    {
+      "trait_type": "Mana",
+      "value": 0
+    },
+    {
+      "trait_type": "Damage",
+      "value": 0
+    },
+    {
+      "trait_type": "Health",
+      "value": 0
+    }
+  ]
+}
