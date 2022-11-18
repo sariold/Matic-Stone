@@ -21,6 +21,13 @@ contract MaticStone is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnabl
         _setTokenURI(tokenId, uri);
     }
 
+    function mulitMint(address to, string[] memory uris) public {
+        uint i=0;
+        for(i; i < uris.length; i++) {
+            safeMint(to, uris[i]);
+        }
+    }
+
     // The following functions are overrides required by Solidity.
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId, uint256 batchSize)

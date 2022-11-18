@@ -1,3 +1,4 @@
+// @ts-ignore
 import { Routes, Route } from "react-router-dom";
 import Game from "./components/routes/Game";
 import Home from "./components/routes/Home";

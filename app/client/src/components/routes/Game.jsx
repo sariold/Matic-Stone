@@ -5,11 +5,20 @@ import ActionButton from "../ui/ActionButton";
 import TurnInfo from "../TurnInfo";
 import * as cardClass from "../../utils/card";
 
+// @ts-ignore
+import MaticStone from "../../utils/MaticStone.json";
+// @ts-ignore
+import Web3 from "web3";
+// @ts-ignore
+import axios from "axios";
+
 import { Fragment, useEffect, useState } from "react";
 import HealthMana from "../HealthMana";
 
 function Game() {
   const maxMana = 10;
+
+  // const [ingredients, setIngredients] = useState([]);
 
   const [gameOver, setGameOver] = useState(true);
   const [winState, setWinState] = useState(0);
@@ -42,12 +51,134 @@ function Game() {
 
   var homepage = "";
 
+  var ingredients = [];
+
+  const [userAddress, setUserAddress] = useState("");
+
+  const [contract, setContract] = useState();
+  // @ts-ignore
+  let provider = window.ethereum;
+
+  useEffect(() => {
+    if (provider) {
+      console.log("MetaMask detected!");
+      const web3 = new Web3(provider);
+      // const networkId = await web3.eth.net.getId();
+      setContract(
+        new web3.eth.Contract(
+          MaticStone.abi,
+          "0x212c2E0A66E3a28D9D37D18a390883bEe2c783E6"
+        )
+      );
+
+      provider.request({ method: "eth_requestAccounts" }).then((res) => {
+        // Return the address of the wallet
+        console.log(res);
+        setUserAddress(res[0]);
+      });
+    } else {
+      alert("Install metamask extension!");
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    // console.log(contract);
+    if (userAddress !== "" && contract !== undefined) {
+      // @ts-ignore
+      contract.methods
+        .balanceOf(userAddress)
+        .call({ from: userAddress })
+        .then((res) => console.log(res));
+      fetcher().then(() => {
+        newGame();
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contract, userAddress]);
+
+  const getBalance = () => {
+    // @ts-ignore
+    return contract.methods.balanceOf(userAddress).call({ from: userAddress });
+  };
+
+  const getTokenID = (index) => {
+    // @ts-ignore
+    return contract.methods
+      .tokenOfOwnerByIndex(userAddress, index)
+      .call({ from: userAddress });
+  };
+
+  const getTokenURI = (id) => {
+    // @ts-ignore
+    return contract.methods.tokenURI(id).call({ from: userAddress });
+  };
+
+  const getTokens = async () => {
+    let arr = [];
+    let balance = await getBalance();
+    // console.log(balance);
+
+    for (let i = 0; i < balance; i++) {
+      // console.log(i);
+      let tokenID = await getTokenID(i);
+      // console.log(tokenID);
+      let tokenURI = await getTokenURI(tokenID);
+      // console.log(tokenURI);
+      arr.push(tokenURI);
+    }
+    return arr;
+  };
+
+  const retrieveJSON = async (uri) => {
+    let res = axios.get(`https://${uri}.ipfs.dweb.link/`).then((resp) => {
+      let attributes = resp.data["attributes"];
+      let name = attributes[1]["value"];
+      let mana = attributes[2]["value"];
+      let damage = attributes[3]["value"];
+      let health = attributes[4]["value"];
+      let c = [name, mana, damage, health];
+      return c;
+    });
+    return res;
+  };
+
+  const fetcher = async () => {
+    let arr = await getTokens();
+    let creatures = [];
+    for (let i = 0; i < arr.length; i++) {
+      let uri = arr[i];
+      let c = await retrieveJSON(uri);
+      // console.log(c);
+      // axios.get(`https://${arr[i]}.ipfs.dweb.link/`).then((resp) => {
+      //   let attributes = resp.data["attributes"];
+      //   let name = attributes[1]["value"];
+      //   let mana = attributes[2]["value"];
+      //   let damage = attributes[3]["value"];
+      //   let health = attributes[4]["value"];
+      //   let c = [name, mana, damage, health];
+      creatures.push(c);
+    }
+
+    // console.log(creatures);
+    ingredients = creatures;
+    // setIngredients([...creatures]);
+    // window.location.href = "/Game";
+  };
+
+  // useEffect(() => {
+  //   if (ingredients.length === 30) console.log(ingredients);
+  // }, [ingredients]);
+
   async function newGame() {
     console.log("New game!");
     setGameOver(false);
     setWinState(0);
     setPlayerTurn(false);
-    let deck = await deckClass.randomDeck();
+    // let deck = await deckClass.randomDeck();
+    // console.log(ingredients);
+    let deck = await deckClass.buildDeck(ingredients);
     deck = await deckClass.shuffleDeck(deck);
     let cards = deck.splice(0, 7);
     let discard = cards.shift();
@@ -146,10 +277,6 @@ function Game() {
     }
   }, [playerHealth, cpuHealth]);
 
-  // useEffect(() => {
-  // 	console.log(turnCounter);
-  // }, [turnCounter]);
-
   useEffect(() => {
     if (
       turnCounter > 0 &&
@@ -157,22 +284,11 @@ function Game() {
         (!gameOver && cpuDeck.length === 0))
     ) {
       setGameOver(true);
-      newGame();
+      // newGame();
+      // window.location.href = "/";
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerHand, playerDeck, cpuHand, cpuDeck]);
-
-  // useEffect(
-  // 	(evt) => {
-  // 		console.log(evt);
-  // 		console.log("PLAYER:");
-  // 		console.log(playerDeck);
-  // 		console.log(playerHand);
-  // 		console.log();
-  // 		console.log(playerDiscard);
-  // 	},
-  // 	[playerHand, playerDeck, playerDiscard]
-  // );
 
   useEffect(() => {
     if (cpuHand.length > 7) {
@@ -196,11 +312,6 @@ function Game() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerHand]);
-
-  // useEffect(() => {
-  // console.log(cpuField);
-  // console.log(cpuHand);
-  // }, [cpuField, cpuHand]);
 
   useEffect(() => {
     if (!playerTurn && !gameOver && turnCounter > 0) {
@@ -265,24 +376,11 @@ function Game() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cpuMana]);
 
-  // useEffect(() => {
-  // 	let cards = [...playerHand, ...playerAffordableHand];
-  // 	setPlayerHand(cards.filter((card) => card.mana > playerMana));
-  // 	setPlayerAffordableHand(
-  // 		cards.filter((card) => card.mana <= playerMana)
-  // 	);
-  // 	// eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [playerMana]);
-
   function whoWon(val) {
     let messages = ["", "YOU WON!", "YOU LOSE!"];
 
     return <h1>{messages[val]}</h1>;
   }
-
-  useEffect(() => {
-    newGame();
-  }, []);
 
   return (
     <Fragment>
