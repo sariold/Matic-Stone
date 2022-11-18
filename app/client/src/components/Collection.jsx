@@ -14,10 +14,10 @@ const Collection = ({ deck, className, cardClass }) => {
   }
 
   useEffect(() => {
-    if (className === "cpuField") {
-      console.log("CPU is adding card(s) to their field.");
-      console.log(deck);
-    }
+    // if (className === "cpuField") {
+    // console.log("CPU is adding card(s) to their field.");
+    // console.log(deck);
+    // }
     setCards([...deck]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deck]);
