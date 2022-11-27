@@ -3,7 +3,7 @@ import PlayerCollection from "../PlayerCollection";
 import Collection from "../Collection";
 import ActionButton from "../ui/ActionButton";
 import TurnInfo from "../TurnInfo";
-import * as cardClass from "../../utils/card";
+import Header from "../ui/Header";
 
 // @ts-ignore
 import MaticStone from "../../utils/MaticStone.json";
@@ -385,6 +385,7 @@ function Game() {
   return (
     <Fragment>
       <div className="text-center background">
+        {/* <Header /> */}
         <div className="col my-auto">
           <div className="row">
             {gameOver && winState !== 0 ? whoWon(winState) : ""}
