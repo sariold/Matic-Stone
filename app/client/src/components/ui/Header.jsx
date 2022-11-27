@@ -5,8 +5,12 @@ const Header = () => {
     <Fragment>
       <nav className="navbar bg-primary">
         <div className="container-fluid">
-          <p className="navbar-brand">MATIC STONE</p>
-          <div className="navbar-nav">©2022</div>
+          <div className="home">
+            <a className="navbar-brand" href="/">
+              MATIC Stone
+            </a>
+          </div>
+          <div className="navbar-brand">©2022</div>
         </div>
       </nav>
     </Fragment>

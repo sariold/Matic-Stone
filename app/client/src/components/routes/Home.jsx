@@ -29,6 +29,15 @@ const Home = () => {
           "0x212c2E0A66E3a28D9D37D18a390883bEe2c783E6"
         )
       );
+
+      provider
+        .request({ method: "eth_requestAccounts" })
+        .then((res) => {
+          // Return the address of the wallet
+          console.log(res);
+          setUserAddress(res[0]);
+        })
+        .catch((e) => console.log(e));
     } else {
       alert("Install metamask extension!");
     }
@@ -47,15 +56,6 @@ const Home = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userAddress, initialized]);
-
-  const connectMetaMask = async () => {
-    provider.request({ method: "eth_requestAccounts" }).then((res) => {
-      // Return the address of the wallet
-      console.log(res);
-      setUserAddress(res[0]);
-    });
-    setInitialized(true);
-  };
 
   const create30 = () => {
     var uris = [];
@@ -117,6 +117,11 @@ const Home = () => {
     else alert("You must at least have 30 MaticStone tokens to play!");
   };
 
+  const carousel = async () => {
+    if ((await getBalance()) >= 30) window.location.href = "/Carousel";
+    else alert("You must at least have 30 MaticStone tokens to view carousel!");
+  };
+
   return (
     <Fragment>
       <div>
@@ -125,16 +130,6 @@ const Home = () => {
           className="background text-center"
           style={{ backgroundImage: "url(/assets/Background.jpg)" }}
         >
-          <div className="row-lm">
-            <button
-              className={
-                userAddress ? "btn btn-primary m-4" : "btn btn-danger m-4"
-              }
-              onClick={connectMetaMask}
-            >
-              MetaMask
-            </button>
-          </div>
           <div className="row-lm">
             <button
               // @ts-ignore
@@ -168,11 +163,15 @@ const Home = () => {
             />
           </div>
           <div className="row-lm">
-            <Button
-              className={"btn-primary m-4"}
-              text={"Card Carousel"}
-              path={"/"}
-            />
+            <button
+              style={{ pointerEvents: userAddress ? "" : "none" }}
+              className={
+                userAddress ? "btn btn-primary m-4" : "btn btn-danger m-4"
+              }
+              onClick={carousel}
+            >
+              Card Carousel
+            </button>
           </div>
         </div>
       </div>

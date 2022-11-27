@@ -1,0 +1,143 @@
+import React from "react";
+import { Fragment, useEffect, useState } from "react";
+import { Carousel } from "react-responsive-carousel";
+import Header from "../ui/Header";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+// @ts-ignore
+import MaticStone from "../../utils/MaticStone.json";
+// @ts-ignore
+import Web3 from "web3";
+// @ts-ignore
+import axios from "axios";
+
+const CardCarousel = () => {
+  var homepage = "";
+
+  // var ingredients = [];
+
+  const [userAddress, setUserAddress] = useState("");
+
+  const [contract, setContract] = useState();
+
+  const [ingredients, setIngredients] = useState([]);
+  // @ts-ignore
+  let provider = window.ethereum;
+
+  useEffect(() => {
+    if (provider) {
+      console.log("MetaMask detected!");
+      const web3 = new Web3(provider);
+      // const networkId = await web3.eth.net.getId();
+      setContract(
+        new web3.eth.Contract(
+          MaticStone.abi,
+          "0x212c2E0A66E3a28D9D37D18a390883bEe2c783E6"
+        )
+      );
+
+      provider.request({ method: "eth_requestAccounts" }).then((res) => {
+        // Return the address of the wallet
+        console.log(res);
+        setUserAddress(res[0]);
+      });
+    } else {
+      alert("Install metamask extension!");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (userAddress !== "" && contract !== undefined) {
+      // @ts-ignore
+      contract.methods
+        .balanceOf(userAddress)
+        .call({ from: userAddress })
+        .then((res) => console.log(res));
+      fetcher().then(() => {
+        // newGame();
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contract, userAddress]);
+
+  const getBalance = () => {
+    // @ts-ignore
+    return contract.methods.balanceOf(userAddress).call({ from: userAddress });
+  };
+
+  const getTokenID = (index) => {
+    // @ts-ignore
+    return contract.methods
+      .tokenOfOwnerByIndex(userAddress, index)
+      .call({ from: userAddress });
+  };
+
+  const getTokenURI = (id) => {
+    // @ts-ignore
+    return contract.methods.tokenURI(id).call({ from: userAddress });
+  };
+
+  const getTokens = async () => {
+    let arr = [];
+    let balance = await getBalance();
+
+    for (let i = 0; i < balance; i++) {
+      let tokenID = await getTokenID(i);
+      let tokenURI = await getTokenURI(tokenID);
+      arr.push(tokenURI);
+    }
+    return arr;
+  };
+
+  const retrieveJSON = async (uri) => {
+    let res = axios.get(`https://${uri}.ipfs.dweb.link/`).then((resp) => {
+      let attributes = resp.data["attributes"];
+      let name = attributes[1]["value"];
+      let mana = attributes[2]["value"];
+      let damage = attributes[3]["value"];
+      let health = attributes[4]["value"];
+      let c = [name, mana, damage, health];
+      return c;
+    });
+    return res;
+  };
+
+  const fetcher = async () => {
+    let arr = await getTokens();
+    let creatures = [];
+    for (let i = 0; i < arr.length; i++) {
+      let uri = arr[i];
+      let c = await retrieveJSON(uri);
+      console.log(c);
+      creatures.push(c);
+    }
+    // ingredients = creatures;
+    // console.log(ingredients);
+    setIngredients(creatures);
+  };
+
+  return (
+    <Fragment>
+      <div>
+        <Header />
+      </div>
+      <div className="row-lm">
+        <Carousel autplay centerMode={false} infiniteLoop={true} width={"%"}>
+          {ingredients.map((c) => (
+            <div>
+              <img
+                alt=""
+                src={homepage + "/assets/creatures/" + c[0] + ".png"}
+              />
+              <div className="carousel-badge">
+                <p>{"Damage: " + c[2] + " / Health: " + c[3]}</p>
+              </div>
+            </div>
+          ))}
+        </Carousel>
+      </div>
+    </Fragment>
+  );
+};
+
+export default CardCarousel;
