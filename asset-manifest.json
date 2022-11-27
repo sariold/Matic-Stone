@@ -1,16 +1,15 @@
 {
   "files": {
-    "main.css": "/Matic-Stone/static/css/main.213c064f.css",
-    "main.js": "/Matic-Stone/static/js/main.64ea7518.js",
+    "main.css": "/Matic-Stone/static/css/main.32e34cbd.css",
+    "main.js": "/Matic-Stone/static/js/main.a3524db7.js",
     "static/media/mario.gif": "/Matic-Stone/static/media/mario.01e19d5e7b9a9a262ca4.gif",
     "static/media/loader.gif": "/Matic-Stone/static/media/loader.af914b7f07c457a3f13e.gif",
-    "static/media/trash.png": "/Matic-Stone/static/media/trash.24dd756e7fdc087d83ee.png",
     "index.html": "/Matic-Stone/index.html",
-    "main.213c064f.css.map": "/Matic-Stone/static/css/main.213c064f.css.map",
-    "main.64ea7518.js.map": "/Matic-Stone/static/js/main.64ea7518.js.map"
+    "main.32e34cbd.css.map": "/Matic-Stone/static/css/main.32e34cbd.css.map",
+    "main.a3524db7.js.map": "/Matic-Stone/static/js/main.a3524db7.js.map"
   },
   "entrypoints": [
-    "static/css/main.213c064f.css",
-    "static/js/main.64ea7518.js"
+    "static/css/main.32e34cbd.css",
+    "static/js/main.a3524db7.js"
   ]
 }
