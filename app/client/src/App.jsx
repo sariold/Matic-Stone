@@ -1,6 +1,7 @@
 // @ts-ignore
 import { Routes, Route } from "react-router-dom";
 import Game from "./components/routes/Game";
+import CardCarousel from "./components/routes/CardCarousel";
 import Home from "./components/routes/Home";
 import "./App.css";
 
@@ -16,6 +17,11 @@ const App = () => {
         path="/game"
         // @ts-ignore
         element={<Game />}
+      />
+      <Route
+        path="/carousel"
+        // @ts-ignore
+        element={<CardCarousel />}
       />
     </Routes>
   );

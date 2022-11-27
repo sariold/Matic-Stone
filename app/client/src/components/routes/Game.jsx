@@ -150,7 +150,7 @@ function Game() {
     for (let i = 0; i < arr.length; i++) {
       let uri = arr[i];
       let c = await retrieveJSON(uri);
-      // console.log(c);
+      console.log(c);
       // axios.get(`https://${arr[i]}.ipfs.dweb.link/`).then((resp) => {
       //   let attributes = resp.data["attributes"];
       //   let name = attributes[1]["value"];
@@ -177,7 +177,7 @@ function Game() {
     setWinState(0);
     setPlayerTurn(false);
     // let deck = await deckClass.randomDeck();
-    // console.log(ingredients);
+    console.log(ingredients);
     let deck = await deckClass.buildDeck(ingredients);
     deck = await deckClass.shuffleDeck(deck);
     let cards = deck.splice(0, 7);

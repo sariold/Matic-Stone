@@ -117,6 +117,11 @@ const Home = () => {
     else alert("You must at least have 30 MaticStone tokens to play!");
   };
 
+  const carousel = async () => {
+    if ((await getBalance()) >= 30) window.location.href = "/Carousel";
+    else alert("You must at least have 30 MaticStone tokens to view carousel!");
+  };
+
   return (
     <Fragment>
       <div>
@@ -168,11 +173,15 @@ const Home = () => {
             />
           </div>
           <div className="row-lm">
-            <Button
-              className={"btn-primary m-4"}
-              text={"Card Carousel"}
-              path={"/"}
-            />
+            <button
+              style={{ pointerEvents: userAddress ? "" : "none" }}
+              className={
+                userAddress ? "btn btn-primary m-4" : "btn btn-danger m-4"
+              }
+              onClick={carousel}
+            >
+              Card Carousel
+            </button>
           </div>
         </div>
       </div>
