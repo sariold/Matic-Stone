@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Game from "./components/routes/Game";
 import CardCarousel from "./components/routes/CardCarousel";
 import Home from "./components/routes/Home";
-import "./App.css";
+import "./App.scss";
 
 const App = () => {
   return (

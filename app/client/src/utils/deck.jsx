@@ -51,7 +51,7 @@ var homepage = "";
 // };
 
 export async function buildDeck(ingredients) {
-  console.log(ingredients);
+  // console.log(ingredients);
   let cards = [];
   for (let i = 0; i < ingredients.length; i++) {
     // console.log(i);

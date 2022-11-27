@@ -10,7 +10,7 @@ const ActionButton = ({ dependentState, gameFunction, text }) => {
   return (
     <Fragment>
       <div
-        className="col-6"
+        className="actionButton"
         style={{ visibility: `${showButton ? "visible" : "hidden"}` }}
       >
         <button

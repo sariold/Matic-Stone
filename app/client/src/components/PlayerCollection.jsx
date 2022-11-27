@@ -29,9 +29,10 @@ const PlayerCollection = ({
     setPlayerDeck([...deck]);
   }, [deck]);
 
-  // useEffect(() => {
-  // 	console.log(toPlay);
-  // }, [toPlay]);
+  useEffect(() => {
+    // console.log(toPlay);
+    setViewable(false);
+  }, [toPlay]);
 
   useEffect(() => {
     setViewable(viewValue);
@@ -59,7 +60,7 @@ const PlayerCollection = ({
         <ReactSortable
           sort={true}
           className={"playerHand"}
-          disabled={disabled || viewable}
+          disabled={disabled}
           list={playerDeck}
           setList={useDeck}
           group={{
@@ -86,6 +87,7 @@ const PlayerCollection = ({
             if (evt.to.className === "playerField") {
               if (toPlay.mana <= mana) setMana(mana - toPlay.mana);
             }
+            setViewable(true);
           }}
         >
           {playerDeck.map((card) => (

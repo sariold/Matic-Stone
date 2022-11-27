@@ -1,8 +1,12 @@
 import React from "react";
 import { Fragment, useEffect, useState } from "react";
-import { Carousel } from "react-responsive-carousel";
-import Header from "../ui/Header";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+
+import Loader from "../ui/loader.gif";
+
+import Header from "../ui/Header";
+// @ts-ignore
+import { Carousel } from "react-responsive-carousel";
 // @ts-ignore
 import MaticStone from "../../utils/MaticStone.json";
 // @ts-ignore
@@ -13,13 +17,11 @@ import axios from "axios";
 const CardCarousel = () => {
   var homepage = "";
 
-  // var ingredients = [];
-
+  const [loading, setLoading] = useState(true);
   const [userAddress, setUserAddress] = useState("");
-
   const [contract, setContract] = useState();
-
   const [ingredients, setIngredients] = useState([]);
+
   // @ts-ignore
   let provider = window.ethereum;
 
@@ -55,6 +57,7 @@ const CardCarousel = () => {
         .then((res) => console.log(res));
       fetcher().then(() => {
         // newGame();
+        setLoading(false);
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -111,8 +114,6 @@ const CardCarousel = () => {
       console.log(c);
       creatures.push(c);
     }
-    // ingredients = creatures;
-    // console.log(ingredients);
     setIngredients(creatures);
   };
 
@@ -121,23 +122,52 @@ const CardCarousel = () => {
       <div>
         <Header />
       </div>
-      <div className="row-lm">
-        <Carousel autplay centerMode={false} infiniteLoop={true} width={"%"}>
-          {ingredients.map((c) => (
-            <div>
-              <img
-                alt=""
-                src={homepage + "/assets/creatures/" + c[0] + ".png"}
-              />
-              <div className="carousel-badge">
-                <p>{"Damage: " + c[2] + " / Health: " + c[3]}</p>
+      <div className="row-lm backdrop">
+        {loading ? (
+          <img src={Loader} alt="Loading gif" className="center" />
+        ) : (
+          <Carousel
+            autplay
+            useKeyboardArrows={true}
+            infiniteLoop={true}
+            showStatus={false}
+            showIndicators={false}
+            emulateTouch={true}
+          >
+            {ingredients.map((c) => (
+              <div>
+                <img
+                  alt=""
+                  src={homepage + "/assets/creatures/" + c[0] + ".png"}
+                />
+                <div className="carousel-badge">
+                  <p>{"Damage: " + c[2] + " / Health: " + c[3]}</p>
+                </div>
               </div>
-            </div>
-          ))}
-        </Carousel>
+            ))}
+          </Carousel>
+        )}
       </div>
     </Fragment>
   );
 };
 
 export default CardCarousel;
+
+// {loading ? (
+//   <img src={Loader} alt="Loading gif" className="center" />
+// ) : (
+//   <Carousel autplay centerMode={false} infiniteLoop={true} width={"%"}>
+//     {ingredients.map((c) => (
+//       <div>
+//         <img
+//           alt=""
+//           src={homepage + "/assets/creatures/" + c[0] + ".png"}
+//         />
+//         <div className="carousel-badge">
+//           <p>{"Damage: " + c[2] + " / Health: " + c[3]}</p>
+//         </div>
+//       </div>
+//     ))}
+//   </Carousel>
+// )}

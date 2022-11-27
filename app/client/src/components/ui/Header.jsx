@@ -3,7 +3,7 @@ import { Fragment } from "react";
 const Header = () => {
   return (
     <Fragment>
-      <nav className="navbar bg-primary">
+      <nav className="navbar bg-success">
         <div className="container-fluid">
           <div className="home">
             <a className="navbar-brand" href="/">
