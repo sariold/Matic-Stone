@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/Matic-Stone/static/css/main.32e34cbd.css",
-    "main.js": "/Matic-Stone/static/js/main.024e90f7.js",
+    "main.js": "/Matic-Stone/static/js/main.b3695d33.js",
     "static/media/mario.gif": "/Matic-Stone/static/media/mario.01e19d5e7b9a9a262ca4.gif",
     "static/media/loader.gif": "/Matic-Stone/static/media/loader.af914b7f07c457a3f13e.gif",
     "index.html": "/Matic-Stone/index.html",
     "main.32e34cbd.css.map": "/Matic-Stone/static/css/main.32e34cbd.css.map",
-    "main.024e90f7.js.map": "/Matic-Stone/static/js/main.024e90f7.js.map"
+    "main.b3695d33.js.map": "/Matic-Stone/static/js/main.b3695d33.js.map"
   },
   "entrypoints": [
     "static/css/main.32e34cbd.css",
-    "static/js/main.024e90f7.js"
+    "static/js/main.b3695d33.js"
   ]
 }
