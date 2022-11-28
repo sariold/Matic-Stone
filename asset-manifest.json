@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/https://sariold.github.io/Matic-Stone/static/css/main.32e34cbd.css",
-    "main.js": "/https://sariold.github.io/Matic-Stone/static/js/main.11c0f822.js",
-    "static/media/mario.gif": "/https://sariold.github.io/Matic-Stone/static/media/mario.01e19d5e7b9a9a262ca4.gif",
-    "static/media/loader.gif": "/https://sariold.github.io/Matic-Stone/static/media/loader.af914b7f07c457a3f13e.gif",
-    "index.html": "/https://sariold.github.io/Matic-Stone/index.html",
-    "main.32e34cbd.css.map": "/https://sariold.github.io/Matic-Stone/static/css/main.32e34cbd.css.map",
-    "main.11c0f822.js.map": "/https://sariold.github.io/Matic-Stone/static/js/main.11c0f822.js.map"
+    "main.css": "/Matic-Stone/static/css/main.32e34cbd.css",
+    "main.js": "/Matic-Stone/static/js/main.024e90f7.js",
+    "static/media/mario.gif": "/Matic-Stone/static/media/mario.01e19d5e7b9a9a262ca4.gif",
+    "static/media/loader.gif": "/Matic-Stone/static/media/loader.af914b7f07c457a3f13e.gif",
+    "index.html": "/Matic-Stone/index.html",
+    "main.32e34cbd.css.map": "/Matic-Stone/static/css/main.32e34cbd.css.map",
+    "main.024e90f7.js.map": "/Matic-Stone/static/js/main.024e90f7.js.map"
   },
   "entrypoints": [
     "static/css/main.32e34cbd.css",
-    "static/js/main.11c0f822.js"
+    "static/js/main.024e90f7.js"
   ]
 }
