@@ -136,7 +136,7 @@ function Game() {
   };
 
   const retrieveJSON = async (uri) => {
-    let res = axios.get(`https://${uri}.ipfs.dweb.link/`).then((resp) => {
+    let res = axios.get(`https://ipfs.io/ipfs/${uri}`).then((resp) => {
       let attributes = resp.data["attributes"];
       let name = attributes[1]["value"];
       let mana = attributes[2]["value"];
