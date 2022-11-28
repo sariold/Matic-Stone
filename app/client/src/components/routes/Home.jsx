@@ -39,6 +39,8 @@ const Home = () => {
         .catch((e) => console.log(e));
     } else {
       alert("Install metamask extension!");
+      let meta_url = "https://metamask.io/";
+      window.open(meta_url, "_blank") || window.location.replace(meta_url);
     }
 
     // console.log(ipfs.pool.sort(() => Math.random() - 0.5)[0]);
@@ -115,12 +117,12 @@ const Home = () => {
   // };
 
   const playGame = async () => {
-    if ((await getBalance()) >= 30) window.location.href = "/Game";
+    if ((await getBalance()) >= 30) window.location.href = "#/Game";
     else alert("You must at least have 30 MaticStone tokens to play!");
   };
 
   const carousel = async () => {
-    if ((await getBalance()) >= 30) window.location.href = "/Carousel";
+    if ((await getBalance()) >= 30) window.location.href = "#/Carousel";
     else alert("You must at least have 30 MaticStone tokens to view carousel!");
   };
 
@@ -133,8 +135,18 @@ const Home = () => {
         ) : (
           <div
             className="background"
-            style={{ backgroundImage: "url(/assets/Background.jpg)" }}
+            style={{
+              backgroundImage:
+                "url(" +
+                process.env.REACT_APP_HOMEPAGE +
+                "assets/Background.jpg)",
+            }}
           >
+            <div className="row-lm">
+              <button className={"btn btn-success m-4"} onClick={() => {}}>
+                Tutorial
+              </button>
+            </div>
             <div className="row-lm">
               <button
                 // @ts-ignore
@@ -154,26 +166,22 @@ const Home = () => {
                 className={
                   userAddress ? "btn btn-success m-4" : "btn btn-danger m-4"
                 }
-                // onClick={fetcher}
-                onClick={playGame}
+                onClick={carousel}
               >
-                Play Game
-              </button>
-            </div>
-            <div className="row-lm">
-              <button className={"btn btn-success m-4"} onClick={() => {}}>
-                Tutorial
+                Card Carousel
               </button>
             </div>
             <div className="row-lm">
               <button
+                // @ts-ignore
                 style={{ pointerEvents: userAddress ? "" : "none" }}
                 className={
                   userAddress ? "btn btn-success m-4" : "btn btn-danger m-4"
                 }
-                onClick={carousel}
+                // onClick={fetcher}
+                onClick={playGame}
               >
-                Card Carousel
+                Play Game
               </button>
             </div>
           </div>

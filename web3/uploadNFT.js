@@ -1,8 +1,10 @@
-require("dotenv").config();
+require("dotenv").config({ path: __dirname + "/../.env" });
 
 const w3S = require("web3.storage");
 const fs = require("fs");
 const token = process.env.web3;
+
+console.log(token);
 
 const images = "../app/client/public/assets/creatures/";
 const jsons = "./JSONs/";

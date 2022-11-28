@@ -38,18 +38,6 @@ var creatures = [
   ["WITCH.png", 2],
 ];
 
-// var homepage = "https://sariold.github.io/Matic-Stone";
-var homepage = "";
-
-// const fetcher = (ipfs) => {
-//   const pool = ipfs;
-//   for (let i = 0; i < pool.length; i++) {
-//     axios.get(`https://${pool[i]}.ipfs.dweb.link/`).then((resp) => {
-//       console.log(resp.data["attributes"]);
-//     });
-//   }
-// };
-
 export async function buildDeck(ingredients) {
   // console.log(ingredients);
   let cards = [];
@@ -57,7 +45,8 @@ export async function buildDeck(ingredients) {
     // console.log(i);
     let array = ingredients[i];
     let name = array[0];
-    let img = homepage + "/assets/creatures/" + name + ".png";
+    let img =
+      process.env.REACT_APP_HOMEPAGE + "assets/creatures/" + name + ".png";
     let mana = array[1];
     let health = array[2];
     let damage = array[3];
@@ -73,7 +62,7 @@ export async function randomDeck() {
   for (let i = 0; i < 30; i++) {
     let array = creatures[Math.floor(Math.random() * creatures.length)];
     let name = array[0];
-    let img = homepage + "/assets/creatures/" + name;
+    let img = process.env.REACT_APP_HOMEPAGE + "assets/creatures/" + name;
     let mana = array[1];
     let health = Math.floor(Math.random() * Number(mana)) + 1;
     let damage = Math.floor(Math.random() * Number(mana)) + 1;

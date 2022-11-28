@@ -15,8 +15,6 @@ import Web3 from "web3";
 import axios from "axios";
 
 const CardCarousel = () => {
-  var homepage = "";
-
   const [loading, setLoading] = useState(true);
   const [userAddress, setUserAddress] = useState("");
   const [contract, setContract] = useState();
@@ -44,6 +42,7 @@ const CardCarousel = () => {
       });
     } else {
       alert("Install metamask extension!");
+      window.location.href = "https://metamask.io/";
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -138,7 +137,12 @@ const CardCarousel = () => {
               <div>
                 <img
                   alt=""
-                  src={homepage + "/assets/creatures/" + c[0] + ".png"}
+                  src={
+                    process.env.REACT_APP_HOMEPAGE +
+                    "assets/creatures/" +
+                    c[0] +
+                    ".png"
+                  }
                 />
                 <div className="carousel-badge">
                   <p>{"Damage: " + c[2] + " / Health: " + c[3]}</p>
@@ -153,21 +157,3 @@ const CardCarousel = () => {
 };
 
 export default CardCarousel;
-
-// {loading ? (
-//   <img src={Loader} alt="Loading gif" className="center" />
-// ) : (
-//   <Carousel autplay centerMode={false} infiniteLoop={true} width={"%"}>
-//     {ingredients.map((c) => (
-//       <div>
-//         <img
-//           alt=""
-//           src={homepage + "/assets/creatures/" + c[0] + ".png"}
-//         />
-//         <div className="carousel-badge">
-//           <p>{"Damage: " + c[2] + " / Health: " + c[3]}</p>
-//         </div>
-//       </div>
-//     ))}
-//   </Carousel>
-// )}

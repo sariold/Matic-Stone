@@ -6,7 +6,7 @@ const Header = () => {
       <nav className="navbar bg-success">
         <div className="container-fluid">
           <div className="home">
-            <a className="navbar-brand" href="/">
+            <a className="navbar-brand" href={process.env.REACT_APP_HOMEPAGE}>
               MATIC Stone
             </a>
           </div>

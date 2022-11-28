@@ -33,7 +33,7 @@ function Game() {
 
   const [playerDrawn, setPlayerDrawn] = useState(false);
 
-  const [playerHealth, setPlayerHealth] = useState(2);
+  const [playerHealth, setPlayerHealth] = useState(15);
   const [cpuHealth, setCpuHealth] = useState(15);
 
   const [playerMana, setPlayerMana] = useState(0);
@@ -52,8 +52,6 @@ function Game() {
 
   const [playerField, setPlayerField] = useState([]);
   const [cpuField, setCpuField] = useState([]);
-
-  var homepage = "";
 
   var ingredients = [];
 
@@ -82,6 +80,7 @@ function Game() {
       });
     } else {
       alert("Install metamask extension!");
+      window.location.href = "https://metamask.io/";
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
