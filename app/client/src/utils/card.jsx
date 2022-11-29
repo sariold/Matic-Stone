@@ -1,6 +1,3 @@
-// var homepage = "https://sariold.github.io/Matic-Stone";
-var homepage = "";
-
 /**
  * Abstract Card class
  * @param name The name of the card
@@ -10,7 +7,7 @@ var homepage = "";
 export class Card {
   name = "";
   img = "";
-  cover = homepage + "/assets/cover.png";
+  cover = process.env.REACT_APP_HOMEPAGE + "assets/cover.png";
   mana = 0;
 
   constructor(name, img, mana) {

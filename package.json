@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Diego Sariol, Mateo Martinez",
+  "author": "Diego Sariol",
   "license": "MIT",
   "dependencies": {
     "@ethereumjs/block": "^3.6.3",

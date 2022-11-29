@@ -1,31 +1,28 @@
 import * as deckClass from "../../utils/deck";
+import { fetcher } from "../../utils/retriever";
 import PlayerCollection from "../PlayerCollection";
 import Collection from "../Collection";
 import ActionButton from "../ui/ActionButton";
 import TurnInfo from "../TurnInfo";
 import Header from "../ui/Header";
-
+import Mario from "../ui/mario.gif";
+import Loader from "../ui/loader.gif";
+import { Fragment, useEffect, useState } from "react";
+import HealthMana from "../HealthMana";
 // @ts-ignore
 import MaticStone from "../../utils/MaticStone.json";
 // @ts-ignore
 import Web3 from "web3";
-// @ts-ignore
-import axios from "axios";
-
-import { Fragment, useEffect, useState } from "react";
-import HealthMana from "../HealthMana";
 
 function Game() {
   const maxMana = 10;
 
-  // const [ingredients, setIngredients] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [gameOver, setGameOver] = useState(true);
   const [winState, setWinState] = useState(0);
   const [playerTurn, setPlayerTurn] = useState(false);
   const [turnCounter, setTurnCounter] = useState(0);
-  const [viewable, setViewable] = useState(false);
-  const [viewText, setViewText] = useState("OFF");
 
   const [playerDrawn, setPlayerDrawn] = useState(false);
 
@@ -49,8 +46,6 @@ function Game() {
   const [playerField, setPlayerField] = useState([]);
   const [cpuField, setCpuField] = useState([]);
 
-  var homepage = "";
-
   var ingredients = [];
 
   const [userAddress, setUserAddress] = useState("");
@@ -63,7 +58,9 @@ function Game() {
     if (provider) {
       console.log("MetaMask detected!");
       const web3 = new Web3(provider);
-      // const networkId = await web3.eth.net.getId();
+      provider.on("accountsChanged", () => {
+        window.location.reload();
+      });
       setContract(
         new web3.eth.Contract(
           MaticStone.abi,
@@ -78,136 +75,56 @@ function Game() {
       });
     } else {
       alert("Install metamask extension!");
+      window.location.href = "https://metamask.io/";
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    // console.log(contract);
     if (userAddress !== "" && contract !== undefined) {
       // @ts-ignore
       contract.methods
         .balanceOf(userAddress)
         .call({ from: userAddress })
-        .then((res) => console.log(res));
-      fetcher().then(() => {
+        .then((res) => {
+          if (res < 30) window.location.href = "/";
+        });
+      fetcher(userAddress, contract).then((res) => {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        ingredients = res;
+        setLoading(false);
         newGame();
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contract, userAddress]);
 
-  const getBalance = () => {
-    // @ts-ignore
-    return contract.methods.balanceOf(userAddress).call({ from: userAddress });
-  };
-
-  const getTokenID = (index) => {
-    // @ts-ignore
-    return contract.methods
-      .tokenOfOwnerByIndex(userAddress, index)
-      .call({ from: userAddress });
-  };
-
-  const getTokenURI = (id) => {
-    // @ts-ignore
-    return contract.methods.tokenURI(id).call({ from: userAddress });
-  };
-
-  const getTokens = async () => {
-    let arr = [];
-    let balance = await getBalance();
-    // console.log(balance);
-
-    for (let i = 0; i < balance; i++) {
-      // console.log(i);
-      let tokenID = await getTokenID(i);
-      // console.log(tokenID);
-      let tokenURI = await getTokenURI(tokenID);
-      // console.log(tokenURI);
-      arr.push(tokenURI);
-    }
-    return arr;
-  };
-
-  const retrieveJSON = async (uri) => {
-    let res = axios.get(`https://${uri}.ipfs.dweb.link/`).then((resp) => {
-      let attributes = resp.data["attributes"];
-      let name = attributes[1]["value"];
-      let mana = attributes[2]["value"];
-      let damage = attributes[3]["value"];
-      let health = attributes[4]["value"];
-      let c = [name, mana, damage, health];
-      return c;
-    });
-    return res;
-  };
-
-  const fetcher = async () => {
-    let arr = await getTokens();
-    let creatures = [];
-    for (let i = 0; i < arr.length; i++) {
-      let uri = arr[i];
-      let c = await retrieveJSON(uri);
-      console.log(c);
-      // axios.get(`https://${arr[i]}.ipfs.dweb.link/`).then((resp) => {
-      //   let attributes = resp.data["attributes"];
-      //   let name = attributes[1]["value"];
-      //   let mana = attributes[2]["value"];
-      //   let damage = attributes[3]["value"];
-      //   let health = attributes[4]["value"];
-      //   let c = [name, mana, damage, health];
-      creatures.push(c);
-    }
-
-    // console.log(creatures);
-    ingredients = creatures;
-    // setIngredients([...creatures]);
-    // window.location.href = "/Game";
-  };
-
-  // useEffect(() => {
-  //   if (ingredients.length === 30) console.log(ingredients);
-  // }, [ingredients]);
-
   async function newGame() {
     console.log("New game!");
     setGameOver(false);
     setWinState(0);
     setPlayerTurn(false);
-    // let deck = await deckClass.randomDeck();
-    console.log(ingredients);
     let deck = await deckClass.buildDeck(ingredients);
     deck = await deckClass.shuffleDeck(deck);
-    let cards = deck.splice(0, 7);
-    let discard = cards.shift();
+    let cards = deck.splice(0, 6);
+    setPlayerMana(1);
     setPlayerManaPool(1);
     setPlayerDeck([...deck]);
     setPlayerHand(cards);
-    setPlayerDiscard([discard]);
+    setPlayerDiscard([]);
     setPlayerField([]);
 
     deck = await deckClass.randomDeck();
     deck = await deckClass.shuffleDeck(deck);
-    cards = deck.splice(0, 7);
-    discard = cards.shift();
+    cards = deck.splice(0, 6);
     setCpuMana(0);
     setCpuManaPool(0);
     setCpuDeck([...deck]);
     setCpuHand(cards);
-    setCpuDiscard([discard]);
+    setCpuDiscard([]);
     setCpuField([]);
-    setPlayerTurn(true);
   }
-
-  function toggleViewable() {
-    setViewable(!viewable);
-  }
-
-  useEffect(() => {
-    viewable ? setViewText("ON") : setViewText("OFF");
-  }, [viewable]);
 
   async function endTurn() {
     setPlayerTurn(false);
@@ -284,8 +201,6 @@ function Game() {
         (!gameOver && cpuDeck.length === 0))
     ) {
       setGameOver(true);
-      // newGame();
-      // window.location.href = "/";
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerHand, playerDeck, cpuHand, cpuDeck]);
@@ -362,7 +277,6 @@ function Game() {
       let deck = cpuHand;
       let affordableDeck = deck.filter((c) => c.mana <= cpuMana);
       deck = deck.filter((c) => c.mana > cpuMana);
-      // console.log(affordableDeck);
       if (affordableDeck.length > 0 && cpuField.length < 5) {
         let card = affordableDeck.splice(
           Math.floor(Math.random() * affordableDeck.length),
@@ -379,151 +293,168 @@ function Game() {
   function whoWon(val) {
     let messages = ["", "YOU WON!", "YOU LOSE!"];
 
-    return <h1>{messages[val]}</h1>;
+    return (
+      <div>
+        <h1>{messages[val]}</h1>
+        <a href="/">
+          <img src={Mario} alt="Home Button" />
+        </a>
+      </div>
+    );
   }
 
   return (
     <Fragment>
+      <Header address={userAddress} />
       <div className="text-center background">
-        {/* <Header /> */}
-        <div className="col my-auto">
+        {loading ? (
+          <img src={Loader} alt="Loading gif" className="center" />
+        ) : (
           <div className="row">
-            {gameOver && winState !== 0 ? whoWon(winState) : ""}
-            <ActionButton
-              dependentState={playerTurn && winState === 0}
-              gameFunction={endTurn}
-              text={"End Turn"}
-            />
-            <ActionButton
-              dependentState={playerTurn && winState === 0}
-              gameFunction={attack}
-              text={"Attack!"}
-            />
-          </div>
-          <div className="row">
-            <TurnInfo
-              dependentState={gameOver}
-              turnState={playerTurn}
-              gameFunction={setPlayerTurn}
-              turnCount={turnCounter}
-              setTurnCounter={setTurnCounter}
-            />
-          </div>
-          <div className="row">
-            <HealthMana
-              dependentState={gameOver}
-              health={cpuHealth}
-              mana={cpuMana}
-              manaPool={cpuManaPool}
-            />
-          </div>
+            {gameOver && winState !== 0 ? (
+              whoWon(winState)
+            ) : (
+              <div className="game">
+                <div className="row">
+                  <div className="col">
+                    <ActionButton
+                      dependentState={playerTurn && winState === 0}
+                      gameFunction={endTurn}
+                      text={"Next Turn"}
+                    />
+                  </div>
+                  <div className="col">
+                    <TurnInfo
+                      dependentState={gameOver}
+                      turnState={playerTurn}
+                      gameFunction={setPlayerTurn}
+                      turnCount={turnCounter}
+                      setTurnCounter={setTurnCounter}
+                    />
+                  </div>
 
-          <div className="row">
-            <div className="col">
-              <Collection
-                deck={cpuDeck}
-                className={"cpuDeck"}
-                cardClass={"backStack"}
-              />
-            </div>
-            <div className="col">
-              <Collection
-                deck={cpuHand}
-                className={"cpuHand"}
-                cardClass={"back"}
-              />
-            </div>
-            <div className="col">
-              <Collection
-                deck={cpuDiscard}
-                className={"cpuDiscard"}
-                cardClass={"backStack"}
-              />
-            </div>
-          </div>
+                  <div className="col">
+                    <ActionButton
+                      dependentState={playerTurn && winState === 0}
+                      gameFunction={attack}
+                      text={"Attack!"}
+                    />
+                  </div>
+                </div>
+                <div className="row">
+                  <HealthMana
+                    dependentState={gameOver}
+                    health={cpuHealth}
+                    mana={cpuMana}
+                    manaPool={cpuManaPool}
+                  />
+                </div>
 
-          <div className="row">
-            <Collection
-              deck={cpuField}
-              className={"cpuField"}
-              cardClass={"front"}
-            />
-          </div>
+                <div className="row">
+                  <div className="col">
+                    <Collection
+                      deck={cpuDeck}
+                      className={"cpuDeck"}
+                      cardClass={"backStack"}
+                    />
+                  </div>
+                  <div className="col">
+                    <Collection
+                      deck={cpuHand}
+                      className={"cpuHand"}
+                      cardClass={"back"}
+                    />
+                  </div>
+                  <div className="col">
+                    <Collection
+                      deck={cpuDiscard}
+                      className={"cpuDiscard"}
+                      cardClass={"backStack"}
+                    />
+                  </div>
+                </div>
 
-          <div className="row">
-            <PlayerCollection
-              viewValue={viewable}
-              mana={null}
-              setMana={null}
-              disabled={!playerTurn}
-              deck={playerField}
-              useDeck={setPlayerField}
-              className={"playerField"}
-              cardClass={"front"}
-              pull={false}
-              // only allow "affordable" cards to be played
-              put={["playerHand"]}
-              setDrawn={setPlayerDrawn}
-            />
-          </div>
+                <div className="row">
+                  <Collection
+                    deck={cpuField}
+                    className={"cpuField"}
+                    cardClass={"front"}
+                  />
+                </div>
 
-          <div className="row">
-            <div className="col">
-              <PlayerCollection
-                viewValue={viewable}
-                mana={null}
-                setMana={null}
-                disabled={!playerTurn}
-                deck={playerDiscard}
-                useDeck={setPlayerDiscard}
-                className={"playerDiscard"}
-                cardClass={"backStack"}
-                pull={false}
-                put={["playerHand", "playerDeck"]}
-                setDrawn={setPlayerDrawn}
-              />
-            </div>
-            <div className="col">
-              <PlayerCollection
-                viewValue={viewable}
-                mana={playerMana}
-                setMana={setPlayerMana}
-                disabled={!playerTurn}
-                deck={playerHand}
-                useDeck={setPlayerHand}
-                className={"playerHand"}
-                cardClass={"front"}
-                pull={true}
-                put={["playerDeck"]}
-                setDrawn={setPlayerDrawn}
-              />
-            </div>
-            <div className="col">
-              <PlayerCollection
-                viewValue={viewable}
-                mana={null}
-                setMana={null}
-                disabled={playerDrawn}
-                deck={playerDeck}
-                useDeck={setPlayerDeck}
-                className={"playerDeck"}
-                cardClass={"backStack"}
-                pull={true}
-                put={["none"]}
-                setDrawn={setPlayerDrawn}
-              />
-            </div>
-          </div>
+                <div className="row">
+                  <PlayerCollection
+                    mana={null}
+                    setMana={null}
+                    disabled={!playerTurn}
+                    deck={playerField}
+                    useDeck={setPlayerField}
+                    className={"playerField"}
+                    cardClass={"front"}
+                    pull={false}
+                    // only allow "affordable" cards to be played
+                    put={["playerHand"]}
+                    setDrawn={setPlayerDrawn}
+                  />
+                </div>
 
-          <div className="row">
-            <HealthMana
-              dependentState={gameOver}
-              health={playerHealth}
-              mana={playerMana}
-              manaPool={playerManaPool}
-            />
+                <div className="row">
+                  <div className="col">
+                    <PlayerCollection
+                      mana={null}
+                      setMana={null}
+                      disabled={!playerTurn}
+                      deck={playerDiscard}
+                      useDeck={setPlayerDiscard}
+                      className={"playerDiscard"}
+                      cardClass={"backStack"}
+                      pull={false}
+                      put={["playerHand", "playerDeck"]}
+                      setDrawn={setPlayerDrawn}
+                    />
+                  </div>
+                  <div className="col">
+                    <PlayerCollection
+                      mana={playerMana}
+                      setMana={setPlayerMana}
+                      disabled={!playerTurn}
+                      deck={playerHand}
+                      useDeck={setPlayerHand}
+                      className={"playerHand"}
+                      cardClass={"front"}
+                      pull={true}
+                      put={["playerDeck"]}
+                      setDrawn={setPlayerDrawn}
+                    />
+                  </div>
+                  <div className="col">
+                    <PlayerCollection
+                      mana={null}
+                      setMana={null}
+                      disabled={playerDrawn}
+                      deck={playerDeck}
+                      useDeck={setPlayerDeck}
+                      className={"playerDeck"}
+                      cardClass={"backStack"}
+                      pull={true}
+                      put={["none"]}
+                      setDrawn={setPlayerDrawn}
+                    />
+                  </div>
+                </div>
+
+                <div className="row">
+                  <HealthMana
+                    dependentState={gameOver}
+                    health={playerHealth}
+                    mana={playerMana}
+                    manaPool={playerManaPool}
+                  />
+                </div>
+              </div>
+            )}
           </div>
-        </div>
+        )}
       </div>
     </Fragment>
   );

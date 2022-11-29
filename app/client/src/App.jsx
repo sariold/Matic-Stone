@@ -1,9 +1,10 @@
 // @ts-ignore
 import { Routes, Route } from "react-router-dom";
 import Game from "./components/routes/Game";
-import CardCarousel from "./components/routes/CardCarousel";
+import Carousel from "./components/routes/Carousel";
 import Home from "./components/routes/Home";
-import "./App.css";
+import "./App.scss";
+import Tutorial from "./components/routes/Tutorial";
 
 const App = () => {
   return (
@@ -14,14 +15,19 @@ const App = () => {
         element={<Home />}
       />
       <Route
-        path="/game"
+        path="/tutorial"
         // @ts-ignore
-        element={<Game />}
+        element={<Tutorial />}
       />
       <Route
         path="/carousel"
         // @ts-ignore
-        element={<CardCarousel />}
+        element={<Carousel />}
+      />
+      <Route
+        path="/game"
+        // @ts-ignore
+        element={<Game />}
       />
     </Routes>
   );

@@ -14,9 +14,9 @@ function HealthMana({ dependentState, health, mana, manaPool }) {
         style={{ visibility: `${showHealthMana ? "visible" : "hidden"}` }}
         className="turnInfo"
       >
-        <p className="health">❤ {health}</p>
-        <p className="mana">
-          {mana} / {manaPool}
+        <p className="health">
+          <span style={{ color: "red" }}> ❤ {health} </span> | ( {mana} /{" "}
+          {manaPool} )
         </p>
       </div>
     </Fragment>
