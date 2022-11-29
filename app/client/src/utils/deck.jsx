@@ -48,8 +48,8 @@ export async function buildDeck(ingredients) {
     let img =
       process.env.REACT_APP_HOMEPAGE + "assets/creatures/" + name + ".png";
     let mana = array[1];
-    let health = array[2];
-    let damage = array[3];
+    let damage = array[2];
+    let health = array[3];
     let creature = new cardClass.Creature(name, img, mana, damage, health);
     // console.log(creature);
     cards.push(creature);

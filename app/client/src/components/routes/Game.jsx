@@ -1,27 +1,21 @@
 import * as deckClass from "../../utils/deck";
+import { fetcher } from "../../utils/retriever";
 import PlayerCollection from "../PlayerCollection";
 import Collection from "../Collection";
 import ActionButton from "../ui/ActionButton";
 import TurnInfo from "../TurnInfo";
 import Header from "../ui/Header";
-
 import Mario from "../ui/mario.gif";
 import Loader from "../ui/loader.gif";
-
+import { Fragment, useEffect, useState } from "react";
+import HealthMana from "../HealthMana";
 // @ts-ignore
 import MaticStone from "../../utils/MaticStone.json";
 // @ts-ignore
 import Web3 from "web3";
-// @ts-ignore
-import axios from "axios";
-
-import { Fragment, useEffect, useState } from "react";
-import HealthMana from "../HealthMana";
 
 function Game() {
   const maxMana = 10;
-
-  // const [ingredients, setIngredients] = useState([]);
 
   const [loading, setLoading] = useState(true);
 
@@ -29,7 +23,6 @@ function Game() {
   const [winState, setWinState] = useState(0);
   const [playerTurn, setPlayerTurn] = useState(false);
   const [turnCounter, setTurnCounter] = useState(0);
-  const [viewable, setViewable] = useState(true);
 
   const [playerDrawn, setPlayerDrawn] = useState(false);
 
@@ -65,7 +58,9 @@ function Game() {
     if (provider) {
       console.log("MetaMask detected!");
       const web3 = new Web3(provider);
-      // const networkId = await web3.eth.net.getId();
+      provider.on("accountsChanged", () => {
+        window.location.reload();
+      });
       setContract(
         new web3.eth.Contract(
           MaticStone.abi,
@@ -87,14 +82,17 @@ function Game() {
   }, []);
 
   useEffect(() => {
-    // console.log(contract);
     if (userAddress !== "" && contract !== undefined) {
       // @ts-ignore
       contract.methods
         .balanceOf(userAddress)
         .call({ from: userAddress })
-        .then((res) => console.log(res));
-      fetcher().then(() => {
+        .then((res) => {
+          if (res < 30) window.location.href = "/";
+        });
+      fetcher(userAddress, contract).then((res) => {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        ingredients = res;
         setLoading(false);
         newGame();
       });
@@ -102,86 +100,11 @@ function Game() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contract, userAddress]);
 
-  const getBalance = () => {
-    // @ts-ignore
-    return contract.methods.balanceOf(userAddress).call({ from: userAddress });
-  };
-
-  const getTokenID = (index) => {
-    // @ts-ignore
-    return contract.methods
-      .tokenOfOwnerByIndex(userAddress, index)
-      .call({ from: userAddress });
-  };
-
-  const getTokenURI = (id) => {
-    // @ts-ignore
-    return contract.methods.tokenURI(id).call({ from: userAddress });
-  };
-
-  const getTokens = async () => {
-    let arr = [];
-    let balance = await getBalance();
-    // console.log(balance);
-
-    for (let i = 0; i < balance; i++) {
-      // console.log(i);
-      let tokenID = await getTokenID(i);
-      // console.log(tokenID);
-      let tokenURI = await getTokenURI(tokenID);
-      // console.log(tokenURI);
-      arr.push(tokenURI);
-    }
-    return arr;
-  };
-
-  const retrieveJSON = async (uri) => {
-    let res = axios.get(`https://ipfs.io/ipfs/${uri}`).then((resp) => {
-      let attributes = resp.data["attributes"];
-      let name = attributes[1]["value"];
-      let mana = attributes[2]["value"];
-      let damage = attributes[3]["value"];
-      let health = attributes[4]["value"];
-      let c = [name, mana, damage, health];
-      return c;
-    });
-    return res;
-  };
-
-  const fetcher = async () => {
-    let arr = await getTokens();
-    let creatures = [];
-    for (let i = 0; i < arr.length; i++) {
-      let uri = arr[i];
-      let c = await retrieveJSON(uri);
-      console.log(c);
-      // axios.get(`https://${arr[i]}.ipfs.dweb.link/`).then((resp) => {
-      //   let attributes = resp.data["attributes"];
-      //   let name = attributes[1]["value"];
-      //   let mana = attributes[2]["value"];
-      //   let damage = attributes[3]["value"];
-      //   let health = attributes[4]["value"];
-      //   let c = [name, mana, damage, health];
-      creatures.push(c);
-    }
-
-    // console.log(creatures);
-    ingredients = creatures;
-    // setIngredients([...creatures]);
-    // window.location.href = "/Game";
-  };
-
-  // useEffect(() => {
-  //   if (ingredients.length === 30) console.log(ingredients);
-  // }, [ingredients]);
-
   async function newGame() {
     console.log("New game!");
     setGameOver(false);
     setWinState(0);
     setPlayerTurn(false);
-    // let deck = await deckClass.randomDeck();
-    // console.log(ingredients);
     let deck = await deckClass.buildDeck(ingredients);
     deck = await deckClass.shuffleDeck(deck);
     let cards = deck.splice(0, 6);
@@ -201,7 +124,6 @@ function Game() {
     setCpuHand(cards);
     setCpuDiscard([]);
     setCpuField([]);
-    // setPlayerTurn(true);
   }
 
   async function endTurn() {
@@ -279,8 +201,6 @@ function Game() {
         (!gameOver && cpuDeck.length === 0))
     ) {
       setGameOver(true);
-      // newGame();
-      // window.location.href = "/";
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerHand, playerDeck, cpuHand, cpuDeck]);
@@ -357,7 +277,6 @@ function Game() {
       let deck = cpuHand;
       let affordableDeck = deck.filter((c) => c.mana <= cpuMana);
       deck = deck.filter((c) => c.mana > cpuMana);
-      // console.log(affordableDeck);
       if (affordableDeck.length > 0 && cpuField.length < 5) {
         let card = affordableDeck.splice(
           Math.floor(Math.random() * affordableDeck.length),
@@ -386,7 +305,7 @@ function Game() {
 
   return (
     <Fragment>
-      <Header />
+      <Header address={userAddress} />
       <div className="text-center background">
         {loading ? (
           <img src={Loader} alt="Loading gif" className="center" />
@@ -396,15 +315,12 @@ function Game() {
               whoWon(winState)
             ) : (
               <div className="game">
-                {/* <div className="row">
- 
-                </div> */}
                 <div className="row">
                   <div className="col">
                     <ActionButton
                       dependentState={playerTurn && winState === 0}
                       gameFunction={endTurn}
-                      text={"End Turn"}
+                      text={"Next Turn"}
                     />
                   </div>
                   <div className="col">
@@ -468,7 +384,6 @@ function Game() {
 
                 <div className="row">
                   <PlayerCollection
-                    viewValue={viewable}
                     mana={null}
                     setMana={null}
                     disabled={!playerTurn}
@@ -486,7 +401,6 @@ function Game() {
                 <div className="row">
                   <div className="col">
                     <PlayerCollection
-                      viewValue={viewable}
                       mana={null}
                       setMana={null}
                       disabled={!playerTurn}
@@ -501,7 +415,6 @@ function Game() {
                   </div>
                   <div className="col">
                     <PlayerCollection
-                      viewValue={viewable}
                       mana={playerMana}
                       setMana={setPlayerMana}
                       disabled={!playerTurn}
@@ -516,7 +429,6 @@ function Game() {
                   </div>
                   <div className="col">
                     <PlayerCollection
-                      viewValue={viewable}
                       mana={null}
                       setMana={null}
                       disabled={playerDrawn}

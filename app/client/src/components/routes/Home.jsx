@@ -1,13 +1,11 @@
 import { Fragment, useEffect, useState } from "react";
+import Loader from "../ui/loader.gif";
+import Header from "../ui/Header";
+import ipfs from "../../utils/ipfs";
 // @ts-ignore
 import Web3 from "web3";
 // @ts-ignore
 import MaticStone from "../../utils/MaticStone.json";
-
-import Loader from "../ui/loader.gif";
-
-import Header from "../ui/Header";
-import ipfs from "../../utils/ipfs";
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
@@ -21,14 +19,15 @@ const Home = () => {
     if (provider) {
       console.log("MetaMask detected!");
       const web3 = new Web3(provider);
-      // const networkId = await web3.eth.net.getId();
+      provider.on("accountsChanged", () => {
+        window.location.reload();
+      });
       setContract(
         new web3.eth.Contract(
           MaticStone.abi,
           "0x212c2E0A66E3a28D9D37D18a390883bEe2c783E6"
         )
       );
-
       provider
         .request({ method: "eth_requestAccounts" })
         .then((res) => {
@@ -42,8 +41,6 @@ const Home = () => {
       let meta_url = "https://metamask.io/";
       window.open(meta_url, "_blank") || window.location.replace(meta_url);
     }
-
-    // console.log(ipfs.pool.sort(() => Math.random() - 0.5)[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -84,37 +81,8 @@ const Home = () => {
     let bal = contract.methods
       .balanceOf(userAddress)
       .call({ from: userAddress });
-    console.log(bal);
     return bal;
   };
-
-  // const getTokenID = (index) => {
-  //   // @ts-ignore
-  //   return contract.methods
-  //     .tokenOfOwnerByIndex(userAddress, index)
-  //     .call({ from: userAddress });
-  // };
-
-  // const getTokenURI = (id) => {
-  //   // @ts-ignore
-  //   return contract.methods.tokenURI(id).call({ from: userAddress });
-  // };
-
-  // const getTokens = async () => {
-  //   let arr = [];
-  //   let balance = await getBalance();
-  //   console.log(balance);
-
-  //   for (let i = 0; i < balance; i++) {
-  //     // console.log(i);
-  //     let tokenID = await getTokenID(i);
-  //     // console.log(tokenID);
-  //     let tokenURI = await getTokenURI(tokenID);
-  //     // console.log(tokenURI);
-  //     arr.push(tokenURI);
-  //   }
-  //   return arr;
-  // };
 
   const playGame = async () => {
     if ((await getBalance()) >= 30) window.location.href = "#/Game";
@@ -129,7 +97,7 @@ const Home = () => {
   return (
     <Fragment>
       <div className="backdrop text-center homepage">
-        <Header />
+        <Header address={userAddress} />
         {loading ? (
           <img src={Loader} alt="Loading Gif" />
         ) : (
@@ -143,7 +111,12 @@ const Home = () => {
             }}
           >
             <div className="row-lm">
-              <button className={"btn btn-success m-4"} onClick={() => {}}>
+              <button
+                className={"btn btn-success m-4"}
+                onClick={() => {
+                  window.location.href = "#/Tutorial";
+                }}
+              >
                 Tutorial
               </button>
             </div>
@@ -178,7 +151,6 @@ const Home = () => {
                 className={
                   userAddress ? "btn btn-success m-4" : "btn btn-danger m-4"
                 }
-                // onClick={fetcher}
                 onClick={playGame}
               >
                 Play Game

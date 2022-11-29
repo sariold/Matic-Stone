@@ -3,7 +3,6 @@ import { useEffect, useState, Fragment } from "react";
 import { ReactSortable } from "react-sortablejs";
 
 const PlayerCollection = ({
-  viewValue,
   mana,
   setMana,
   disabled,
@@ -19,24 +18,11 @@ const PlayerCollection = ({
 
   const [playerDeck, setPlayerDeck] = useState(deck);
 
-  const [viewable, setViewable] = useState(false);
+  const [viewable, setViewable] = useState(true);
 
   useEffect(() => {
-    // if (className === "playerField") {
-    // 	console.log("CHANGES");
-    // 	console.log(deck);
-    // }
     setPlayerDeck([...deck]);
   }, [deck]);
-
-  useEffect(() => {
-    // console.log(toPlay);
-    setViewable(false);
-  }, [toPlay]);
-
-  useEffect(() => {
-    setViewable(viewValue);
-  }, [viewValue]);
 
   function isAffordable(card) {
     return (
@@ -87,7 +73,12 @@ const PlayerCollection = ({
             if (evt.to.className === "playerField") {
               if (toPlay.mana <= mana) setMana(mana - toPlay.mana);
             }
+          }}
+          onUnchoose={function (evt) {
             setViewable(true);
+          }}
+          onChoose={function (evt) {
+            setViewable(false);
           }}
         >
           {playerDeck.map((card) => (

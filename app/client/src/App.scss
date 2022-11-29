@@ -19,7 +19,7 @@ html {
 }
 
 .navbar-brand {
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .homepage button {
@@ -38,10 +38,6 @@ html {
   margin-top: -2rem;
 }
 
-.game p {
-  font-size: 1.5rem;
-}
-
 .backdrop {
   background-color: #f3f3f5;
   justify-content: center;
@@ -57,8 +53,6 @@ html {
 }
 
 .carousel .slide img {
-  // height: 50%;
-  // width: 280px;
   width: 20rem;
   padding-top: 1.5rem;
 }
@@ -69,15 +63,19 @@ html {
   padding-top: 1rem;
 }
 
+.ah1 {
+  color: unset;
+  text-decoration: none;
+}
+
+.game p {
+  font-size: 1.5rem;
+}
+
 .turnInfo,
 .time {
   font-size: 1rem;
 }
-
-// .health {
-// color: red;
-// font-size: 1rem;
-// }
 
 .front,
 .back,
@@ -129,7 +127,6 @@ html {
   bottom: 0rem;
   right: 1rem;
   width: 3rem;
-  // height: 3.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -139,11 +136,11 @@ html {
   font-size: 0.5rem;
 }
 
-.playerDeck {
+.playerDeck,
+.cpuDeck {
   border-style: solid;
-  border-color: blue;
-  height: 7.3rem;
-  width: 5.3rem;
+  height: 7rem;
+  width: 5rem;
 }
 
 .cpuField,
@@ -152,7 +149,6 @@ html {
   text-align: center;
   display: flex;
   height: 7rem;
-  /* max-width: 50rem; */
   border-style: solid;
   border-color: black;
   margin-top: 1rem;
@@ -168,14 +164,6 @@ html {
   display: flex;
   justify-content: center;
   width: 40rem;
-}
-
-.cpuDeck {
-  border-style: solid;
-  border-color: black;
-  position: relative;
-  height: 7rem;
-  width: 5rem;
 }
 
 .cpuDiscard,
@@ -205,7 +193,6 @@ html {
 
 .playerCard {
   height: 7rem;
-  // padding: 1rem;
   margin: 0 -0.5rem;
   position: relative;
   width: 5rem;
@@ -235,7 +222,6 @@ html {
   transition: 800ms cubic-bezier(0.19, 1, 0.22, 1) transform;
   &:after {
     animation: none;
-    // background: red;
     bottom: 0;
     content: "";
     left: 0;
@@ -249,9 +235,12 @@ html {
 $total: 7;
 @for $i from 0 through ($total - 1) {
   $rotationRange: 20;
-  $rotation: ($i - ($total - 1) / 2) / ($total - 2) * $rotationRange;
+  $rotation: calc(($i - calc(($total - 1) / 2)) / ($total - 2)) *
+    $rotationRange;
   $offsetRange: 10;
-  $offset: abs(($i - ($total - 1) / 2) / ($total - 2) * $offsetRange);
+  $offset: abs(
+    calc(($i - calc(($total - 1) / 2)) / ($total - 2)) * $offsetRange
+  );
   .playerCard:nth-child(#{$i + 1}) {
     .handCard,
     .affordableCard {
@@ -265,17 +254,6 @@ $total: 7;
         z-index: 5;
       }
     }
-  }
-}
-
-@keyframes fade {
-  0% {
-    opacity: 0.9;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.15);
   }
 }
 
