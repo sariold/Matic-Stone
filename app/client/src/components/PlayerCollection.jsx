@@ -2,6 +2,12 @@ import { useEffect, useState, Fragment } from "react";
 // @ts-ignore
 import { ReactSortable } from "react-sortablejs";
 
+/**
+ * PlayerCollection component to display a deck of cards and allow
+ * for interactivity and sorting.
+ * @param {object} props - Game state and player deck information
+ * @returns JSX react component element
+ */
 const PlayerCollection = ({
   mana,
   setMana,
@@ -15,32 +21,46 @@ const PlayerCollection = ({
   setDrawn,
 }) => {
   const [toPlay, setToPlay] = useState(null);
-
   const [playerDeck, setPlayerDeck] = useState(deck);
-
   const [viewable, setViewable] = useState(true);
 
+  /**
+   * Use effect to set the player deck state.
+   */
   useEffect(() => {
     setPlayerDeck([...deck]);
   }, [deck]);
 
-  function isAffordable(card) {
+  /**
+   * Determines if a card can be played based on its mana cost
+   * and sets the appropriate class name for the card.
+   * @param {object} card - Card object (creature / spell)
+   * @returns Class name for card
+   */
+  const isAffordable = (card) => {
     return (
-      (card.mana <= mana ? "affordableCard" : "handCard") +
+      (card.mana <= mana && !disabled ? "affordableCard" : "handCard") +
       (viewable ? " viewable" : "")
     );
-  }
+  };
 
-  function getClass(className, card) {
+  /**
+   * Get classname based on a card's location on the board.
+   * @param {string} className - Class name for player collection
+   * @param {object} card - Card object (creature / spell)
+   * @returns Class name for card
+   */
+  const getClass = (className, card) => {
     if (className !== "playerField") return "backStack";
     if (className === "playerField") {
       if (card.attacking) return "tapped attackPlayer";
       return card.tapped ? "tapped" : "card";
     }
     return "card";
-  }
+  };
 
   if (className === "playerHand")
+    // Player hand collection.
     return (
       <Fragment>
         <ReactSortable
@@ -56,9 +76,6 @@ const PlayerCollection = ({
           }}
           animation={150}
           dragoverBubble={true}
-          ghostClass={"sortable-ghost"} // Class name for the drop placeholder
-          chosenClass={"sortable-chosen"} // Class name for the chosen item
-          dragClass={"sortable-drag"} // Class name for the dragging item
           onStart={function (evt) {
             setToPlay(playerDeck[evt.oldIndex]);
           }}
@@ -99,6 +116,7 @@ const PlayerCollection = ({
         </ReactSortable>
       </Fragment>
     );
+  // Player collection that is either: deck, field, or discard.
   else
     return (
       <Fragment>

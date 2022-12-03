@@ -1,20 +1,30 @@
 import { Fragment, useEffect, useState } from "react";
-import Loader from "../ui/loader.gif";
+import Loader from "../ui/gifs/loader.gif";
 import Header from "../ui/Header";
-import ipfs from "../../utils/ipfs";
+import ipfs from "../../utils/data/ipfs";
 // @ts-ignore
 import Web3 from "web3";
 // @ts-ignore
-import MaticStone from "../../utils/MaticStone.json";
+import MaticStone from "../../utils/data/MaticStone.json";
 
+/**
+ * Homepage component to display the homepage with all
+ * of the important page links.
+ * @returns JSX react component element
+ */
 const Home = () => {
   const [loading, setLoading] = useState(false);
   const [userAddress, setUserAddress] = useState("");
 
   const [contract, setContract] = useState();
+
   // @ts-ignore
   let provider = window.ethereum;
 
+  /**
+   * Use effect to check if MetaMask is installed,
+   * set user address and contract state.
+   */
   useEffect(() => {
     if (provider) {
       console.log("MetaMask detected!");
@@ -31,30 +41,20 @@ const Home = () => {
       provider
         .request({ method: "eth_requestAccounts" })
         .then((res) => {
-          // Return the address of the wallet
-          console.log(res);
           setUserAddress(res[0]);
         })
         .catch((e) => console.log(e));
     } else {
-      alert("Install metamask extension!");
-      let meta_url = "https://metamask.io/";
-      window.open(meta_url, "_blank") || window.location.replace(meta_url);
+      alert("Install MetaMask extension!");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (userAddress !== "" && contract !== undefined) {
-      // @ts-ignore
-      contract.methods
-        .balanceOf(userAddress)
-        .call({ from: userAddress })
-        .then((res) => console.log(res));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userAddress]);
-
+  /**
+   * Create an array of X amount of URIs from the IPFS pool.
+   * @param {*} x
+   * @returns
+   */
   const createX = (x) => {
     var uris = [];
     for (let i = 0; i < x; i++) {
@@ -63,6 +63,9 @@ const Home = () => {
     return uris;
   };
 
+  /**
+   * Contract call to multi mint a set of NFTs.
+   */
   const mint = async () => {
     let uris = createX(30);
     console.log(uris);
@@ -76,6 +79,10 @@ const Home = () => {
       .then(() => setLoading(false));
   };
 
+  /**
+   * Contract call to get the balance of the user.
+   * @returns Balance of the user
+   */
   const getBalance = () => {
     // @ts-ignore
     let bal = contract.methods
@@ -84,11 +91,18 @@ const Home = () => {
     return bal;
   };
 
+  /**
+   * Check how many tokens a player has and determine if they can play.
+   */
   const playGame = async () => {
     if ((await getBalance()) >= 30) window.location.href = "#/Game";
     else alert("You must at least have 30 MaticStone tokens to play!");
   };
 
+  /**
+   * Check how many tokens a player has and determine if they can
+   * view their card collection.
+   */
   const carousel = async () => {
     if ((await getBalance()) >= 30) window.location.href = "#/Carousel";
     else alert("You must at least have 30 MaticStone tokens to view carousel!");

@@ -1,10 +1,14 @@
 const fs = require("fs");
 const ipfsCreatures = require("./ipfsCreatures");
-
 const template = fs.readFileSync("template.json");
 
 let creatures = ipfsCreatures["creatures"];
 
+/**
+ * Create all permutations of creatures and their corresponding
+ * health and damage attributes based on their mana cost.
+ * Generate a JSON file for each permutation to upload to IPFS.
+ */
 creatures.forEach((c) => {
   let name = c[0].slice(0, -4);
   let mana = c[1];

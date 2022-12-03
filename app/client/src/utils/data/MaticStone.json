@@ -16355,54 +16355,22 @@
   "ast": {
     "absolutePath": "project:/contracts/MaticStone.sol",
     "exportedSymbols": {
-      "Address": [
-        1975
-      ],
-      "Context": [
-        1997
-      ],
-      "Counters": [
-        2071
-      ],
-      "ERC165": [
-        2270
-      ],
-      "ERC721": [
-        944
-      ],
-      "ERC721Burnable": [
-        1108
-      ],
-      "ERC721Enumerable": [
-        1462
-      ],
-      "ERC721URIStorage": [
-        1587
-      ],
-      "IERC165": [
-        2282
-      ],
-      "IERC721": [
-        1060
-      ],
-      "IERC721Enumerable": [
-        1618
-      ],
-      "IERC721Metadata": [
-        1645
-      ],
-      "IERC721Receiver": [
-        1078
-      ],
-      "Math": [
-        3147
-      ],
-      "MaticStone": [
-        3309
-      ],
-      "Strings": [
-        2246
-      ]
+      "Address": [1975],
+      "Context": [1997],
+      "Counters": [2071],
+      "ERC165": [2270],
+      "ERC721": [944],
+      "ERC721Burnable": [1108],
+      "ERC721Enumerable": [1462],
+      "ERC721URIStorage": [1587],
+      "IERC165": [2282],
+      "IERC721": [1060],
+      "IERC721Enumerable": [1618],
+      "IERC721Metadata": [1645],
+      "IERC721Receiver": [1078],
+      "Math": [3147],
+      "MaticStone": [3309],
+      "Strings": [2246]
     },
     "id": 3310,
     "license": "MIT",
@@ -16410,12 +16378,7 @@
     "nodes": [
       {
         "id": 3149,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".9"
-        ],
+        "literals": ["solidity", "^", "0.8", ".9"],
         "nodeType": "PragmaDirective",
         "src": "33:23:15"
       },
@@ -16537,17 +16500,7 @@
         "fullyImplemented": true,
         "id": 3309,
         "linearizedBaseContracts": [
-          3309,
-          1108,
-          1587,
-          1462,
-          1618,
-          944,
-          1645,
-          1060,
-          2270,
-          2282,
-          1997
+          3309, 1108, 1587, 1462, 1618, 944, 1645, 1060, 2270, 2282, 1997
         ],
         "name": "MaticStone",
         "nameLocation": "422:10:15",
@@ -16703,9 +16656,7 @@
               "src": "703:170:15",
               "statements": [
                 {
-                  "assignments": [
-                    3185
-                  ],
+                  "assignments": [3185],
                   "declarations": [
                     {
                       "constant": false,
@@ -16876,10 +16827,7 @@
                       "id": 3195,
                       "name": "_safeMint",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        494,
-                        523
-                      ],
+                      "overloadedDeclarations": [494, 523],
                       "referencedDeclaration": 494,
                       "src": "806:9:15",
                       "typeDescriptions": {
@@ -17066,9 +17014,7 @@
               "src": "941:114:15",
               "statements": [
                 {
-                  "assignments": [
-                    3215
-                  ],
+                  "assignments": [3215],
                   "declarations": [
                     {
                       "constant": false,
@@ -17423,10 +17369,7 @@
             "visibility": "public"
           },
           {
-            "baseFunctions": [
-              930,
-              1300
-            ],
+            "baseFunctions": [930, 1300],
             "body": {
               "id": 3260,
               "nodeType": "Block",
@@ -17708,10 +17651,7 @@
             "visibility": "internal"
           },
           {
-            "baseFunctions": [
-              667,
-              1586
-            ],
+            "baseFunctions": [667, 1586],
             "body": {
               "id": 3275,
               "nodeType": "Block",
@@ -17862,10 +17802,7 @@
             "visibility": "internal"
           },
           {
-            "baseFunctions": [
-              204,
-              1534
-            ],
+            "baseFunctions": [204, 1534],
             "body": {
               "id": 3291,
               "nodeType": "Block",
@@ -18046,10 +17983,7 @@
             "visibility": "public"
           },
           {
-            "baseFunctions": [
-              93,
-              1158
-            ],
+            "baseFunctions": [93, 1158],
             "body": {
               "id": 3307,
               "nodeType": "Block",

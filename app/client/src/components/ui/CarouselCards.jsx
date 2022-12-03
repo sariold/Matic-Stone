@@ -3,9 +3,17 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 // @ts-ignore
 import { Carousel } from "react-responsive-carousel";
 
+/**
+ * CarouselCards component to display a carousel of cards.
+ * @param {object} props - Array list of card attributes
+ * @returns JSX react component element
+ */
 const CarouselCards = ({ items }) => {
   const [ingredients, setIngredients] = useState([]);
 
+  /**
+   * Use effect to set deck state based on input.
+   */
   useEffect(() => {
     setIngredients(items);
   }, [items]);
@@ -18,7 +26,6 @@ const CarouselCards = ({ items }) => {
         infiniteLoop={true}
         showStatus={false}
         showIndicators={false}
-        emulateTouch={true}
       >
         {ingredients.map((c) => (
           <div key={c}>

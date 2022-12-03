@@ -1,14 +1,18 @@
 import React from "react";
 import { Fragment, useEffect, useState } from "react";
 import { fetcher } from "../../utils/retriever";
-import Loader from "../ui/loader.gif";
+import Loader from "../ui/gifs/loader.gif";
 import Header from "../ui/Header";
 import CarouselCards from "../ui/CarouselCards";
 // @ts-ignore
-import MaticStone from "../../utils/MaticStone.json";
+import MaticStone from "../../utils/data/MaticStone.json";
 // @ts-ignore
 import Web3 from "web3";
 
+/**
+ * Carousel component to display the carousel page.
+ * @returns JSX react component element
+ */
 const Carousel = () => {
   const [loading, setLoading] = useState(true);
   const [userAddress, setUserAddress] = useState("");
@@ -18,6 +22,10 @@ const Carousel = () => {
   // @ts-ignore
   let provider = window.ethereum;
 
+  /**
+   * Use effect to check if MetaMask is installed,
+   * set user address and contract state.
+   */
   useEffect(() => {
     if (provider) {
       console.log("MetaMask detected!");
@@ -31,19 +39,20 @@ const Carousel = () => {
           "0x212c2E0A66E3a28D9D37D18a390883bEe2c783E6"
         )
       );
-
       provider.request({ method: "eth_requestAccounts" }).then((res) => {
-        // Return the address of the wallet
-        console.log(res);
         setUserAddress(res[0]);
       });
     } else {
-      alert("Install metamask extension!");
-      window.location.href = "https://metamask.io/";
+      alert("Install MetaMask extension!");
+      window.location.href = process.env.REACT_APP_HOMEPAGE;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /**
+   * Use effect to check if carousel page requirements are met in order
+   * to display all of a user's cards or send them back to the homepage.
+   */
   useEffect(() => {
     if (userAddress !== "" && contract !== undefined) {
       // @ts-ignore
@@ -53,7 +62,6 @@ const Carousel = () => {
         .then((res) => {
           if (res < 30) window.location.href = "/";
         });
-      // Send to home page if no cards!
       fetcher(userAddress, contract).then((res) => {
         setIngredients(res);
         setLoading(false);

@@ -1,5 +1,10 @@
 import { useEffect, useState, Fragment } from "react";
 
+/**
+ * TurnInfo component to display the current turn information and time.
+ * @param {object} props - Game state information to adjust turn information
+ * @returns JSX react component element
+ */
 function TurnInfo({
   dependentState,
   turnState,
@@ -7,7 +12,8 @@ function TurnInfo({
   turnCount,
   setTurnCounter,
 }) {
-  const turnTime = 20;
+  const turnTime = 15;
+
   const [showTurnInfo, setShowTurnInfo] = useState(false);
   const [currentTurn, setCurrentTurn] = useState(turnState);
 
@@ -15,16 +21,25 @@ function TurnInfo({
   const [seconds, setSeconds] = useState(turnTime);
   const [isOn, setOn] = useState(false);
 
+  /**
+   * Use effect to update the turn counter.
+   */
   useEffect(() => {
     setCount(turnCount);
   }, [turnCount]);
 
+  /**
+   * Use effect to determine if the turn info should be displayed.
+   */
   useEffect(() => {
     setShowTurnInfo(dependentState);
     if (!dependentState) setOn(true);
     else if (dependentState) setOn(false);
   }, [dependentState]);
 
+  /**
+   * Use effect to change turn and reset timer.
+   */
   useEffect(() => {
     setCurrentTurn(turnState);
     const changeTurn = () => {
@@ -33,6 +48,9 @@ function TurnInfo({
     changeTurn();
   }, [turnState]);
 
+  /**
+   * Use effect to manage game timer countdown and reset.
+   */
   useEffect(() => {
     let interval = null;
     if (isOn && !dependentState && seconds > 0) {

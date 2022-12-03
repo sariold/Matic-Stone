@@ -1,3 +1,4 @@
+// IPFS pool of all possible creature card attribute permutations.
 exports.pool = [
   "bafkreidvdet7nhhxn3zlt356o7higptz42gyum2yfwjupql3ybqepclyki",
   "bafkreib5mqy6meoideloju6kenlqxxgwai7kypbj3arn6fhhadwfrkyehi",

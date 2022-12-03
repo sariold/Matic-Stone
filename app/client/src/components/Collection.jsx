@@ -1,9 +1,27 @@
 import { useEffect, useState, Fragment } from "react";
 
+/**
+ * Opponent player collection component to display a collection of cards.
+ * @param {object} props - Deck information
+ * @returns JSX react component element
+ */
 const Collection = ({ deck, className, cardClass }) => {
   const [cards, setCards] = useState(deck);
 
-  function getClass(className, card) {
+  /**
+   * Use effect to set the deck state.
+   */
+  useEffect(() => {
+    setCards([...deck]);
+  }, [deck]);
+
+  /**
+   * Determine the card class based on card location on board.
+   * @param {string} className - Outer div component
+   * @param {object} card - Card object (creature / spell)
+   * @returns Appropriate class name
+   */
+  const getClass = (className, card) => {
     if (className === "cpuHand") return "cards";
     if (className !== "cpuField") return "backStack";
     if (className === "cpuField") {
@@ -11,11 +29,7 @@ const Collection = ({ deck, className, cardClass }) => {
       return card.tapped ? "tapped" : "cards";
     }
     return "cards";
-  }
-
-  useEffect(() => {
-    setCards([...deck]);
-  }, [deck]);
+  };
 
   return (
     <Fragment>

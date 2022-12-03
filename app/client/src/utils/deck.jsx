@@ -1,5 +1,8 @@
 import * as cardClass from "./card";
 
+/**
+ * Array list of creature image names and mana costs.
+ */
 var creatures = [
   ["ALIENS.png", 3],
   ["ARCHERESS.png", 2],
@@ -38,11 +41,15 @@ var creatures = [
   ["WITCH.png", 2],
 ];
 
-export async function buildDeck(ingredients) {
-  // console.log(ingredients);
+/**
+ * Creates a deck of cards based on a given array of creature names,
+ * mana costs, and health / data attributes.
+ * @param {array} ingredients - IPFS array of creature metadata
+ * @returns Array of creature card objects
+ */
+export const buildDeck = async (ingredients) => {
   let cards = [];
   for (let i = 0; i < ingredients.length; i++) {
-    // console.log(i);
     let array = ingredients[i];
     let name = array[0];
     let img =
@@ -51,13 +58,18 @@ export async function buildDeck(ingredients) {
     let damage = array[2];
     let health = array[3];
     let creature = new cardClass.Creature(name, img, mana, damage, health);
-    // console.log(creature);
     cards.push(creature);
   }
   return cards;
-}
+};
 
-export async function randomDeck() {
+/**
+ * Creates a deck of cards based on a given array of creature names and mana
+ * costs. Determines their attributes for health and damage based on a random
+ * number generator and a given range (mana cost).
+ * @returns Array of creature card objects
+ */
+export const randomDeck = async () => {
   let cards = [];
   for (let i = 0; i < 30; i++) {
     let array = creatures[Math.floor(Math.random() * creatures.length)];
@@ -71,9 +83,14 @@ export async function randomDeck() {
     cards.push(creature);
   }
   return cards;
-}
+};
 
-export async function shuffleDeck(cards) {
+/**
+ * Shuffle a deck of cards.
+ * @param {array} cards - Creature card object array
+ * @returns Array list of shuffled cards
+ */
+export const shuffleDeck = async (cards) => {
   return [...cards]
     .sort(() => Math.random() - 0.5)
     .map((card) => ({
@@ -84,4 +101,4 @@ export async function shuffleDeck(cards) {
           Math.pow(10, 12) + Math.random() * 9 * Math.pow(10, 12)
         ).toString(36),
     }));
-}
+};
