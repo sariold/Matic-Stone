@@ -15,7 +15,7 @@ Cryptocurrencies continue to grow and thrive each day as new tokens are released
 ### 90 Second Tutorial For Minting Cards with Test Ethereum 
 
 <p align="center">
-  <a href="https://www.youtube.com/watch?v=8qD8iVaJOzk">
+  <a href="https://www.youtube.com/watch?v=QKHSgmhsjwQ">
     <img src="https://play-lh.googleusercontent.com/vA4tG0v4aasE7oIvRIvTkOYTwom07DfqHdUPr6k7jmrDwy_qA_SonqZkw6KX0OXKAdk" />
   </a>
 </p>
