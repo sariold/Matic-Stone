@@ -3,9 +3,13 @@ import { Routes, Route } from "react-router-dom";
 import Game from "./components/routes/Game";
 import Carousel from "./components/routes/Carousel";
 import Home from "./components/routes/Home";
-import "./App.scss";
 import Tutorial from "./components/routes/Tutorial";
+import "./App.scss";
 
+/**
+ * App component that handles routing and URL navigation.
+ * @returns {JSX.Element} - App component instance
+ */
 const App = () => {
   return (
     <Routes>

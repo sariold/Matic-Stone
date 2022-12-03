@@ -3,13 +3,14 @@ require("dotenv").config({ path: __dirname + "/../.env" });
 const w3S = require("web3.storage");
 const fs = require("fs");
 const token = process.env.web3;
-
-console.log(token);
-
 const images = "../app/client/public/assets/creatures/";
 const jsons = "./JSONs/";
 
-async function main() {
+/**
+ * Upload file directory to Web3.storage IPFS server.
+ * Returns CID of uploaded directory.
+ */
+async function uploader() {
   console.log(token);
 
   if (!token) {
@@ -31,9 +32,13 @@ async function main() {
   console.log(cid);
 }
 
-// Uncomment to upload files to web3.Storage
-// main();
+// Uncomment to upload files to Web3.Storage.
+// uploader();
 
+/**
+ * Retrieve files corresponding to CID from Web3.Storage IPFS server.
+ * @param  {string} cid - CID of uploaded directory
+ */
 async function retrieveFiles(cid) {
   const client = new w3S.Web3Storage({ token });
   const res = await client.get(cid);
@@ -42,13 +47,11 @@ async function retrieveFiles(cid) {
     throw new Error(`failed to get ${cid} - [${res.status}] ${res.statusText}`);
   }
 
-  // console.log(res);
   const files = await res.files();
-  // console.log(files);
   for (const file of files) {
     console.log(`"${file.cid}",`);
   }
 }
 
-// Uncomment to retrieve files from web3.Storage based on CID
-retrieveFiles("bafybeifmgifgi7d27ts3hrg23bk2n33ttq3ydo5dyeduxl6qadrdijtkgq");
+// Uncomment to retrieve files from Web3.Storage based on CID.
+// retrieveFiles("bafybeifmgifgi7d27ts3hrg23bk2n33ttq3ydo5dyeduxl6qadrdijtkgq");

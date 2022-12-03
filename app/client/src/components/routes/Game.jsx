@@ -1,3 +1,4 @@
+import { Fragment, useEffect, useState } from "react";
 import * as deckClass from "../../utils/deck";
 import { fetcher } from "../../utils/retriever";
 import PlayerCollection from "../PlayerCollection";
@@ -5,15 +6,18 @@ import Collection from "../Collection";
 import ActionButton from "../ui/ActionButton";
 import TurnInfo from "../TurnInfo";
 import Header from "../ui/Header";
-import Mario from "../ui/mario.gif";
-import Loader from "../ui/loader.gif";
-import { Fragment, useEffect, useState } from "react";
+import Mario from "../ui/gifs/mario.gif";
+import Loader from "../ui/gifs/loader.gif";
 import HealthMana from "../HealthMana";
 // @ts-ignore
-import MaticStone from "../../utils/MaticStone.json";
+import MaticStone from "../../utils/data/MaticStone.json";
 // @ts-ignore
 import Web3 from "web3";
 
+/**
+ * Game component to handle game state and display the game.
+ * @returns JSX react component element
+ */
 function Game() {
   const maxMana = 10;
 
@@ -23,7 +27,6 @@ function Game() {
   const [winState, setWinState] = useState(0);
   const [playerTurn, setPlayerTurn] = useState(false);
   const [turnCounter, setTurnCounter] = useState(0);
-
   const [playerDrawn, setPlayerDrawn] = useState(false);
 
   const [playerHealth, setPlayerHealth] = useState(15);
@@ -46,14 +49,18 @@ function Game() {
   const [playerField, setPlayerField] = useState([]);
   const [cpuField, setCpuField] = useState([]);
 
-  var ingredients = [];
-
   const [userAddress, setUserAddress] = useState("");
-
   const [contract, setContract] = useState();
+
   // @ts-ignore
   let provider = window.ethereum;
 
+  var ingredients = [];
+
+  /**
+   * Use effect to check if MetaMask is installed,
+   * set user address and contract state.
+   */
   useEffect(() => {
     if (provider) {
       console.log("MetaMask detected!");
@@ -67,20 +74,20 @@ function Game() {
           "0x212c2E0A66E3a28D9D37D18a390883bEe2c783E6"
         )
       );
-
       provider.request({ method: "eth_requestAccounts" }).then((res) => {
-        // Return the address of the wallet
-        console.log(res);
         setUserAddress(res[0]);
       });
     } else {
-      alert("Install metamask extension!");
-      window.location.href = "https://metamask.io/";
+      alert("Install MetaMask extension!");
+      window.location.href = process.env.REACT_APP_HOMEPAGE;
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /**
+   * Use effect to see if requirements to play game are met and either
+   * start the game or send user back to homepage.
+   */
   useEffect(() => {
     if (userAddress !== "" && contract !== undefined) {
       // @ts-ignore
@@ -100,7 +107,130 @@ function Game() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contract, userAddress]);
 
-  async function newGame() {
+  /**
+   * Use effect to check if game is over based on player and
+   * opponent health in order to set correct game state.
+   */
+  useEffect(() => {
+    console.log(playerHealth, cpuHealth);
+    if (!(turnCounter > 0)) return;
+    if (playerHealth <= 0 || playerDeck.length === 0) {
+      setTimeout(() => {
+        setWinState(2);
+        setGameOver(true);
+      }, 2000);
+    } else if (cpuHealth <= 0 || cpuDeck.length === 0) {
+      setTimeout(() => {
+        setWinState(1);
+        setGameOver(true);
+      }, 2000);
+    }
+  }, [playerHealth, cpuHealth, turnCounter, playerDeck, cpuDeck]);
+
+  /**
+   * Use effect to check if CPU has too many cards in their hand.
+   */
+  useEffect(() => {
+    if (cpuHand.length > 7) {
+      let deck = cpuHand;
+      let card = deck.shift();
+      setCpuHand([...deck]);
+      setCpuDiscard([...cpuDiscard, card]);
+      console.log("CPU popping card!");
+    }
+  }, [cpuHand, cpuDiscard]);
+
+  /**
+   * Use effect to check if player has too many cards in their hand.
+   */
+  useEffect(() => {
+    if (playerHand.length > 7) {
+      let deck = playerHand;
+      let pos = Math.floor(Math.random() * deck.length);
+      let card = deck.splice(pos, 1)[0];
+      setPlayerDiscard([...playerDiscard, card]);
+      setPlayerHand([...deck]);
+      console.log("Player popping card!");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playerHand]);
+
+  /**
+   * Use effect for handling start and end of each player's turn.
+   * This includes increasing mana pool and changing creature's tapped and attack states.
+   */
+  useEffect(() => {
+    if (!playerTurn && !gameOver && turnCounter > 0) {
+      if (!playerDrawn) {
+        let tempDeck = playerDeck;
+        let card = tempDeck.shift();
+        setPlayerDeck([...tempDeck]);
+        let deck = [...playerHand, card];
+        setPlayerHand([...deck]);
+      }
+
+      let tempDeck = cpuDeck;
+      let card = tempDeck.shift();
+      setCpuDeck([...tempDeck]);
+      let deck = [...cpuHand, card];
+      setCpuHand([...deck]);
+
+      let creatures = cpuField;
+      creatures.forEach((c) => {
+        c.tapped = false;
+        c.attacking = false;
+      });
+      setCpuField(creatures);
+      if (cpuMana < maxMana) {
+        setCpuManaPool(cpuManaPool + 1);
+        setCpuMana(cpuManaPool + 1);
+      }
+      let timeDuration = Math.floor(Math.random() * 5) + 5;
+      console.log(`Computer will take a ${timeDuration - 1}s long turn`);
+      setTimeout(() => {
+        if (playerMana < maxMana) {
+          setPlayerManaPool(playerManaPool + 1);
+          setPlayerMana(playerManaPool + 1);
+        }
+        let creatures = playerField;
+        creatures.forEach((c) => {
+          c.tapped = false;
+          c.attacking = false;
+        });
+        setPlayerField(creatures);
+        setPlayerTurn(true);
+        setTurnCounter(turnCounter + 1);
+        setPlayerDrawn(false);
+      }, timeDuration * 1000);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playerTurn, gameOver]);
+
+  /**
+   * Use effect to handle CPU turn for playing cards and attacking.
+   */
+  useEffect(() => {
+    setTimeout(() => {
+      let deck = cpuHand;
+      let affordableDeck = deck.filter((c) => c.mana <= cpuMana);
+      deck = deck.filter((c) => c.mana > cpuMana);
+      if (affordableDeck.length > 0 && cpuField.length < 5) {
+        let card = affordableDeck.splice(
+          Math.floor(Math.random() * affordableDeck.length),
+          1
+        );
+        setCpuHand([...deck, ...affordableDeck]);
+        setCpuField([...cpuField, card[0]]);
+        setCpuMana(cpuMana - card[0].mana);
+      } else attack();
+    }, 1000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cpuMana]);
+
+  /**
+   * Create a new game instance and initialize all game variables.
+   */
+  const newGame = async () => {
     console.log("New game!");
     setGameOver(false);
     setWinState(0);
@@ -124,20 +254,27 @@ function Game() {
     setCpuHand(cards);
     setCpuDiscard([]);
     setCpuField([]);
-  }
+  };
 
-  async function endTurn() {
+  /**
+   * Function to end the player's turn.
+   */
+  const endTurn = async () => {
     setPlayerTurn(false);
     setTurnCounter(turnCounter + 1);
-  }
+  };
 
-  async function attack() {
+  /**
+   * Function to initiate an attack from player to opponent or vice versa.
+   * Handles the game state and logic for creatures attacking an opponent's
+   * creatures or the opponent directly.
+   */
+  const attack = async () => {
     let creaturesOne = playerTurn ? playerField : cpuField;
+    let creaturesTwo = playerTurn ? cpuField : playerField;
 
     if (creaturesOne.length === 0) return;
     console.log((playerTurn ? "Player " : "CPU ") + "is now attacking!");
-
-    let creaturesTwo = playerTurn ? cpuField : playerField;
 
     let healthOne = playerTurn ? playerHealth : cpuHealth;
     let healthTwo = playerTurn ? cpuHealth : playerHealth;
@@ -164,7 +301,6 @@ function Game() {
 
         setCpuField(playerTurn ? [...creaturesTwo] : [...creaturesOne]);
         setPlayerField(playerTurn ? [...creaturesOne] : [...creaturesTwo]);
-
         setCpuHealth(playerTurn ? healthTwo : healthOne);
         setPlayerHealth(playerTurn ? healthOne : healthTwo);
 
@@ -173,126 +309,18 @@ function Game() {
       }
       setCpuField(playerTurn ? [...creaturesTwo] : [...creaturesOne]);
       setPlayerField(playerTurn ? [...creaturesOne] : [...creaturesTwo]);
-
       setCpuHealth(playerTurn ? healthTwo : healthOne);
       setPlayerHealth(playerTurn ? healthOne : healthTwo);
     }
-  }
+  };
 
-  useEffect(() => {
-    console.log(playerHealth, cpuHealth);
-    if (playerHealth <= 0) {
-      setTimeout(() => {
-        setWinState(2);
-        setGameOver(true);
-      }, 2000);
-    } else if (cpuHealth <= 0) {
-      setTimeout(() => {
-        setWinState(1);
-        setGameOver(true);
-      }, 2000);
-    }
-  }, [playerHealth, cpuHealth]);
-
-  useEffect(() => {
-    if (
-      turnCounter > 0 &&
-      ((!gameOver && playerDeck.length === 0) ||
-        (!gameOver && cpuDeck.length === 0))
-    ) {
-      setGameOver(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playerHand, playerDeck, cpuHand, cpuDeck]);
-
-  useEffect(() => {
-    if (cpuHand.length > 7) {
-      let card = cpuHand.shift();
-      setCpuHand([...cpuHand]);
-      setCpuDiscard([...cpuDiscard, card]);
-      console.log("CPU popping card!");
-    }
-  }, [cpuHand, cpuDiscard]);
-
-  useEffect(() => {
-    if (playerHand.length > 7) {
-      let hand = playerHand;
-      let deck = [...hand];
-      let pos = Math.floor(Math.random() * deck.length);
-      let card = deck.splice(pos, 1)[0];
-      setPlayerDiscard([...playerDiscard, card]);
-
-      setPlayerHand([...deck]);
-      console.log("Player popping card!");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playerHand]);
-
-  useEffect(() => {
-    if (!playerTurn && !gameOver && turnCounter > 0) {
-      if (!playerDrawn) {
-        let card = playerDeck.shift();
-        let deck = [...playerHand, card];
-        setPlayerHand([...deck]);
-      }
-
-      let card = cpuDeck.shift();
-      let deck = [...cpuHand, card];
-
-      setCpuHand([...deck]);
-      let creatures = cpuField;
-      creatures.forEach((c) => {
-        c.tapped = false;
-        c.attacking = false;
-      });
-      setCpuField(creatures);
-      if (cpuMana < maxMana) {
-        setCpuManaPool(cpuManaPool + 1);
-        setCpuMana(cpuManaPool + 1);
-      }
-      let timeDuration = Math.floor(Math.random() * 5) + 5;
-      console.log(`Computer will take a ${timeDuration - 1}s long turn`);
-      setTimeout(() => {
-        if (playerMana < maxMana) {
-          setPlayerManaPool(playerManaPool + 1);
-          setPlayerMana(playerManaPool + 1);
-        }
-        let creatures = playerField;
-        creatures.forEach((c) => {
-          c.tapped = false;
-          c.attacking = false;
-        });
-        setPlayerField(creatures);
-
-        setPlayerTurn(true); // TODO: These two lines can use the endTurn(true) function instead
-        setTurnCounter(turnCounter + 1);
-        setPlayerDrawn(false);
-      }, timeDuration * 1000);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playerTurn, gameOver]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      let deck = cpuHand;
-      let affordableDeck = deck.filter((c) => c.mana <= cpuMana);
-      deck = deck.filter((c) => c.mana > cpuMana);
-      if (affordableDeck.length > 0 && cpuField.length < 5) {
-        let card = affordableDeck.splice(
-          Math.floor(Math.random() * affordableDeck.length),
-          1
-        );
-        setCpuHand([...deck, ...affordableDeck]);
-        setCpuField([...cpuField, card[0]]);
-        setCpuMana(cpuMana - card[0].mana);
-      } else attack();
-    }, 1000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cpuMana]);
-
-  function whoWon(val) {
+  /**
+   * When the game is over, this function will be called.
+   * @param {number} val - 0 = default, 1 = player win, 2 = cpu win
+   * @returns The win state of the game in text format.
+   */
+  const whoWon = (val) => {
     let messages = ["", "YOU WON!", "YOU LOSE!"];
-
     return (
       <div>
         <h1>{messages[val]}</h1>
@@ -301,7 +329,7 @@ function Game() {
         </a>
       </div>
     );
-  }
+  };
 
   return (
     <Fragment>
@@ -315,6 +343,7 @@ function Game() {
               whoWon(winState)
             ) : (
               <div className="game">
+                {/* Game buttons */}
                 <div className="row">
                   <div className="col">
                     <ActionButton
@@ -332,7 +361,6 @@ function Game() {
                       setTurnCounter={setTurnCounter}
                     />
                   </div>
-
                   <div className="col">
                     <ActionButton
                       dependentState={playerTurn && winState === 0}
@@ -341,6 +369,7 @@ function Game() {
                     />
                   </div>
                 </div>
+                {/* Opponent information */}
                 <div className="row">
                   <HealthMana
                     dependentState={gameOver}
@@ -349,7 +378,7 @@ function Game() {
                     manaPool={cpuManaPool}
                   />
                 </div>
-
+                {/* Opponent deck, hand, and discard collections */}
                 <div className="row">
                   <div className="col">
                     <Collection
@@ -373,7 +402,7 @@ function Game() {
                     />
                   </div>
                 </div>
-
+                {/* Opponent field */}
                 <div className="row">
                   <Collection
                     deck={cpuField}
@@ -381,7 +410,7 @@ function Game() {
                     cardClass={"front"}
                   />
                 </div>
-
+                {/* Player field */}
                 <div className="row">
                   <PlayerCollection
                     mana={null}
@@ -392,12 +421,12 @@ function Game() {
                     className={"playerField"}
                     cardClass={"front"}
                     pull={false}
-                    // only allow "affordable" cards to be played
+                    // Only allow "affordable" cards to be played
                     put={["playerHand"]}
                     setDrawn={setPlayerDrawn}
                   />
                 </div>
-
+                {/* Player deck, hand, and discard collections */}
                 <div className="row">
                   <div className="col">
                     <PlayerCollection
@@ -442,7 +471,7 @@ function Game() {
                     />
                   </div>
                 </div>
-
+                {/* Player information */}
                 <div className="row">
                   <HealthMana
                     dependentState={gameOver}

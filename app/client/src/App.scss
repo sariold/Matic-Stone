@@ -1,7 +1,7 @@
 html {
   font-size: 14px;
   @media only screen and (min-width: 1500px) {
-    font-size: 18px;
+    font-size: 16px;
   }
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
@@ -24,6 +24,11 @@ html {
 
 .homepage button {
   font-size: 2rem;
+}
+
+.metamask-logo {
+  max-width: 3rem;
+  max-height: 3rem;
 }
 
 .background {
@@ -148,7 +153,7 @@ html {
   justify-content: center;
   text-align: center;
   display: flex;
-  height: 7rem;
+  height: 7.5rem;
   border-style: solid;
   border-color: black;
   margin-top: 1rem;
@@ -197,9 +202,8 @@ html {
   position: relative;
   width: 5rem;
   &:after {
-    // uncomment background below to see hit areas
+    // Uncomment background below to see hit areas
     // background: rgba(255, 0, 0, 0.45);
-    // width: 10rem;
     bottom: 0;
     content: "";
     left: 0;

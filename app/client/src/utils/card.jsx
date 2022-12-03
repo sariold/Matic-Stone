@@ -1,8 +1,5 @@
 /**
- * Abstract Card class
- * @param name The name of the card
- * @param mana The mana cost of the card
- * @param pos The position of the card on the field
+ * Card class with name, image, cover, and mana cost information.
  */
 export class Card {
   name = "";
@@ -21,10 +18,7 @@ export class Card {
 }
 
 /**
- * Creature card class
- * @param health The health of the creature
- * @param damage The damage of the creature
- * @param tapped The creature's hibernation status
+ * Extended card class with health, damage, tapped, and attacking information.
  */
 export class Creature extends Card {
   health = 0;
@@ -40,7 +34,7 @@ export class Creature extends Card {
 }
 
 /**
- * Abstract Spell card class
+ * Extended card class with instant status information.
  */
 export class Spell extends Card {
   instant = false;
@@ -54,8 +48,7 @@ export class Spell extends Card {
 }
 
 /**
- * Instant Damage spell card class
- * @param damage The damage of the spell
+ * Extended spell class with damage information.
  */
 export class InstantDamage extends Spell {
   damage = 0;
@@ -67,10 +60,7 @@ export class InstantDamage extends Spell {
 }
 
 /**
- * Buff spell card class
- * Can be used to deal damage or deal health
- * @param damage The damage dealt by the spell
- * @param health The health dealt by the spell
+ * Extended spell class with damage and health information for a creature.
  */
 export class Buff extends Spell {
   damage = 0;
@@ -84,10 +74,7 @@ export class Buff extends Spell {
 }
 
 /**
- * Draw spell card class
- * Can be used to draw cards and mill you or an opponent
- * @param draw The amount of cards to draw
- * @param mill The next location of the drawn cards
+ * Extended spell class for draw and mill information.
  */
 export class Draw extends Spell {
   draw = 0;

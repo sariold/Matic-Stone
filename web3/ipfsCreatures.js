@@ -1,3 +1,4 @@
+// Array list of creature names, mana costs, and IPFS image hashes.
 exports.creatures = [
   [
     "ALIENS.png",
