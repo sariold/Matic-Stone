@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.3c5af804.css",
-    "main.js": "/static/js/main.604b4807.js",
+    "main.css": "/static/css/main.65d6a37c.css",
+    "main.js": "/static/js/main.3c1c957a.js",
     "static/media/mario.gif": "/static/media/mario.01e19d5e7b9a9a262ca4.gif",
     "static/media/loader.gif": "/static/media/loader.af914b7f07c457a3f13e.gif",
     "index.html": "/index.html",
-    "main.3c5af804.css.map": "/static/css/main.3c5af804.css.map",
-    "main.604b4807.js.map": "/static/js/main.604b4807.js.map"
+    "main.65d6a37c.css.map": "/static/css/main.65d6a37c.css.map",
+    "main.3c1c957a.js.map": "/static/js/main.3c1c957a.js.map"
   },
   "entrypoints": [
-    "static/css/main.3c5af804.css",
-    "static/js/main.604b4807.js"
+    "static/css/main.65d6a37c.css",
+    "static/js/main.3c1c957a.js"
   ]
 }
