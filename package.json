@@ -18,7 +18,7 @@
     "@ethereumjs/vm": "^5.9.3",
     "@metamask/eth-sig-util": "^4.0.1",
     "@metamask/safe-event-emitter": "^2.0.0",
-    "@openzeppelin/contracts": "^4.9.3",
+    "@openzeppelin/contracts": "^4.9.6",
     "@truffle/hdwallet-provider": "^2.1.4",
     "axios": "^1.6.0",
     "bottleneck": "^2.19.5",
