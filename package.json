@@ -20,7 +20,7 @@
     "@metamask/safe-event-emitter": "^2.0.0",
     "@openzeppelin/contracts": "^4.9.6",
     "@truffle/hdwallet-provider": "^2.1.4",
-    "axios": "^1.6.0",
+    "axios": "^1.7.4",
     "bottleneck": "^2.19.5",
     "dotenv": "^16.0.3",
     "minimist": "^1.2.7",
