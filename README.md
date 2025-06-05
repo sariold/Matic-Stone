@@ -1,10 +1,7 @@
-# Matic Stone
-### 90 Second Tutorial For Minting Cards with Test Ethereum 
+# $MATIC Stone 
 
 <p align="center">
-  <a href="https://www.youtube.com/watch?v=QKHSgmhsjwQ">
-    <img src="https://play-lh.googleusercontent.com/vA4tG0v4aasE7oIvRIvTkOYTwom07DfqHdUPr6k7jmrDwy_qA_SonqZkw6KX0OXKAdk" />
-  </a>
+  <img src="./Matic_Stone_Tutorial.gif" alt="$MATIC Stone Tutorial Gif" />
 </p>
 
 Cryptocurrencies continue to grow and thrive each day as new tokens are released into the market every single hour. The possibilities of utilizing decentralized storage are still being explored. Matic Stone sets out to combine an online JavaScript card game where the trading cards are unique mintable NFT's. 
