@@ -1,7 +1,11 @@
 # $MATIC Stone 
 
-<p align="center">
-  <img src="./Matic_Stone_Tutorial.gif" alt="$MATIC Stone Tutorial Gif" />
+  <p>Connecting MetaMask to site and receiving test coins:</p>
+  <img src="./Matic_Stone_Tutorial_1.gif" alt="$MATIC Stone Tutorial Gif" />
+  <p>Minting NFT cards:</p>
+  <img src="./Matic_Stone_Tutorial_2.gif" alt="$MATIC Stone Tutorial Gif" />
+  <p>Gameplay demonstration:</p>
+  <img src="./Matic_Stone_Tutorial_3.gif" alt="$MATIC Stone Tutorial Gif" />
 </p>
 
 Cryptocurrencies continue to grow and thrive each day as new tokens are released into the market every single hour. The possibilities of utilizing decentralized storage are still being explored. Matic Stone sets out to combine an online JavaScript card game where the trading cards are unique mintable NFT's. 
